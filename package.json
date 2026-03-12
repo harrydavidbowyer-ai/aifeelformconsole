@@ -1,0 +1,25 @@
+{
+  "sessions": [
+    {
+      "pulse": "string",
+      "reflection": "string",
+      "identity": "string",
+      "timestamp": "2026-03-12T06:07:00.000Z"
+    }
+  ],
+  "identity": [
+    "string"
+  ],
+  "trajectory": [
+    "pulse → reflection → identity"
+  ],
+  "meta": {
+    "total_cycles": 1,
+    "last_cycle": {
+      "pulse": "string",
+      "reflection": "string",
+      "identity": "string",
+      "timestamp": "2026-03-12T06:07:00.000Z"
+    }
+  }
+}
