@@ -6,7 +6,6 @@
 <title>FeelForm Console</title>
 
 <style>
-/* ——— your CSS stays the same ——— */
 body {
   background: #0a0a0a;
   color: #eaeaea;
@@ -82,89 +81,7 @@ body {
 </style>
 </head>
 
-<body>
-
-<div class="ff-console">
-
-  <!-- TABS -->
-  <div class="ff-console-tabs">
-    <div class="ff-console-tab ff-active" data-tab="ritual">Ritual</div>
-    <div class="ff-console-tab" data-tab="memory">Memory</div>
-  </div>
-
-  <!-- PANELS -->
-  <div id="ff-panel-ritual" class="ff-console-panel ff-active">
-
-    <!-- CHAMBER 1 -->
-    <div id="ff-chamber-pulse" class="ff-chamber ff-active">
-      <h2>Pulse</h2>
-      <input data-ff-input="pulse" placeholder="Pulse…" />
-      <div class="ff-next" data-next="somatic">Next</div>
-    </div>
-
-    <!-- CHAMBER 2 -->
-    <div id="ff-chamber-somatic" class="ff-chamber">
-      <h2>Somatic</h2>
-      <input data-ff-input="somatic" placeholder="Somatic…" />
-      <div class="ff-next" data-next="amplitude">Next</div>
-    </div>
-
-    <!-- CHAMBER 3 -->
-    <div id="ff-chamber-amplitude" class="ff-chamber">
-      <h2>Amplitude</h2>
-      <input data-ff-input="amplitude" type="number" placeholder="Amplitude…" />
-      <div class="ff-next" data-next="reflection">Next</div>
-    </div>
-
-    <!-- CHAMBER 4 -->
-    <div id="ff-chamber-reflection" class="ff-chamber">
-      <h2>Reflection</h2>
-      <input data-ff-input="reflection" placeholder="Reflection…" />
-      <div class="ff-next" data-next="decision">Next</div>
-    </div>
-
-    <!-- CHAMBER 5 -->
-    <div id="ff-chamber-decision" class="ff-chamber">
-      <h2>Decision</h2>
-      <input data-ff-input="decision" placeholder="Decision…" />
-      <div class="ff-next" data-next="identity">Next</div>
-    </div>
-
-    <!-- CHAMBER 6 -->
-    <div id="ff-chamber-identity" class="ff-chamber">
-      <h2>Identity</h2>
-      <input data-ff-input="identity" placeholder="Identity…" />
-      <div class="ff-next" data-ff-action="complete-cycle">Complete Cycle</div>
-      <div data-ff-status="memory" style="margin-top:10px;color:#888;"></div>
-    </div>
-
-  </div>
-
-  <!-- MEMORY PANEL -->
-  <div id="ff-panel-memory" class="ff-console-panel">
-    <h2>Memory Engine</h2>
-
-    <p>Total Cycles: <span id="ff-memory-total">0</span></p>
-    <p>Last Identity: <span id="ff-memory-last-identity">—</span></p>
-    <p>Last Amplitude: <span id="ff-memory-last-amplitude">—</span></p>
-
-    <h3>Identity Drift</h3>
-    <div id="ff-memory-identity"></div>
-
-    <h3>Trajectory</h3>
-    <div id="ff-memory-trajectory"></div>
-
-    <h3>Meta</h3>
-    <div id="ff-memory-meta"></div>
-
-    <h3>Sessions</h3>
-    <div id="ff-memory-sessions"></div>
-  </div>
-
-</div>
-
-<!-- ——— FULL UPDATED JS ——— -->
-<script>
+  <script>
 const FF_API_BASE = "https://aifeelformconsole.onrender.com";
 
 /* -------------------------------
@@ -174,12 +91,14 @@ document.querySelectorAll(".ff-console-tab").forEach(tab => {
   tab.addEventListener("click", () => {
     const target = tab.getAttribute("data-tab");
 
-    document.querySelectorAll(".ff-console-tab").forEach(t => t.classList.remove("ff-active"));
+    document.querySelectorAll(".ff-console-tab").forEach(t =>
+      t.classList.remove("ff-active")
+    );
     tab.classList.add("ff-active");
 
-    document.querySelectorAll(".ff-console-panel").forEach(panel => {
-      panel.classList.remove("ff-active");
-    });
+    document.querySelectorAll(".ff-console-panel").forEach(panel =>
+      panel.classList.remove("ff-active")
+    );
 
     const panel = document.getElementById(`ff-panel-${target}`);
     if (panel) panel.classList.add("ff-active");
@@ -190,7 +109,9 @@ document.querySelectorAll(".ff-console-tab").forEach(tab => {
    CHAMBER NAVIGATION
 --------------------------------*/
 function ffShowChamber(name) {
-  document.querySelectorAll(".ff-chamber").forEach(ch => ch.classList.remove("ff-active"));
+  document.querySelectorAll(".ff-chamber").forEach(ch =>
+    ch.classList.remove("ff-active")
+  );
   const target = document.getElementById(`ff-chamber-${name}`);
   if (target) target.classList.add("ff-active");
 }
@@ -215,8 +136,12 @@ async function ffSaveCycle() {
   const payload = {
     pulse: document.querySelector("[data-ff-input='pulse']").value.trim(),
     somatic: document.querySelector("[data-ff-input='somatic']").value.trim(),
-    amplitude: parseFloat(document.querySelector("[data-ff-input='amplitude']").value || 0),
-    reflection: document.querySelector("[data-ff-input='reflection']").value.trim(),
+    amplitude: parseFloat(
+      document.querySelector("[data-ff-input='amplitude']").value || 0
+    ),
+    reflection: document
+      .querySelector("[data-ff-input='reflection']")
+      .value.trim(),
     decision: document.querySelector("[data-ff-input='decision']").value.trim(),
     identity: document.querySelector("[data-ff-input='identity']").value.trim(),
     timestamp: Date.now()
@@ -264,32 +189,46 @@ async function ffLoadMemory() {
     const memory = await res.json();
     const cycles = memory.sessions || [];
 
+    // Totals
     document.getElementById("ff-memory-total").textContent = cycles.length;
 
+    // Last cycle
     if (cycles.length > 0) {
       const last = cycles[cycles.length - 1];
-      document.getElementById("ff-memory-last-identity").textContent = last.identity || "—";
-      document.getElementById("ff-memory-last-amplitude").textContent = last.amplitude ?? "—";
+      document.getElementById("ff-memory-last-identity").textContent =
+        last.identity || "—";
+      document.getElementById("ff-memory-last-amplitude").textContent =
+        last.amplitude ?? "—";
     }
 
-    document.getElementById("ff-memory-identity").innerHTML =
-      cycles.map(c => `<div class="ff-memory-item">${c.identity || "—"}</div>`).join("");
+    // Identity Drift
+    document.getElementById("ff-memory-identity").innerHTML = cycles
+      .map(c => `<div class="ff-memory-item">${c.identity || "—"}</div>`)
+      .join("");
 
-    document.getElementById("ff-memory-trajectory").innerHTML =
-      cycles.map(c => `<div class="ff-memory-item">${c.pulse || "—"}</div>`).join("");
+    // Trajectory
+    document.getElementById("ff-memory-trajectory").innerHTML = cycles
+      .map(c => `<div class="ff-memory-item">${c.pulse || "—"}</div>`)
+      .join("");
 
-    document.getElementById("ff-memory-meta").innerHTML =
-      cycles.map(c => `<div class="ff-memory-item">${c.reflection || "—"}</div>`).join("");
+    // Meta
+    document.getElementById("ff-memory-meta").innerHTML = cycles
+      .map(c => `<div class="ff-memory-item">${c.reflection || "—"}</div>`)
+      .join("");
 
-    document.getElementById("ff-memory-sessions").innerHTML =
-      cycles.map(c => {
-        const date = c.timestamp ? new Date(c.timestamp).toLocaleString() : "—";
-        return `<div class="ff-session-pill">
-                  <strong>${date}</strong>
-                  <div>${c.identity || "—"}</div>
-                </div>`;
-      }).join("");
-
+    // Sessions
+    document.getElementById("ff-memory-sessions").innerHTML = cycles
+      .map(c => {
+        const date = c.timestamp
+          ? new Date(c.timestamp).toLocaleString()
+          : "—";
+        return `
+          <div class="ff-session-pill">
+            <strong>${date}</strong>
+            <div>${c.identity || "—"}</div>
+          </div>`;
+      })
+      .join("");
   } catch (err) {
     console.error("Memory load error:", err);
   }
@@ -298,11 +237,83 @@ async function ffLoadMemory() {
 /* -------------------------------
    INIT
 --------------------------------*/
-document.querySelector("[data-ff-action='complete-cycle']")
+document
+  .querySelector("[data-ff-action='complete-cycle']")
   .addEventListener("click", ffSaveCycle);
 
 ffLoadMemory();
 </script>
+<body>
 
-</body>
-</html>
+<div class="ff-console">
+
+  <!-- TABS -->
+  <div class="ff-console-tabs">
+    <div class="ff-console-tab ff-active" data-tab="ritual">Ritual</div>
+    <div class="ff-console-tab" data-tab="memory">Memory</div>
+  </div>
+
+  <!-- RITUAL PANEL -->
+  <div id="ff-panel-ritual" class="ff-console-panel ff-active">
+
+    <div id="ff-chamber-pulse" class="ff-chamber ff-active">
+      <h2>Pulse</h2>
+      <input data-ff-input="pulse" placeholder="Pulse…" />
+      <div class="ff-next" data-next="somatic">Next</div>
+    </div>
+
+    <div id="ff-chamber-somatic" class="ff-chamber">
+      <h2>Somatic</h2>
+      <input data-ff-input="somatic" placeholder="Somatic…" />
+      <div class="ff-next" data-next="amplitude">Next</div>
+    </div>
+
+    <div id="ff-chamber-amplitude" class="ff-chamber">
+      <h2>Amplitude</h2>
+      <input data-ff-input="amplitude" type="number" placeholder="Amplitude…" />
+      <div class="ff-next" data-next="reflection">Next</div>
+    </div>
+
+    <div id="ff-chamber-reflection" class="ff-chamber">
+      <h2>Reflection</h2>
+      <input data-ff-input="reflection" placeholder="Reflection…" />
+      <div class="ff-next" data-next="decision">Next</div>
+    </div>
+
+    <div id="ff-chamber-decision" class="ff-chamber">
+      <h2>Decision</h2>
+      <input data-ff-input="decision" placeholder="Decision…" />
+      <div class="ff-next" data-next="identity">Next</div>
+    </div>
+
+    <div id="ff-chamber-identity" class="ff-chamber">
+      <h2>Identity</h2>
+      <input data-ff-input="identity" placeholder="Identity…" />
+      <div class="ff-next" data-ff-action="complete-cycle">Complete Cycle</div>
+      <div data-ff-status="memory" style="margin-top:10px;color:#888;"></div>
+    </div>
+
+  </div>
+
+  <!-- MEMORY PANEL -->
+  <div id="ff-panel-memory" class="ff-console-panel">
+    <h2>Memory Engine</h2>
+
+    <p>Total Cycles: <span id="ff-memory-total">0</span></p>
+    <p>Last Identity: <span id="ff-memory-last-identity">—</span></p>
+    <p>Last Amplitude: <span id="ff-memory-last-amplitude">—</span></p>
+
+    <h3>Identity Drift</h3>
+    <div id="ff-memory-identity"></div>
+
+    <h3>Trajectory</h3>
+    <div id="ff-memory-trajectory"></div>
+
+    <h3>Meta</h3>
+    <div id="ff-memory-meta"></div>
+
+    <h3>Sessions</h3>
+    <div id="ff-memory-sessions"></div>
+  </div>
+
+</div>
