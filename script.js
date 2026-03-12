@@ -69,6 +69,77 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
 /* ----------------------------------------------------
+   FEELFORM CYCLE ENGINE — v1.0
+   (Collects all Console inputs, generates a cycle,
+    sends it to backend, updates Memory Engine)
+---------------------------------------------------- */
+
+async function completeCycle() {
+
+  // 1. COLLECT IDENTITY INPUTS
+  const identityName = document.querySelector("#identity input[placeholder='Enter name']").value || "";
+  const identityRole = document.querySelector("#identity input[placeholder='Enter role']").value || "";
+  const altitude = document.querySelector("#identity input[type='range']").value || 0;
+  const mode = document.querySelector("#identity select").value || "";
+
+  // 2. COLLECT REFLECTION INPUTS
+  const feeling = document.querySelector("#reflection input[placeholder='What are you feeling?']").value || "";
+  const warmth = document.querySelectorAll("#reflection input[type='range']")[0].value || 0;
+  const density = document.querySelectorAll("#reflection input[type='range']")[1].value || 0;
+  const nearness = document.querySelectorAll("#reflection input[type='range']")[2].value || 0;
+  const clarity = document.querySelectorAll("#reflection input[type='range']")[3].value || 0;
+
+  // 3. DECISION INPUTS (placeholder logic)
+  const vectorA = "Orientation toward clarity";
+  const vectorB = "Orientation toward expansion";
+  const vectorC = "Orientation toward depth";
+  const angle = 0;
+
+  // 4. RITUAL STATE
+  const intensity = (Number(warmth) + Number(density) + Number(nearness) + Number(clarity)) / 4;
+
+  // 5. BUILD THE CYCLE OBJECT
+  const cycle = {
+    identity: {
+      name: identityName,
+      role: identityRole,
+      altitude,
+      mode
+    },
+    reflection: {
+      feeling,
+      warmth,
+      density,
+      nearness,
+      clarity
+    },
+    decision: {
+      vectorA,
+      vectorB,
+      vectorC,
+      angle
+    },
+    ritual: {
+      intensity
+    },
+    pulse: feeling,
+    timestamp: Date.now()
+  };
+
+  // 6. SEND TO BACKEND
+  await fetch("https://feelform-memory-engine-mq5j.onrender.com/api/session", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(cycle)
+  });
+
+  // 7. UPDATE MEMORY ENGINE
+  renderCinematicMemory();
+}
+
+
+
+/* ----------------------------------------------------
    CINEMATIC MEMORY ENGINE — SOLAR–FLARE v4.1
 ---------------------------------------------------- */
 
@@ -121,7 +192,6 @@ function renderConstellation(memory) {
 
   el.textContent = glyph;
 
-  // cinematic drift
   el.classList.remove("drift");
   setTimeout(() => el.classList.add("drift"), 50);
 }
