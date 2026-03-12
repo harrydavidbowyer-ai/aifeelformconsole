@@ -1,13 +1,11 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <title>Solar‑Flare Console — Deep OS</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>FeelForm · Console</title>
 
-
-  
-  <!-- Midnight Glass + Ember Gold stylesheet -->
+  <!-- Stylesheet -->
   <link rel="stylesheet" href="style.css">
 
   <!-- Script -->
@@ -16,199 +14,120 @@
 
 <body>
 
-<div class="ff-console">
+  <div class="console">
 
-  <!-- ===== SPINE ===== -->
-  <aside class="ff-spine">
-    <div>
-      <div class="ff-spine-seal">FeelForm · Console</div>
-      <div class="ff-spine-engraving">Solar–Flare</div>
+    <!-- HEADER -->
+    <div class="console-header">
+      <div class="console-title">FeelForm · Console</div>
 
-      <nav class="ff-spine-nav" id="ffNav">
-        <div class="ff-spine-nav-item active" data-chamber="identity">Identity</div>
-        <div class="ff-spine-nav-item" data-chamber="reflection">Reflection</div>
-        <div class="ff-spine-nav-item" data-chamber="decision">Decision</div>
-        <div class="ff-spine-nav-item" data-chamber="ritual">Ritual</div>
-        <div class="ff-spine-nav-item" data-chamber="memory">Memory</div>
-      </nav>
-
-      <div class="ff-spine-rail">
-        <div class="ff-spine-rail-indicator" id="ffRailIndicator"></div>
+      <div class="console-nav">
+        <a href="#" data-target="identity" class="active">Identity</a>
+        <a href="#" data-target="reflection">Reflection</a>
+        <a href="#" data-target="decision">Decision</a>
+        <a href="#" data-target="ritual">Ritual</a>
+        <a href="#" data-target="memory">Memory</a>
       </div>
+
+      <button id="sound-toggle" style="margin-left:20px;">Sound: OFF</button>
     </div>
 
-    <div class="ff-spine-dots" id="ffDots">
-      <div class="ff-spine-dot active"></div>
-      <div class="ff-spine-dot"></div>
-      <div class="ff-spine-dot"></div>
-      <div class="ff-spine-dot"></div>
-      <div class="ff-spine-dot"></div>
-      <div class="ff-spine-dot"></div>
-      <div class="ff-spine-dot"></div>
-      <div class="ff-spine-dot"></div>
+    <!-- NAV DOTS -->
+    <div style="display:flex; gap:10px; margin-bottom:20px;">
+      <div class="nav-dot active" data-target="identity">●</div>
+      <div class="nav-dot" data-target="reflection">●</div>
+      <div class="nav-dot" data-target="decision">●</div>
+      <div class="nav-dot" data-target="ritual">●</div>
+      <div class="nav-dot" data-target="memory">●</div>
     </div>
-  </aside>
 
-  <!-- ===== CHAMBERS ===== -->
-  <main class="ff-chambers">
+    <!-- PANELS -->
+    <div class="console-panels">
 
-    <!-- ===================== IDENTITY ===================== -->
-    <section id="identity" class="ff-chamber identity active">
-      <div class="ff-chamber-header">Identity</div>
-      <div class="ff-line-soft"></div>
+      <!-- IDENTITY -->
+      <div class="panel" id="identity">
+        <h2>Identity</h2>
 
-      <div class="ff-identity-plane">
+        <p>Name</p>
+        <input type="text" placeholder="Enter name" style="width:100%; margin-bottom:12px;">
 
-        <div class="ff-identity-row">
-          <div>
-            <div class="ff-identity-label">Name</div>
-            <input id="ffIdentityName" type="text" class="ff-input" placeholder="Enter name" />
-          </div>
-          <div>
-            <div class="ff-identity-label">Role</div>
-            <input id="ffIdentityRole" type="text" class="ff-input" placeholder="Enter role" />
-          </div>
-        </div>
+        <p>Role</p>
+        <input type="text" placeholder="Enter role" style="width:100%; margin-bottom:12px;">
 
-        <div class="ff-identity-row">
-          <div>
-            <div class="ff-identity-label">Altitude</div>
-            <input id="ffIdentityAltitude" type="range" min="0" max="100" />
-          </div>
-          <div>
-            <div class="ff-identity-label">Mode</div>
-            <select id="ffIdentityMode" class="ff-select">
-              <option value="Clear">Clear</option>
-              <option value="Drifting">Drifting</option>
-              <option value="Focused">Focused</option>
-              <option value="Open">Open</option>
-            </select>
-          </div>
-        </div>
+        <p>Altitude</p>
+        <input type="range" min="0" max="100" value="50" style="width:100%; margin-bottom:12px;">
 
-      </div>
-    </section>
+        <p>Mode</p>
+        <select style="width:100%; margin-bottom:12px;">
+          <option>Stillness</option>
+          <option>Expansion</option>
+          <option>Depth</option>
+        </select>
 
-    <!-- ===================== REFLECTION ===================== -->
-    <section id="reflection" class="ff-chamber reflection">
-      <div class="ff-chamber-header">Reflection</div>
-      <div class="ff-line-soft"></div>
-
-      <div class="ff-reflection-field">
-
-        <div>
-          <div class="ff-reflection-label">Feeling</div>
-          <input id="ffReflectionFeeling" type="text" class="ff-input" placeholder="What are you feeling?" />
-        </div>
-
-        <div class="ff-reflection-slider-row">
-          <label>Warmth</label>
-          <input id="ffReflectionWarmth" type="range" min="0" max="100" />
-        </div>
-
-        <div class="ff-reflection-slider-row">
-          <label>Density</label>
-          <input id="ffReflectionDensity" type="range" min="0" max="100" />
-        </div>
-
-        <div class="ff-reflection-slider-row">
-          <label>Nearness</label>
-          <input id="ffReflectionNearness" type="range" min="0" max="100" />
-        </div>
-
-        <div class="ff-reflection-slider-row">
-          <label>Clarity</label>
-          <input id="ffReflectionClarity" type="range" min="0" max="100" />
-        </div>
-
-      </div>
-    </section>
-
-    <!-- ===================== DECISION ===================== -->
-    <section id="decision" class="ff-chamber decision">
-      <div class="ff-chamber-header">Decision</div>
-      <div class="ff-line-soft"></div>
-
-      <div class="ff-decision-grid">
-
-        <button class="ff-decision-vector" data-vector="A">
-          <div class="ff-decision-label">Vector A</div>
-          <div class="ff-decision-desc">Orientation toward clarity</div>
-        </button>
-
-        <button class="ff-decision-vector" data-vector="B">
-          <div class="ff-decision-label">Vector B</div>
-          <div class="ff-decision-desc">Orientation toward expansion</div>
-        </button>
-
-        <button class="ff-decision-vector" data-vector="C">
-          <div class="ff-decision-label">Vector C</div>
-          <div class="ff-decision-desc">Orientation toward depth</div>
-        </button>
-
+        <button style="margin-top:10px;">Clear</button>
       </div>
 
-      <div class="ff-decision-angle-display">
-        Angle: <span id="ffDecisionAngle">0</span>°
+      <!-- REFLECTION -->
+      <div class="panel" id="reflection" style="display:none;">
+        <h2>Reflection</h2>
+
+        <p>Feeling</p>
+        <input type="text" placeholder="What are you feeling?" style="width:100%; margin-bottom:12px;">
+
+        <p>Warmth</p>
+        <input type="range" min="0" max="100" value="0" style="width:100%; margin-bottom:12px;">
+
+        <p>Density</p>
+        <input type="range" min="0" max="100" value="0" style="width:100%; margin-bottom:12px;">
+
+        <p>Nearness</p>
+        <input type="range" min="0" max="100" value="0" style="width:100%; margin-bottom:12px;">
+
+        <p>Clarity</p>
+        <input type="range" min="0" max="100" value="0" style="width:100%; margin-bottom:12px;">
       </div>
-    </section>
 
-    <!-- ===================== RITUAL ===================== -->
-    <section id="ritual" class="ff-chamber ritual">
-      <div class="ff-chamber-header">Ritual</div>
+      <!-- DECISION -->
+      <div class="panel" id="decision" style="display:none;">
+        <h2>Decision</h2>
 
-      <div class="ff-ritual-orb" id="ffRitualOrb"></div>
-      <div class="ff-ritual-pulse" id="ffRitualPulse"></div>
+        <p>Vector A</p>
+        <p style="opacity:0.7; margin-bottom:10px;">Orientation toward clarity</p>
 
-      <div class="ff-ritual-field">
-        <div class="ff-line-soft"></div>
+        <p>Vector B</p>
+        <p style="opacity:0.7; margin-bottom:10px;">Orientation toward expansion</p>
 
-        <div class="ff-ritual-stats">
-          <div>Cycles: <span id="ffRitualCycles">0</span></div>
-          <div>Intensity: <span id="ffRitualIntensity">0</span></div>
-          <div>Last ignition: <span id="ffRitualTimestamp">—</span></div>
-        </div>
+        <p>Vector C</p>
+        <p style="opacity:0.7; margin-bottom:10px;">Orientation toward depth</p>
 
-        <div class="ff-line-soft"></div>
+        <p>Angle: 0°</p>
       </div>
-    </section>
 
-    <!-- ===================== MEMORY ===================== -->
-    <section id="memory" class="ff-chamber memory">
-      <div class="ff-chamber-header">Memory</div>
+      <!-- RITUAL -->
+      <div class="panel" id="ritual" style="display:none;">
+        <h2>Ritual</h2>
 
-      <div class="ff-memory-plane">
-
-        <!-- Drift particles -->
-        <div class="ff-memory-drift" style="top: 18%; left: 26%;"></div>
-        <div class="ff-memory-drift" style="top: 42%; left: 68%;"></div>
-        <div class="ff-memory-drift" style="top: 66%; left: 40%;"></div>
-
-        <!-- Glyph echoes -->
-        <div class="ff-memory-glyph" style="top: 22%; left: 32%;">Δ</div>
-        <div class="ff-memory-glyph" style="top: 48%; left: 58%;">○</div>
-        <div class="ff-memory-glyph" style="top: 68%; left: 44%;">∴</div>
-
-        <!-- Cluster lines -->
-        <div class="ff-memory-cluster-line"
-             style="top: 25%; left: 34%; width: 120px; transform: rotate(18deg);"></div>
-        <div class="ff-memory-cluster-line"
-             style="top: 52%; left: 50%; width: 90px; transform: rotate(-22deg);"></div>
-        <div class="ff-memory-cluster-line"
-             style="top: 60%; left: 38%; width: 110px; transform: rotate(12deg);"></div>
-
-        <div class="ff-line-soft"></div>
-
-        <!-- Visible Memory Log -->
-        <div id="ffMemoryLog" class="ff-memory-log"></div>
-
-        <div class="ff-line-soft"></div>
+        <p>Cycles: 0</p>
+        <p>Intensity: 0</p>
+        <p>Last ignition: —</p>
       </div>
-    </section>
 
-  </main>
-</div>
+      <!-- MEMORY -->
+      <div class="panel" id="memory" style="display:none;">
+        <h2>Memory</h2>
 
-<!-- JS will be added in Message 3 -->
+        <p>Δ</p>
+        <p>○</p>
+        <p>∴</p>
+      </div>
+
+    </div>
+
+    <!-- FOOTER -->
+    <div class="console-footer">
+      Solar–Flare · FeelForm OS
+    </div>
+
+  </div>
+
 </body>
 </html>
