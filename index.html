@@ -1,36 +1,133 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>FeelForm OS — CSS Test</title>
+  <title>FeelForm OS — Solar Flare</title>
   <link rel="stylesheet" href="style.css">
 </head>
+
 <body>
 
 <div id="ff-root">
+
+  <!-- HEADER -->
   <div id="ff-header">
     <div id="ff-logo">FEELFORM OS</div>
     <div id="ff-header-center">SOLAR FLARE</div>
     <div id="ff-header-right">EMBER GOLD</div>
   </div>
 
+  <!-- CONSOLE -->
   <div id="ff-console">
+
+    <!-- LEFT MENU -->
     <div id="ff-console-tabs">
-      <div class="ff-console-tab ff-active">OVERVIEW</div>
-      <div class="ff-console-tab">MEMORY</div>
-      <div class="ff-console-tab">ENGINE</div>
+      <div class="ff-console-tab ff-active" data-panel="system">System</div>
+      <div class="ff-console-tab" data-panel="coaching">Coaching</div>
+      <div class="ff-console-tab" data-panel="identity">Identity</div>
+      <div class="ff-console-tab" data-panel="memory">Memory</div>
     </div>
 
+    <!-- RIGHT PANELS -->
     <div id="ff-console-panels">
-      <div class="ff-console-panel ff-active">
+
+      <!-- SYSTEM PANEL -->
+      <div class="ff-console-panel ff-active" id="panel-system">
         <div class="ff-console-block">
           <h2>System</h2>
-          <p>CSS loaded successfully.</p>
+          <p>Core system online.</p>
         </div>
       </div>
+
+      <!-- COACHING PANEL -->
+      <div class="ff-console-panel" id="panel-coaching">
+        <div class="ff-console-block">
+          <h2>Coaching</h2>
+          <p>Coaching pathways active.</p>
+        </div>
+      </div>
+
+      <!-- IDENTITY PANEL -->
+      <div class="ff-console-panel" id="panel-identity">
+        <div class="ff-console-block">
+          <h2>Identity</h2>
+          <p>Identity architecture loaded.</p>
+        </div>
+      </div>
+
+      <!-- MEMORY PANEL -->
+      <div class="ff-console-panel" id="panel-memory">
+
+        <div class="ff-memory-section">
+          <div class="ff-memory-title">Memory</div>
+
+          <!-- Memory strip -->
+          <div class="ff-memory-strip">
+            <div class="ff-memory-pill">
+              <div class="ff-label">State</div>
+              <div class="ff-value">Active</div>
+            </div>
+
+            <div class="ff-memory-pill">
+              <div class="ff-label">Cycles</div>
+              <div class="ff-value">0</div>
+            </div>
+          </div>
+
+          <!-- Memory grid -->
+          <div class="ff-memory-grid">
+            <div class="ff-memory-panel">
+              <header>Notes</header>
+              <div class="ff-memory-scroll" id="ff-notes"></div>
+            </div>
+
+            <div class="ff-memory-panel">
+              <header>Events</header>
+              <div class="ff-memory-scroll" id="ff-events"></div>
+            </div>
+
+            <div class="ff-memory-panel">
+              <header>Signals</header>
+              <div class="ff-memory-scroll" id="ff-signals"></div>
+            </div>
+          </div>
+
+          <!-- Timeline -->
+          <div class="ff-memory-timeline">
+            <header>Sessions</header>
+            <div class="ff-memory-sessions" id="ff-sessions"></div>
+          </div>
+
+          <!-- Inputs -->
+          <div class="ff-memory-inputs">
+            <div>
+              <label>Note</label>
+              <input id="ff-note-input">
+            </div>
+
+            <div>
+              <label>Event</label>
+              <input id="ff-event-input">
+            </div>
+
+            <div>
+              <label>Signal</label>
+              <input id="ff-signal-input">
+            </div>
+          </div>
+
+          <!-- Controls -->
+          <div class="ff-memory-controls">
+            <button id="ff-add">Add</button>
+          </div>
+
+        </div>
+      </div>
+
     </div>
   </div>
 </div>
 
+<script src="script.js"></script>
 </body>
 </html>
