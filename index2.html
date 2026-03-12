@@ -5,10 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>FeelForm · Console</title>
 
-  <!-- Stylesheet -->
   <link rel="stylesheet" href="style.css">
-
-  <!-- Script -->
   <script defer src="script.js"></script>
 </head>
 
@@ -16,7 +13,6 @@
 
   <div class="console">
 
-    <!-- HEADER -->
     <div class="console-header">
       <div class="console-title">FeelForm · Console</div>
 
@@ -31,7 +27,6 @@
       <button id="sound-toggle" style="margin-left:20px;">Sound: OFF</button>
     </div>
 
-    <!-- NAV DOTS -->
     <div style="display:flex; gap:10px; margin-bottom:20px;">
       <div class="nav-dot active" data-target="identity">●</div>
       <div class="nav-dot" data-target="reflection">●</div>
@@ -40,10 +35,8 @@
       <div class="nav-dot" data-target="memory">●</div>
     </div>
 
-    <!-- PANELS -->
     <div class="console-panels">
 
-      <!-- IDENTITY -->
       <div class="panel" id="identity">
         <h2>Identity</h2>
 
@@ -66,7 +59,6 @@
         <button style="margin-top:10px;">Clear</button>
       </div>
 
-      <!-- REFLECTION -->
       <div class="panel" id="reflection" style="display:none;">
         <h2>Reflection</h2>
 
@@ -86,7 +78,6 @@
         <input type="range" min="0" max="100" value="0">
       </div>
 
-      <!-- DECISION -->
       <div class="panel" id="decision" style="display:none;">
         <h2>Decision</h2>
 
@@ -102,7 +93,6 @@
         <p>Angle: 0°</p>
       </div>
 
-      <!-- RITUAL -->
       <div class="panel" id="ritual" style="display:none;">
         <h2>Ritual</h2>
 
@@ -111,29 +101,18 @@
         <p>Last ignition: —</p>
       </div>
 
-      <!-- MEMORY -->
       <div class="panel" id="memory" style="display:none;">
         <h2>Memory</h2>
 
-        <!-- META HUD -->
         <div id="memory-meta" class="memory-meta"></div>
-
-        <!-- CONSTELLATION -->
         <div id="memory-constellation" class="memory-constellation"></div>
-
-        <!-- IDENTITY DRIFT -->
         <div id="memory-identity" class="memory-identity"></div>
-
-        <!-- TRAJECTORY -->
         <div id="memory-trajectory" class="memory-trajectory"></div>
-
-        <!-- SESSION CARDS -->
         <div id="memory-sessions" class="memory-sessions"></div>
       </div>
 
     </div>
 
-    <!-- FOOTER -->
     <div class="console-footer">
       Solar–Flare · FeelForm OS
     </div>
