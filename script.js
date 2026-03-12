@@ -1,139 +1,189 @@
 /* ----------------------------------------------------
-   FEELFORM OS — SCRIPT.JS
-   Navigation + Synthetic Sound Engine
+   FEELFORM CONSOLE — CORE UI LOGIC
 ---------------------------------------------------- */
 
 document.addEventListener("DOMContentLoaded", () => {
 
   /* ----------------------------------------------------
-     AUDIO ENGINE
+     PANEL SWITCHING
   ---------------------------------------------------- */
+  const navLinks = document.querySelectorAll(".console-nav a");
+  const navDots = document.querySelectorAll(".nav-dot");
+  const panels = document.querySelectorAll(".panel");
 
-  const FFSound = {
-    enabled: false,
-    ctx: null,
-    master: null,
+  function showPanel(targetId) {
+    panels.forEach((panel) => {
+      panel.style.display = panel.id === targetId ? "block" : "none";
+    });
 
-    init() {
-      if (!this.ctx) {
-        this.ctx = new (window.AudioContext || window.webkitAudioContext)();
-        this.master = this.ctx.createGain();
-        this.master.gain.value = 0.6;
-        this.master.connect(this.ctx.destination);
-      }
-    },
+    navLinks.forEach((link) => {
+      link.classList.toggle("active", link.getAttribute("data-target") === targetId);
+    });
 
-    unlock() {
-      // Required for Safari/iOS
-      if (this.ctx && this.ctx.state === "suspended") {
-        this.ctx.resume();
-      }
-    },
-
-    toggle() {
-      this.enabled = !this.enabled;
-      const btn = document.querySelector("#sound-toggle");
-      if (btn) btn.textContent = this.enabled ? "Sound: ON" : "Sound: OFF";
-    },
-
-    play(type = "ui") {
-      if (!this.enabled) return;
-      if (!this.ctx) this.init();
-      this.unlock();
-
-      const osc = this.ctx.createOscillator();
-      const gain = this.ctx.createGain();
-
-      // Default tone
-      let freq = 220;
-      let attack = 0.01;
-      let release = 0.25;
-
-      // Tone variations
-      if (type === "nav") {
-        freq = 320;
-        release = 0.18;
-      }
-      if (type === "open") {
-        freq = 180;
-        release = 0.35;
-      }
-      if (type === "dot") {
-        freq = 260;
-        release = 0.12;
-      }
-
-      osc.type = "sine";
-      osc.frequency.value = freq;
-
-      gain.gain.setValueAtTime(0, this.ctx.currentTime);
-      gain.gain.linearRampToValueAtTime(0.4, this.ctx.currentTime + attack);
-      gain.gain.exponentialRampToValueAtTime(0.0001, this.ctx.currentTime + release);
-
-      osc.connect(gain);
-      gain.connect(this.master);
-
-      osc.start();
-      osc.stop(this.ctx.currentTime + release);
-    }
-  };
-
-  /* ----------------------------------------------------
-     SOUND TOGGLE BUTTON
-  ---------------------------------------------------- */
-
-  const soundToggle = document.querySelector("#sound-toggle");
-  if (soundToggle) {
-    soundToggle.addEventListener("click", () => {
-      FFSound.toggle();
-      FFSound.play("ui");
+    navDots.forEach((dot) => {
+      dot.classList.toggle("active", dot.getAttribute("data-target") === targetId);
     });
   }
 
-  /* ----------------------------------------------------
-     NAVIGATION LOGIC
-  ---------------------------------------------------- */
-
-  const navLinks = document.querySelectorAll(".console-nav a");
-  const panels = document.querySelectorAll(".panel");
-  const dots = document.querySelectorAll(".nav-dot");
-
-  // NAV LINKS
-  navLinks.forEach(link => {
-    link.addEventListener("click", e => {
+  navLinks.forEach((link) => {
+    link.addEventListener("click", (e) => {
       e.preventDefault();
       const target = link.getAttribute("data-target");
-
-      panels.forEach(panel => {
-        panel.style.display = panel.id === target ? "block" : "none";
-      });
-
-      navLinks.forEach(l => l.classList.remove("active"));
-      link.classList.add("active");
-
-      FFSound.play("nav");
+      showPanel(target);
     });
   });
 
-  // NAV DOTS
-  dots.forEach(dot => {
+  navDots.forEach((dot) => {
     dot.addEventListener("click", () => {
       const target = dot.getAttribute("data-target");
-
-      panels.forEach(panel => {
-        panel.style.display = panel.id === target ? "block" : "none";
-      });
-
-      dots.forEach(d => d.classList.remove("active"));
-      dot.classList.add("active");
-
-      FFSound.play("dot");
+      showPanel(target);
     });
   });
 
-  // DEFAULT PANEL
-  if (panels.length > 0) {
-    panels.forEach((p, i) => p.style.display = i === 0 ? "block" : "none");
+  // Default panel
+  showPanel("identity");
+
+  /* ----------------------------------------------------
+     SOUND ENGINE
+  ---------------------------------------------------- */
+  const soundToggle = document.getElementById("sound-toggle");
+  let soundEnabled = false;
+
+  const clickSound = new Audio(
+    "https://cdn.pixabay.com/download/audio/2022/03/15/audio_7c1f3e3c52.mp3?filename=click-124467.mp3"
+  );
+
+  soundToggle.addEventListener("click", () => {
+    soundEnabled = !soundEnabled;
+    soundToggle.textContent = `Sound: ${soundEnabled ? "ON" : "OFF"}`;
+  });
+
+  document.querySelectorAll(".console-nav a, .nav-dot").forEach((el) => {
+    el.addEventListener("click", () => {
+      if (soundEnabled) clickSound.play();
+    });
+  });
+
+}); // END DOMContentLoaded
+
+
+
+/* ----------------------------------------------------
+   CINEMATIC MEMORY ENGINE — SOLAR–FLARE v4.1
+---------------------------------------------------- */
+
+const MEMORY_URL = "https://feelform-memory-engine-mq5j.onrender.com/api/memory";
+
+/* LOAD MEMORY */
+async function loadCinematicMemory() {
+  try {
+    const res = await fetch(MEMORY_URL);
+    return await res.json();
+  } catch (err) {
+    console.error("Memory Engine error:", err);
+    return null;
+  }
+}
+
+/* RENDER META HUD */
+function renderMeta(memory) {
+  const meta = document.querySelector("#memory-meta");
+  meta.innerHTML = `
+    <p><strong>Cycles:</strong> ${memory.meta.total_cycles}</p>
+    <p><strong>Last ignition:</strong> ${
+      memory.meta.last_cycle
+        ? new Date(memory.meta.last_cycle.timestamp).toLocaleString()
+        : "—"
+    }</p>
+  `;
+}
+
+/* RENDER CONSTELLATION (Δ ○ ∴) */
+function renderConstellation(memory) {
+  const el = document.querySelector("#memory-constellation");
+
+  const cycles = memory.meta.total_cycles;
+  const last = memory.meta.last_cycle;
+  const prev = memory.sessions[memory.sessions.length - 2];
+
+  let glyph = "○";
+
+  if (prev) {
+    const changed =
+      last.pulse !== prev.pulse ||
+      last.reflection !== prev.reflection ||
+      last.identity !== prev.identity;
+
+    if (changed) glyph = "Δ";
   }
 
+  if (cycles % 3 === 0 && cycles > 0) glyph = "∴";
+
+  el.textContent = glyph;
+
+  // cinematic drift
+  el.classList.remove("drift");
+  setTimeout(() => el.classList.add("drift"), 50);
+}
+
+/* RENDER IDENTITY DRIFT TIMELINE */
+function renderIdentity(memory) {
+  const container = document.querySelector("#memory-identity");
+  container.innerHTML = "";
+
+  memory.identity.forEach((id, i) => {
+    const node = document.createElement("div");
+    node.classList.add("node");
+    if (i === memory.identity.length - 1) node.classList.add("recent");
+    container.appendChild(node);
+  });
+}
+
+/* RENDER TRAJECTORY CHAINS */
+function renderTrajectory(memory) {
+  const container = document.querySelector("#memory-trajectory");
+  container.innerHTML = memory.trajectory
+    .map((t) => `<div>${t}</div>`)
+    .join("");
+}
+
+/* RENDER SESSION CARDS */
+function renderSessionCards(memory) {
+  const container = document.querySelector("#memory-sessions");
+  container.innerHTML = memory.sessions
+    .map(
+      (s) => `
+      <div class="session-card">
+        <p><strong>Pulse:</strong> ${s.pulse}</p>
+        <p><strong>Reflection:</strong> ${s.reflection}</p>
+        <p><strong>Identity:</strong> ${s.identity}</p>
+        <p style="opacity:0.6; font-size:0.8rem;">
+          ${new Date(s.timestamp).toLocaleString()}
+        </p>
+      </div>
+    `
+    )
+    .join("");
+}
+
+/* MASTER RENDERER */
+async function renderCinematicMemory() {
+  const memory = await loadCinematicMemory();
+  if (!memory) return;
+
+  renderMeta(memory);
+  renderConstellation(memory);
+  renderIdentity(memory);
+  renderTrajectory(memory);
+  renderSessionCards(memory);
+}
+
+/* LOAD WHEN MEMORY PANEL IS OPENED */
+document.querySelectorAll(".console-nav a, .nav-dot").forEach((el) => {
+  el.addEventListener("click", () => {
+    const target = el.getAttribute("data-target");
+    if (target === "memory") {
+      renderCinematicMemory();
+    }
+  });
 });
