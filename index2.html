@@ -1,168 +1,767 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-<meta charset="UTF-8">
-<title>Solar Flare Console — Prototype</title>
+<meta charset="UTF-8" />
+<title>Solar‑Flare Console</title>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
 <style>
+/* ===== GLOBAL SURFACE ===== */
+
+:root {
+  --ff-bg: #05060a;
+  --ff-panel: rgba(255,255,255,0.02);
+  --ff-panel-strong: rgba(255,255,255,0.04);
+  --ff-border-soft: rgba(255,255,255,0.06);
+  --ff-ember: #f6b75c;
+  --ff-ember-soft: rgba(246,183,92,0.32);
+  --ff-ember-dim: rgba(246,183,92,0.18);
+  --ff-text-soft: rgba(255,255,255,0.72);
+  --ff-text-dim: rgba(255,255,255,0.46);
+  --ff-radius-lg: 22px;
+  --ff-radius-md: 16px;
+  --ff-radius-sm: 12px;
+  --ff-transition-fast: 0.18s ease;
+  --ff-transition-med: 0.32s ease;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
 body {
   margin: 0;
-  background: #050509;
-  color: #f5f5f7;
-  font-family: system-ui, sans-serif;
+  min-height: 100vh;
+  background: radial-gradient(circle at top, #151824 0, #05060a 52%, #020308 100%);
+  color: var(--ff-text-soft);
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "SF Pro Text",
+    "Segoe UI", sans-serif;
+}
+
+/* ===== CONSOLE WRAPPER ===== */
+
+.ff-console {
   display: flex;
-  flex-direction: column;
-  height: 100vh;
+  max-width: 1120px;
+  margin: 40px auto;
+  padding: 24px 28px;
+  background: radial-gradient(circle at top left,
+              rgba(246,183,92,0.08),
+              rgba(0,0,0,0.0) 40%),
+              rgba(0,0,0,0.82);
+  border-radius: 28px;
+  border: 1px solid rgba(255,255,255,0.06);
+  box-shadow: 0 32px 80px rgba(0,0,0,0.75);
+  gap: 32px;
 }
 
-/* GRID LAYOUT */
-.ff-grid {
-  display: grid;
-  grid-template-columns: 200px 1fr 1fr;
-  flex: 1;
-  overflow: hidden;
-}
+/* ===== SPINE ===== */
 
-/* LEFT SPINE */
 .ff-spine {
-  position: relative;
-  padding: 24px;
-  border-right: 1px solid rgba(255,255,255,0.08);
+  width: 220px;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
+  border-right: 1px solid rgba(255,255,255,0.06);
+  padding-right: 22px;
 }
 
-/* SHALLOW ENGRAVED SPINE LINE */
-.ff-spine::after {
-  content: "";
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  right: -1px;
-  width: 1px;
-  background: linear-gradient(
-    to bottom,
-    rgba(246,183,92,0.10),
-    rgba(0,0,0,0.85),
-    rgba(246,183,92,0.10)
-  );
-  box-shadow:
-    inset 0 0 2px rgba(0,0,0,0.9),
-    inset 0 0 3px rgba(246,183,92,0.12);
+/* Seal */
+
+.ff-spine-seal {
+  font-size: 11px;
+  letter-spacing: 0.26em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.52);
+  margin-bottom: 18px;
+}
+
+/* Vertical engraving */
+
+.ff-spine-engraving {
+  writing-mode: vertical-rl;
+  text-orientation: mixed;
+  font-size: 11px;
+  letter-spacing: 0.32em;
+  text-transform: uppercase;
+  color: rgba(246,183,92,0.42);
   opacity: 0.9;
+  margin-bottom: 32px;
 }
 
-.ff-nav {
+/* Navigation band */
+
+.ff-spine-nav {
   display: flex;
   flex-direction: column;
-  gap: 12px;
-  font-size: 12px;
-  letter-spacing: 0.18em;
-  text-transform: uppercase;
-  opacity: 0.7;
+  gap: 10px;
+  margin-top: 12px;
 }
 
-.ff-nav div {
+.ff-spine-nav-item {
+  font-size: 11px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.42);
+  padding: 7px 0;
   cursor: pointer;
+  position: relative;
+  transition: color var(--ff-transition-fast);
 }
 
-.ff-nav .active {
-  color: #f6b75c;
+.ff-spine-nav-item::before {
+  content: "";
+  position: absolute;
+  left: -14px;
+  top: 50%;
+  width: 4px;
+  height: 4px;
+  border-radius: 999px;
+  background: transparent;
+  transform: translateY(-50%);
+  transition: background var(--ff-transition-fast), transform var(--ff-transition-fast);
+}
+
+.ff-spine-nav-item.active {
+  color: var(--ff-text-soft);
+}
+
+.ff-spine-nav-item.active::before {
+  background: var(--ff-ember-soft);
+  transform: translateY(-50%) scale(1.2);
+}
+
+/* Chamber rail */
+
+.ff-spine-rail {
+  margin-top: 26px;
+  width: 2px;
+  height: 180px;
+  border-radius: 999px;
+  background: linear-gradient(
+    to bottom,
+    rgba(246,183,92,0.12),
+    rgba(246,183,92,0.04)
+  );
+  position: relative;
+  overflow: hidden;
+}
+
+.ff-spine-rail-indicator {
+  position: absolute;
+  left: 50%;
+  width: 4px;
+  height: 26px;
+  border-radius: 999px;
+  background: rgba(246,183,92,0.45);
+  transform: translate(-50%, 0);
+  transition: transform var(--ff-transition-med);
+}
+
+/* Dot sequence */
+
+.ff-spine-dots {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 32px;
+  max-width: 160px;
+}
+
+.ff-spine-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 999px;
+  background: rgba(246,183,92,0.16);
+  transition: background var(--ff-transition-fast), transform var(--ff-transition-fast);
+}
+
+.ff-spine-dot.active {
+  background: rgba(246,183,92,0.6);
+  transform: scale(1.15);
+}
+
+/* ===== CHAMBER SURFACE ===== */
+
+.ff-chambers {
+  flex: 1;
+  min-height: 420px;
+  position: relative;
+}
+
+.ff-chamber {
+  position: absolute;
+  inset: 0;
+  padding: 32px 30px;
+  border-radius: var(--ff-radius-lg);
+  background: var(--ff-panel);
+  border: 1px solid var(--ff-border-soft);
+  opacity: 0;
+  pointer-events: none;
+  transform: translateY(10px);
+  transition:
+    opacity var(--ff-transition-med),
+    transform var(--ff-transition-med),
+    background var(--ff-transition-med),
+    border-color var(--ff-transition-med);
+}
+
+.ff-chamber.active {
   opacity: 1;
+  pointer-events: auto;
+  transform: translateY(0);
 }
 
-/* PANELS */
-.ff-panel {
-  padding: 24px;
-  border-right: 1px solid rgba(255,255,255,0.08);
-  overflow-y: auto;
+.ff-chamber-header {
+  font-size: 12px;
+  letter-spacing: 0.26em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.64);
+  margin-bottom: 22px;
 }
 
-.ff-panel:last-child {
-  border-right: none;
+/* Shared lines */
+
+.ff-line-soft {
+  height: 1px;
+  background: linear-gradient(
+    to right,
+    rgba(246,183,92,0.04),
+    rgba(246,183,92,0.16),
+    rgba(246,183,92,0.04)
+  );
+  opacity: 0.7;
+  margin: 4px 0 18px;
 }
 
-.ff-title {
-  font-size: 14px;
+/* ===== IDENTITY CHAMBER ===== */
+
+.ff-chamber.identity {
+  background: radial-gradient(circle at top,
+              rgba(246,183,92,0.06),
+              rgba(0,0,0,0.9));
+}
+
+.ff-identity-plane {
+  border-radius: var(--ff-radius-md);
+  border: 1px solid rgba(255,255,255,0.06);
+  padding: 32px 26px;
+  background: rgba(4,6,12,0.9);
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.ff-identity-row {
+  display: flex;
+  justify-content: space-between;
+  font-size: 13px;
+  color: var(--ff-text-dim);
+}
+
+.ff-identity-label {
   letter-spacing: 0.18em;
   text-transform: uppercase;
-  margin-bottom: 20px;
-  opacity: 0.7;
+  font-size: 11px;
+  color: rgba(255,255,255,0.5);
 }
 
-/* EIGHT DOT STRIP — BOTTOM (shallow engraved 4 + 4 symmetry) */
-.ff-dots {
+/* ===== REFLECTION CHAMBER ===== */
+
+.ff-chamber.reflection {
+  background: radial-gradient(circle at top,
+              rgba(246,183,92,0.04),
+              rgba(0,0,0,0.96));
+}
+
+.ff-reflection-field {
+  border-radius: var(--ff-radius-md);
+  border: 1px solid rgba(255,255,255,0.05);
+  padding: 30px 26px;
+  background: rgba(10,9,12,0.92);
   display: flex;
-  gap: 40px;
-  justify-content: center;
-  padding: 18px 0;
-  border-top: 1px solid rgba(255,255,255,0.08);
+  flex-direction: column;
+  gap: 22px;
 }
 
-.ff-dot-group {
+.ff-reflection-warmth {
   display: flex;
   gap: 10px;
 }
 
-.ff-dot {
-  width: 10px;
-  height: 10px;
-  border-radius: 50%;
+.ff-reflection-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 999px;
+  background: radial-gradient(circle, rgba(246,183,92,0.5), rgba(246,183,92,0.02));
+  opacity: 0.7;
+}
 
-  /* SHALLOW ENGRAVED EFFECT */
-  background: radial-gradient(circle at 40% 40%, rgba(246,183,92,0.18), rgba(0,0,0,0.85));
-  box-shadow:
-    inset 0 0 2px rgba(0,0,0,0.9),
-    inset 0 0 3px rgba(246,183,92,0.12),
-    0 0 1px rgba(246,183,92,0.15);
+.ff-reflection-text {
+  font-size: 13px;
+  color: var(--ff-text-dim);
+}
+
+/* ===== DECISION CHAMBER ===== */
+
+.ff-chamber.decision {
+  background: radial-gradient(circle at top,
+              rgba(246,183,92,0.05),
+              rgba(0,0,0,0.96));
+}
+
+.ff-decision-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 18px;
+}
+
+.ff-decision-column {
+  border-radius: var(--ff-radius-md);
+  border: 1px solid rgba(255,255,255,0.06);
+  padding: 22px 18px;
+  background: rgba(6,7,12,0.96);
+}
+
+.ff-decision-label {
+  font-size: 11px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.5);
+  margin-bottom: 10px;
+}
+
+.ff-decision-option {
+  font-size: 13px;
+  color: var(--ff-text-dim);
+}
+
+/* ===== RITUAL CHAMBER ===== */
+
+.ff-chamber.ritual {
+  background: radial-gradient(circle at top,
+              rgba(246,183,92,0.06),
+              rgba(0,0,0,0.96));
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 32px;
+}
+
+.ff-ritual-orb {
+  width: 46px;
+  height: 46px;
+  border-radius: 50%;
+  background: radial-gradient(
+    circle at center,
+    rgba(246,183,92,0.28),
+    rgba(246,183,92,0.08)
+  );
+  border: 1px solid rgba(246,183,92,0.22);
+  opacity: 0.92;
+  cursor: pointer;
+  transition: transform var(--ff-transition-fast), box-shadow var(--ff-transition-fast);
+}
+
+.ff-ritual-orb:active {
+  transform: scale(0.92);
+  box-shadow: 0 0 22px rgba(246,183,92,0.34);
+}
+
+.ff-ritual-pulse {
+  position: absolute;
+  top: 82px;
+  width: 46px;
+  height: 46px;
+  border-radius: 50%;
+  background: radial-gradient(
+    circle,
+    rgba(246,183,92,0.20),
+    rgba(246,183,92,0.02)
+  );
+  opacity: 0;
+  pointer-events: none;
+  transform: scale(1);
+  transition: transform 0.45s ease, opacity 0.45s ease;
+}
+
+.ff-ritual-pulse.active {
+  transform: scale(3.6);
+  opacity: 0.55;
+}
+
+.ff-ritual-field {
+  width: 78%;
+  background: rgba(255,255,255,0.024);
+  border-radius: var(--ff-radius-md);
+  border: 1px solid rgba(255,255,255,0.05);
+  padding: 32px 26px;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  position: relative;
+}
+
+.ff-ritual-steps {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 14px;
+}
+
+.ff-ritual-step {
+  background: rgba(255,255,255,0.03);
+  border-radius: 14px;
+  border: 1px solid rgba(255,255,255,0.05);
+  padding: 12px 8px;
+  text-align: center;
+  font-size: 11px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: rgba(246,183,92,0.32);
+}
+
+/* ===== MEMORY CHAMBER ===== */
+
+.ff-chamber.memory {
+  background: radial-gradient(circle at top,
+              rgba(246,183,92,0.03),
+              rgba(0,0,0,0.96));
+}
+
+.ff-memory-plane {
+  width: 100%;
+  background: rgba(255,255,255,0.018);
+  border-radius: var(--ff-radius-md);
+  border: 1px solid rgba(255,255,255,0.04);
+  padding: 32px 26px;
+  display: flex;
+  flex-direction: column;
+  gap: 26px;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Drift particles */
+
+.ff-memory-drift {
+  position: absolute;
+  width: 6px;
+  height: 6px;
+  background: rgba(246,183,92,0.12);
+  border-radius: 50%;
+  opacity: 0.42;
+  filter: blur(0.5px);
+  transition: transform 12s linear;
+}
+
+/* Glyph echoes */
+
+.ff-memory-glyph {
+  font-size: 11px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: rgba(246,183,92,0.22);
+  opacity: 0.55;
+  position: absolute;
+  pointer-events: none;
+  transition: transform 18s linear;
+}
+
+/* Cluster lines */
+
+.ff-memory-cluster-line {
+  position: absolute;
+  height: 1px;
+  background: rgba(246,183,92,0.10);
+  opacity: 0.35;
+  transform-origin: left center;
+  border-radius: 1px;
+}
+
+/* Memory entry placeholder */
+
+.ff-memory-entry {
+  font-size: 12px;
+  letter-spacing: 0.12em;
+  color: rgba(246,183,92,0.26);
+  text-transform: uppercase;
+  text-align: center;
+}
+
+/* ===== RESPONSIVE ===== */
+
+@media (max-width: 900px) {
+  .ff-console {
+    flex-direction: column;
+    padding: 20px;
+  }
+  .ff-spine {
+    width: 100%;
+    flex-direction: row;
+    align-items: flex-start;
+    border-right: none;
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+    padding-right: 0;
+    padding-bottom: 18px;
+    gap: 24px;
+  }
+  .ff-spine-engraving {
+    writing-mode: horizontal-tb;
+    margin-bottom: 0;
+  }
+  .ff-spine-nav {
+    flex-direction: row;
+    flex-wrap: wrap;
+  }
+  .ff-spine-nav-item::before {
+    left: 0;
+  }
+  .ff-spine-rail {
+    display: none;
+  }
+  .ff-spine-dots {
+    margin-top: 0;
+  }
+  .ff-chambers {
+    margin-top: 18px;
+    min-height: 380px;
+  }
 }
 </style>
 </head>
-
 <body>
 
-<div class="ff-grid">
+<div class="ff-console">
 
-  <!-- LEFT SPINE -->
+  <!-- ===== SPINE ===== -->
   <aside class="ff-spine">
-    <div class="ff-nav">
-      <div class="active">System</div>
-      <div>Console</div>
-      <div>Memory</div>
-      <div>Services</div>
+    <div>
+      <div class="ff-spine-seal">FeelForm · Console</div>
+      <div class="ff-spine-engraving">Solar–Flare</div>
+
+      <nav class="ff-spine-nav" id="ffNav">
+        <div class="ff-spine-nav-item active" data-chamber="identity">Identity</div>
+        <div class="ff-spine-nav-item" data-chamber="reflection">Reflection</div>
+        <div class="ff-spine-nav-item" data-chamber="decision">Decision</div>
+        <div class="ff-spine-nav-item" data-chamber="ritual">Ritual</div>
+        <div class="ff-spine-nav-item" data-chamber="memory">Memory</div>
+      </nav>
+
+      <div class="ff-spine-rail">
+        <div class="ff-spine-rail-indicator" id="ffRailIndicator"></div>
+      </div>
     </div>
-    <div style="font-size:10px;opacity:0.5;">Solar Flare Build</div>
+
+    <div class="ff-spine-dots" id="ffDots">
+      <div class="ff-spine-dot active"></div>
+      <div class="ff-spine-dot"></div>
+      <div class="ff-spine-dot"></div>
+      <div class="ff-spine-dot"></div>
+      <div class="ff-spine-dot"></div>
+      <div class="ff-spine-dot"></div>
+      <div class="ff-spine-dot"></div>
+      <div class="ff-spine-dot"></div>
+    </div>
   </aside>
 
-  <!-- CENTER CONSOLE -->
-  <section class="ff-panel">
-    <div class="ff-title">Console</div>
-    <p>This is the central console panel.</p>
-  </section>
+  <!-- ===== CHAMBERS ===== -->
+  <main class="ff-chambers">
 
-  <!-- RIGHT MEMORY -->
-  <section class="ff-panel">
-    <div class="ff-title">Memory</div>
-    <p>This is the memory panel.</p>
-  </section>
+    <!-- IDENTITY -->
+    <section id="identity" class="ff-chamber identity active">
+      <div class="ff-chamber-header">Identity</div>
+      <div class="ff-line-soft"></div>
+      <div class="ff-identity-plane">
+        <div class="ff-identity-row">
+          <div>
+            <div class="ff-identity-label">Altitude</div>
+            <div>Suspended · Cool · Clear</div>
+          </div>
+          <div>
+            <div class="ff-identity-label">Mode</div>
+            <div>Truth Plane</div>
+          </div>
+        </div>
+        <div class="ff-identity-row">
+          <div>
+            <div class="ff-identity-label">State</div>
+            <div>Baseline Self</div>
+          </div>
+          <div>
+            <div class="ff-identity-label">Return</div>
+            <div>Always reachable</div>
+          </div>
+        </div>
+      </div>
+    </section>
 
+    <!-- REFLECTION -->
+    <section id="reflection" class="ff-chamber reflection">
+      <div class="ff-chamber-header">Reflection</div>
+      <div class="ff-line-soft"></div>
+      <div class="ff-reflection-field">
+        <div class="ff-reflection-warmth">
+          <div class="ff-reflection-dot"></div>
+          <div class="ff-reflection-dot"></div>
+          <div class="ff-reflection-dot"></div>
+        </div>
+        <div class="ff-reflection-text">
+          Warm interior matte field.  
+          Shallow depth, soft edges, emotional nearness.  
+          This is where the organism feels itself without deciding.
+        </div>
+      </div>
+    </section>
+
+    <!-- DECISION -->
+    <section id="decision" class="ff-chamber decision">
+      <div class="ff-chamber-header">Decision</div>
+      <div class="ff-line-soft"></div>
+      <div class="ff-decision-grid">
+        <div class="ff-decision-column">
+          <div class="ff-decision-label">Vector A</div>
+          <div class="ff-decision-option">One possible future · One orientation</div>
+        </div>
+        <div class="ff-decision-column">
+          <div class="ff-decision-label">Vector B</div>
+          <div class="ff-decision-option">Another possible future · Another orientation</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- RITUAL -->
+    <section id="ritual" class="ff-chamber ritual">
+      <div class="ff-chamber-header">Ritual</div>
+      <div class="ff-ritual-orb" id="ffRitualOrb"></div>
+      <div class="ff-ritual-pulse" id="ffRitualPulse"></div>
+
+      <div class="ff-ritual-field">
+        <div class="ff-line-soft"></div>
+        <div class="ff-ritual-steps">
+          <div class="ff-ritual-step">Enter</div>
+          <div class="ff-ritual-step">Warm</div>
+          <div class="ff-ritual-step">Focus</div>
+          <div class="ff-ritual-step">Release</div>
+        </div>
+        <div class="ff-line-soft"></div>
+      </div>
+    </section>
+
+    <!-- MEMORY -->
+    <section id="memory" class="ff-chamber memory">
+      <div class="ff-chamber-header">Memory</div>
+      <div class="ff-memory-plane">
+
+        <!-- Drift particles -->
+        <div class="ff-memory-drift" style="top: 18%; left: 26%;"></div>
+        <div class="ff-memory-drift" style="top: 42%; left: 68%;"></div>
+        <div class="ff-memory-drift" style="top: 66%; left: 40%;"></div>
+
+        <!-- Glyph echoes -->
+        <div class="ff-memory-glyph" style="top: 22%; left: 32%;">Δ</div>
+        <div class="ff-memory-glyph" style="top: 48%; left: 58%;">○</div>
+        <div class="ff-memory-glyph" style="top: 68%; left: 44%;">∴</div>
+
+        <!-- Cluster lines -->
+        <div class="ff-memory-cluster-line"
+             style="top: 25%; left: 34%; width: 120px; transform: rotate(18deg);"></div>
+        <div class="ff-memory-cluster-line"
+             style="top: 52%; left: 50%; width: 90px; transform: rotate(-22deg);"></div>
+        <div class="ff-memory-cluster-line"
+             style="top: 60%; left: 38%; width: 110px; transform: rotate(12deg);"></div>
+
+        <div class="ff-line-soft"></div>
+        <div class="ff-memory-entry">Cool thin drift · Symbolic constellations</div>
+        <div class="ff-line-soft"></div>
+      </div>
+    </section>
+
+  </main>
 </div>
 
-<!-- EIGHT DOTS AT BOTTOM (shallow engraved 4 + 4 symmetry) -->
-<div class="ff-dots">
-  <div class="ff-dot-group">
-    <div class="ff-dot"></div>
-    <div class="ff-dot"></div>
-    <div class="ff-dot"></div>
-    <div class="ff-dot"></div>
-  </div>
-  <div class="ff-dot-group">
-    <div class="ff-dot"></div>
-    <div class="ff-dot"></div>
-    <div class="ff-dot"></div>
-    <div class="ff-dot"></div>
-  </div>
-</div>
+<script>
+(function() {
+  const chambers = ["identity", "reflection", "decision", "ritual", "memory"];
+  const navItems = Array.from(document.querySelectorAll(".ff-spine-nav-item"));
+  const chamberEls = chambers.map(id => document.getElementById(id));
+  const dots = Array.from(document.querySelectorAll(".ff-spine-dot"));
+  const railIndicator = document.getElementById("ffRailIndicator");
+  const ritualOrb = document.getElementById("ffRitualOrb");
+  const ritualPulse = document.getElementById("ffRitualPulse");
+  const memoryDrift = Array.from(document.querySelectorAll(".ff-memory-drift"));
+  const memoryGlyphs = Array.from(document.querySelectorAll(".ff-memory-glyph"));
+
+  let currentIndex = 0;
+
+  function setActiveChamber(index) {
+    currentIndex = index;
+
+    chamberEls.forEach((el, i) => {
+      el.classList.toggle("active", i === index);
+    });
+
+    navItems.forEach((el, i) => {
+      el.classList.toggle("active", i === index);
+    });
+
+    dots.forEach((dot, i) => {
+      dot.classList.toggle("active", i === index);
+    });
+
+    const railHeight = 180;
+    const step = railHeight / (chambers.length - 1);
+    if (railIndicator) {
+      railIndicator.style.transform =
+        "translate(-50%, " + (index * step) + "px)";
+    }
+
+    // very light "dynamic drift" influence
+    if (chambers[index] === "memory") {
+      randomizeMemory();
+    }
+  }
+
+  navItems.forEach((item, idx) => {
+    item.addEventListener("click", () => setActiveChamber(idx));
+  });
+
+  // Ritual ignition
+  if (ritualOrb && ritualPulse) {
+    ritualOrb.addEventListener("click", () => {
+      ritualPulse.classList.remove("active");
+      void ritualPulse.offsetWidth; // reflow
+      ritualPulse.classList.add("active");
+
+      // each ignition slightly nudges memory drift
+      setTimeout(() => {
+        randomizeMemory();
+      }, 450);
+    });
+  }
+
+  // Dynamic Memory drift / glyph motion (gentle, non-intrusive)
+  function randomizeMemory() {
+    const plane = document.querySelector(".ff-memory-plane");
+    if (!plane) return;
+    const rect = plane.getBoundingClientRect();
+
+    memoryDrift.forEach(dot => {
+      const x = Math.random() * 60 + 10;
+      const y = Math.random() * 60 + 10;
+      dot.style.transform = "translate(" + x + "%," + y + "%)";
+    });
+
+    memoryGlyphs.forEach(glyph => {
+      const x = Math.random() * 40 + 20;
+      const y = Math.random() * 40 + 20;
+      glyph.style.transform = "translate(" + x + "%," + y + "%)";
+    });
+  }
+
+  // initial
+  setActiveChamber(0);
+})();
+</script>
 
 </body>
 </html>
