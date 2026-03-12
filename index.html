@@ -3,111 +3,528 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>FeelForm Console</title>
+<title>FeelForm Console — Solar Flare</title>
 
 <style>
+:root {
+  --ff-bg: #050509;
+  --ff-panel: #0b0b12;
+  --ff-panel-soft: #101018;
+  --ff-gold: #f6b75c;
+  --ff-gold-soft: rgba(246, 183, 92, 0.35);
+  --ff-gold-hard: rgba(246, 183, 92, 0.9);
+  --ff-text: #f5f5f7;
+  --ff-muted: #8b8b96;
+  --ff-border: #1b1b24;
+  --ff-danger: #ff4b6a;
+  --ff-success: #6be38a;
+}
+
+* {
+  box-sizing: border-box;
+}
+
 body {
-  background: #0a0a0a;
-  color: #eaeaea;
-  font-family: "Inter", sans-serif;
   margin: 0;
   padding: 0;
+  background: radial-gradient(circle at top, #141421 0, #050509 55%, #020207 100%);
+  color: var(--ff-text);
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Inter", sans-serif;
 }
+
+/* FRAME */
+
+.ff-frame {
+  min-height: 100vh;
+  padding: 32px 40px 40px;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+/* TOP BAR */
+
+.ff-topbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  font-size: 11px;
+  color: var(--ff-muted);
+}
+
+.ff-topbar-left {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.ff-topbar-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 999px;
+  background: radial-gradient(circle, var(--ff-gold-hard), transparent 70%);
+  box-shadow: 0 0 12px var(--ff-gold-soft);
+}
+
+.ff-topbar-title {
+  font-variant: small-caps;
+}
+
+.ff-topbar-right {
+  display: flex;
+  gap: 18px;
+  align-items: center;
+}
+
+/* MAIN CONSOLE */
 
 .ff-console {
-  width: 100%;
-  max-width: 900px;
-  margin: 40px auto;
-  padding: 20px;
-  border: 1px solid #222;
-  background: #111;
-  border-radius: 12px;
+  flex: 1;
+  display: grid;
+  grid-template-columns: 220px minmax(0, 1.4fr) minmax(0, 1.2fr);
+  gap: 24px;
 }
 
-.ff-console-tabs {
+/* LEFT SPINE */
+
+.ff-spine {
+  position: relative;
+  padding-right: 18px;
   display: flex;
-  gap: 12px;
-  margin-bottom: 20px;
+  flex-direction: column;
+  justify-content: space-between;
 }
 
-.ff-console-tab {
-  padding: 10px 18px;
-  border: 1px solid #333;
+/* Vertical engraved line */
+.ff-spine-line {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  right: 0;
+  width: 1px;
+  background: linear-gradient(
+    to bottom,
+    transparent 0,
+    rgba(246, 183, 92, 0.4) 18%,
+    rgba(246, 183, 92, 0.9) 50%,
+    rgba(246, 183, 92, 0.4) 82%,
+    transparent 100%
+  );
+  opacity: 0.9;
+}
+
+/* OS NAV ENGRAVING */
+
+.ff-os-nav {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding-top: 8px;
+}
+
+.ff-os-label {
+  font-size: 10px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  font-variant: small-caps;
+  color: var(--ff-muted);
   cursor: pointer;
-  border-radius: 6px;
-  opacity: 0.6;
+  padding: 4px 0;
 }
 
-.ff-console-tab.ff-active {
-  opacity: 1;
-  border-color: #888;
+.ff-os-label.ff-active {
+  color: var(--ff-gold);
 }
 
-.ff-console-panel {
-  display: none;
+/* SPINE FOOTER */
+
+.ff-spine-footer {
+  font-size: 10px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--ff-muted);
 }
 
-.ff-console-panel.ff-active {
-  display: block;
+/* PANELS */
+
+.ff-panel {
+  background: radial-gradient(circle at top left, rgba(246, 183, 92, 0.12), transparent 55%),
+              radial-gradient(circle at bottom right, rgba(246, 183, 92, 0.08), transparent 60%),
+              var(--ff-panel);
+  border-radius: 18px;
+  border: 1px solid var(--ff-border);
+  box-shadow:
+    0 0 0 1px rgba(255, 255, 255, 0.02),
+    0 18px 45px rgba(0, 0, 0, 0.85);
+  padding: 18px 18px 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+/* PANEL HEADERS */
+
+.ff-panel-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+}
+
+.ff-panel-title {
+  font-size: 12px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  font-variant: small-caps;
+  color: var(--ff-muted);
+}
+
+.ff-panel-sub {
+  font-size: 11px;
+  color: var(--ff-gold-soft);
+}
+
+/* RITUAL CHAMBERS */
+
+.ff-ritual-body {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
 }
 
 .ff-chamber {
   display: none;
+  flex-direction: column;
+  gap: 10px;
 }
 
 .ff-chamber.ff-active {
-  display: block;
+  display: flex;
 }
 
+.ff-chamber-label {
+  font-size: 11px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--ff-muted);
+}
+
+.ff-chamber-input {
+  background: var(--ff-panel-soft);
+  border-radius: 12px;
+  border: 1px solid var(--ff-border);
+  padding: 10px 12px;
+  color: var(--ff-text);
+  font-size: 13px;
+  outline: none;
+}
+
+.ff-chamber-input:focus {
+  border-color: var(--ff-gold-soft);
+  box-shadow: 0 0 0 1px rgba(246, 183, 92, 0.25);
+}
+
+/* NEXT BUTTON */
+
 .ff-next {
-  margin-top: 20px;
-  padding: 10px 18px;
-  border: 1px solid #444;
+  align-self: flex-end;
+  margin-top: 4px;
+  padding: 7px 14px;
+  border-radius: 999px;
+  border: 1px solid rgba(246, 183, 92, 0.4);
+  background: radial-gradient(circle at top, rgba(246, 183, 92, 0.18), transparent 70%);
+  color: var(--ff-gold);
+  font-size: 11px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
   cursor: pointer;
-  display: inline-block;
+}
+
+/* COMPLETE CYCLE BUTTON */
+
+.ff-complete {
+  align-self: flex-end;
+  margin-top: 8px;
+  padding: 8px 16px;
+  border-radius: 999px;
+  border: 1px solid rgba(246, 183, 92, 0.7);
+  background: radial-gradient(circle at top, rgba(246, 183, 92, 0.28), transparent 70%);
+  color: var(--ff-bg);
+  font-size: 11px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  cursor: pointer;
+  font-weight: 600;
+}
+
+/* STATUS */
+
+.ff-status {
+  font-size: 11px;
+  color: var(--ff-muted);
+  margin-top: 4px;
+}
+
+/* MEMORY PANEL */
+
+.ff-memory-body {
+  flex: 1;
+  display: grid;
+  grid-template-rows: auto auto minmax(0, 1fr);
+  gap: 10px;
+}
+
+.ff-memory-row {
+  display: flex;
+  justify-content: space-between;
+  font-size: 11px;
+  color: var(--ff-muted);
+}
+
+.ff-memory-row span {
+  color: var(--ff-text);
+}
+
+.ff-memory-columns {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 10px;
+  font-size: 11px;
+}
+
+.ff-memory-col-title {
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--ff-muted);
+  margin-bottom: 6px;
+}
+
+.ff-memory-col-body {
+  border-radius: 10px;
+  border: 1px solid var(--ff-border);
+  background: rgba(5, 5, 12, 0.9);
+  padding: 8px 10px;
+  max-height: 150px;
+  overflow-y: auto;
 }
 
 .ff-memory-item {
-  padding: 6px 0;
-  border-bottom: 1px solid #222;
+  padding: 4px 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.02);
+}
+
+.ff-memory-item:last-child {
+  border-bottom: none;
+}
+
+/* SESSIONS LIST */
+
+.ff-sessions {
+  border-radius: 12px;
+  border: 1px solid var(--ff-border);
+  background: rgba(5, 5, 12, 0.9);
+  padding: 10px 12px;
+  font-size: 11px;
+  max-height: 180px;
+  overflow-y: auto;
 }
 
 .ff-session-pill {
-  padding: 10px;
-  margin-bottom: 10px;
-  border: 1px solid #333;
-  border-radius: 6px;
+  padding: 7px 8px;
+  border-radius: 8px;
+  border: 1px solid rgba(246, 183, 92, 0.18);
+  background: radial-gradient(circle at top left, rgba(246, 183, 92, 0.18), transparent 70%);
+  margin-bottom: 6px;
+}
+
+.ff-session-pill strong {
+  display: block;
+  font-size: 10px;
+  color: var(--ff-gold);
+  margin-bottom: 2px;
+}
+
+/* RESPONSIVE */
+
+@media (max-width: 980px) {
+  .ff-console {
+    grid-template-columns: 1fr;
+  }
+  .ff-spine-line {
+    display: none;
+  }
 }
 </style>
 </head>
+<body>
 
-  <script>
+<div class="ff-frame">
+
+  <!-- TOP BAR -->
+  <div class="ff-topbar">
+    <div class="ff-topbar-left">
+      <div class="ff-topbar-dot"></div>
+      <div class="ff-topbar-title">FeelForm OS — Console</div>
+    </div>
+    <div class="ff-topbar-right">
+      <div>Solar Flare Build</div>
+      <div>v4.1</div>
+    </div>
+  </div>
+
+  <!-- MAIN CONSOLE -->
+  <div class="ff-console">
+
+    <!-- LEFT SPINE / OS NAV -->
+    <aside class="ff-spine">
+      <div>
+        <div class="ff-os-nav">
+          <div class="ff-os-label ff-active" data-ff-os="system">System</div>
+          <div class="ff-os-label" data-ff-os="ritual">Ritual</div>
+          <div class="ff-os-label" data-ff-os="memory">Memory</div>
+          <div class="ff-os-label" data-ff-os="services">Services</div>
+        </div>
+      </div>
+      <div class="ff-spine-footer">
+        FeelForm / Solar Flare
+      </div>
+      <div class="ff-spine-line"></div>
+    </aside>
+
+    <!-- CENTER PANEL — RITUAL -->
+    <section class="ff-panel" data-ff-panel="ritual">
+      <div class="ff-panel-header">
+        <div class="ff-panel-title">Ritual Chamber</div>
+        <div class="ff-panel-sub">Cycle intake → completion</div>
+      </div>
+
+      <div class="ff-ritual-body">
+
+        <!-- Pulse -->
+        <div class="ff-chamber ff-active" id="ff-chamber-pulse">
+          <div class="ff-chamber-label">Pulse</div>
+          <textarea class="ff-chamber-input" rows="2" data-ff-input="pulse"
+            placeholder="What is the live signal in your field right now?"></textarea>
+          <button class="ff-next" data-next="somatic">Next</button>
+        </div>
+
+        <!-- Somatic -->
+        <div class="ff-chamber" id="ff-chamber-somatic">
+          <div class="ff-chamber-label">Somatic</div>
+          <textarea class="ff-chamber-input" rows="2" data-ff-input="somatic"
+            placeholder="Where does this live in your body?"></textarea>
+          <button class="ff-next" data-next="amplitude">Next</button>
+        </div>
+
+        <!-- Amplitude -->
+        <div class="ff-chamber" id="ff-chamber-amplitude">
+          <div class="ff-chamber-label">Amplitude</div>
+          <input class="ff-chamber-input" type="number" min="0" max="10" step="0.1"
+            data-ff-input="amplitude" placeholder="Intensity from 0–10" />
+          <button class="ff-next" data-next="reflection">Next</button>
+        </div>
+
+        <!-- Reflection -->
+        <div class="ff-chamber" id="ff-chamber-reflection">
+          <div class="ff-chamber-label">Reflection</div>
+          <textarea class="ff-chamber-input" rows="2" data-ff-input="reflection"
+            placeholder="What are you seeing more clearly about this?"></textarea>
+          <button class="ff-next" data-next="decision">Next</button>
+        </div>
+
+        <!-- Decision -->
+        <div class="ff-chamber" id="ff-chamber-decision">
+          <div class="ff-chamber-label">Decision</div>
+          <textarea class="ff-chamber-input" rows="2" data-ff-input="decision"
+            placeholder="What decision or micro‑move emerges from this?"></textarea>
+          <button class="ff-next" data-next="identity">Next</button>
+        </div>
+
+        <!-- Identity -->
+        <div class="ff-chamber" id="ff-chamber-identity">
+          <div class="ff-chamber-label">Identity</div>
+          <textarea class="ff-chamber-input" rows="2" data-ff-input="identity"
+            placeholder="Who are you, on the other side of this cycle?"></textarea>
+          <button class="ff-complete" data-ff-action="complete-cycle">Complete Cycle</button>
+          <div class="ff-status" data-ff-status="memory"></div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- RIGHT PANEL — MEMORY -->
+    <section class="ff-panel" data-ff-panel="memory">
+      <div class="ff-panel-header">
+        <div class="ff-panel-title">Memory Engine</div>
+        <div class="ff-panel-sub">Console recall / drift / sessions</div>
+      </div>
+
+      <div class="ff-memory-body">
+
+        <!-- Top row: totals -->
+        <div class="ff-memory-row">
+          <div>Total cycles: <span id="ff-memory-total">0</span></div>
+          <div>Last amplitude: <span id="ff-memory-last-amplitude">—</span></div>
+          <div>Last identity: <span id="ff-memory-last-identity">—</span></div>
+        </div>
+
+        <!-- Middle: three columns -->
+        <div class="ff-memory-columns">
+          <div>
+            <div class="ff-memory-col-title">Identity Drift</div>
+            <div class="ff-memory-col-body" id="ff-memory-identity"></div>
+          </div>
+          <div>
+            <div class="ff-memory-col-title">Trajectory</div>
+            <div class="ff-memory-col-body" id="ff-memory-trajectory"></div>
+          </div>
+          <div>
+            <div class="ff-memory-col-title">Meta</div>
+            <div class="ff-memory-col-body" id="ff-memory-meta"></div>
+          </div>
+        </div>
+
+        <!-- Bottom: sessions -->
+        <div class="ff-sessions" id="ff-memory-sessions"></div>
+
+      </div>
+    </section>
+
+  </div>
+</div>
+
+<script>
 const FF_API_BASE = "https://aifeelformconsole.onrender.com";
 
-/* -------------------------------
-   TABS
---------------------------------*/
-document.querySelectorAll(".ff-console-tab").forEach(tab => {
-  tab.addEventListener("click", () => {
-    const target = tab.getAttribute("data-tab");
+/* OS NAV — static engraving, but switches visible panel focus */
+document.querySelectorAll(".ff-os-label").forEach(label => {
+  label.addEventListener("click", () => {
+    const target = label.getAttribute("data-ff-os");
 
-    document.querySelectorAll(".ff-console-tab").forEach(t =>
-      t.classList.remove("ff-active")
+    document.querySelectorAll(".ff-os-label").forEach(l =>
+      l.classList.remove("ff-active")
     );
-    tab.classList.add("ff-active");
+    label.classList.add("ff-active");
 
-    document.querySelectorAll(".ff-console-panel").forEach(panel =>
-      panel.classList.remove("ff-active")
-    );
-
-    const panel = document.getElementById(`ff-panel-${target}`);
-    if (panel) panel.classList.add("ff-active");
+    // For now: Ritual + Memory are the two active panels.
+    // System / Services can be future expansions.
+    if (target === "ritual") {
+      document.querySelector('[data-ff-panel="ritual"]').style.display = "flex";
+      document.querySelector('[data-ff-panel="memory"]').style.display = "flex";
+    } else if (target === "memory") {
+      document.querySelector('[data-ff-panel="ritual"]').style.display = "none";
+      document.querySelector('[data-ff-panel="memory"]').style.display = "flex";
+    } else {
+      // System / Services → keep both visible for now
+      document.querySelector('[data-ff-panel="ritual"]').style.display = "flex";
+      document.querySelector('[data-ff-panel="memory"]').style.display = "flex";
+    }
   });
 });
 
-/* -------------------------------
-   CHAMBER NAVIGATION
---------------------------------*/
+/* CHAMBER NAVIGATION */
 function ffShowChamber(name) {
   document.querySelectorAll(".ff-chamber").forEach(ch =>
     ch.classList.remove("ff-active")
@@ -123,9 +540,7 @@ document.querySelectorAll(".ff-next").forEach(btn => {
   });
 });
 
-/* -------------------------------
-   MEMORY ENGINE — SAVE
---------------------------------*/
+/* MEMORY ENGINE — SAVE */
 async function ffSaveCycle() {
   const status = document.querySelector("[data-ff-status='memory']");
   if (status) {
@@ -158,7 +573,7 @@ async function ffSaveCycle() {
 
     if (status) {
       status.textContent = "Saved";
-      status.style.color = "limegreen";
+      status.style.color = "var(--ff-success)";
     }
 
     ffLoadMemory();
@@ -166,7 +581,7 @@ async function ffSaveCycle() {
     console.error("Memory save error:", err);
     if (status) {
       status.textContent = "Error saving";
-      status.style.color = "red";
+      status.style.color = "var(--ff-danger)";
     }
   } finally {
     setTimeout(() => {
@@ -178,9 +593,7 @@ async function ffSaveCycle() {
   }
 }
 
-/* -------------------------------
-   MEMORY ENGINE — LOAD
---------------------------------*/
+/* MEMORY ENGINE — LOAD */
 async function ffLoadMemory() {
   try {
     const res = await fetch(`${FF_API_BASE}/api/memory`);
@@ -190,130 +603,72 @@ async function ffLoadMemory() {
     const cycles = memory.sessions || [];
 
     // Totals
-    document.getElementById("ff-memory-total").textContent = cycles.length;
+    const totalEl = document.getElementById("ff-memory-total");
+    if (totalEl) totalEl.textContent = cycles.length;
 
     // Last cycle
     if (cycles.length > 0) {
       const last = cycles[cycles.length - 1];
-      document.getElementById("ff-memory-last-identity").textContent =
-        last.identity || "—";
-      document.getElementById("ff-memory-last-amplitude").textContent =
-        last.amplitude ?? "—";
+      const lastIdentityEl = document.getElementById("ff-memory-last-identity");
+      const lastAmpEl = document.getElementById("ff-memory-last-amplitude");
+
+      if (lastIdentityEl) lastIdentityEl.textContent = last.identity || "—";
+      if (lastAmpEl) lastAmpEl.textContent = last.amplitude ?? "—";
     }
 
     // Identity Drift
-    document.getElementById("ff-memory-identity").innerHTML = cycles
-      .map(c => `<div class="ff-memory-item">${c.identity || "—"}</div>`)
-      .join("");
+    const identityDiv = document.getElementById("ff-memory-identity");
+    if (identityDiv) {
+      identityDiv.innerHTML = cycles
+        .map(c => `<div class="ff-memory-item">${c.identity || "—"}</div>`)
+        .join("");
+    }
 
     // Trajectory
-    document.getElementById("ff-memory-trajectory").innerHTML = cycles
-      .map(c => `<div class="ff-memory-item">${c.pulse || "—"}</div>`)
-      .join("");
+    const trajectoryDiv = document.getElementById("ff-memory-trajectory");
+    if (trajectoryDiv) {
+      trajectoryDiv.innerHTML = cycles
+        .map(c => `<div class="ff-memory-item">${c.pulse || "—"}</div>`)
+        .join("");
+    }
 
     // Meta
-    document.getElementById("ff-memory-meta").innerHTML = cycles
-      .map(c => `<div class="ff-memory-item">${c.reflection || "—"}</div>`)
-      .join("");
+    const metaDiv = document.getElementById("ff-memory-meta");
+    if (metaDiv) {
+      metaDiv.innerHTML = cycles
+        .map(c => `<div class="ff-memory-item">${c.reflection || "—"}</div>`)
+        .join("");
+    }
 
     // Sessions
-    document.getElementById("ff-memory-sessions").innerHTML = cycles
-      .map(c => {
-        const date = c.timestamp
-          ? new Date(c.timestamp).toLocaleString()
-          : "—";
-        return `
-          <div class="ff-session-pill">
-            <strong>${date}</strong>
-            <div>${c.identity || "—"}</div>
-          </div>`;
-      })
-      .join("");
+    const sessionsDiv = document.getElementById("ff-memory-sessions");
+    if (sessionsDiv) {
+      sessionsDiv.innerHTML = cycles
+        .map(c => {
+          const date = c.timestamp
+            ? new Date(c.timestamp).toLocaleString()
+            : "—";
+          return `
+            <div class="ff-session-pill">
+              <strong>${date}</strong>
+              <div>${c.identity || "—"}</div>
+            </div>`;
+        })
+        .join("");
+    }
   } catch (err) {
     console.error("Memory load error:", err);
   }
 }
 
-/* -------------------------------
-   INIT
---------------------------------*/
-document
-  .querySelector("[data-ff-action='complete-cycle']")
-  .addEventListener("click", ffSaveCycle);
+/* INIT */
+const completeBtn = document.querySelector("[data-ff-action='complete-cycle']");
+if (completeBtn) {
+  completeBtn.addEventListener("click", ffSaveCycle);
+}
 
 ffLoadMemory();
 </script>
-<body>
 
-<div class="ff-console">
-
-  <!-- TABS -->
-  <div class="ff-console-tabs">
-    <div class="ff-console-tab ff-active" data-tab="ritual">Ritual</div>
-    <div class="ff-console-tab" data-tab="memory">Memory</div>
-  </div>
-
-  <!-- RITUAL PANEL -->
-  <div id="ff-panel-ritual" class="ff-console-panel ff-active">
-
-    <div id="ff-chamber-pulse" class="ff-chamber ff-active">
-      <h2>Pulse</h2>
-      <input data-ff-input="pulse" placeholder="Pulse…" />
-      <div class="ff-next" data-next="somatic">Next</div>
-    </div>
-
-    <div id="ff-chamber-somatic" class="ff-chamber">
-      <h2>Somatic</h2>
-      <input data-ff-input="somatic" placeholder="Somatic…" />
-      <div class="ff-next" data-next="amplitude">Next</div>
-    </div>
-
-    <div id="ff-chamber-amplitude" class="ff-chamber">
-      <h2>Amplitude</h2>
-      <input data-ff-input="amplitude" type="number" placeholder="Amplitude…" />
-      <div class="ff-next" data-next="reflection">Next</div>
-    </div>
-
-    <div id="ff-chamber-reflection" class="ff-chamber">
-      <h2>Reflection</h2>
-      <input data-ff-input="reflection" placeholder="Reflection…" />
-      <div class="ff-next" data-next="decision">Next</div>
-    </div>
-
-    <div id="ff-chamber-decision" class="ff-chamber">
-      <h2>Decision</h2>
-      <input data-ff-input="decision" placeholder="Decision…" />
-      <div class="ff-next" data-next="identity">Next</div>
-    </div>
-
-    <div id="ff-chamber-identity" class="ff-chamber">
-      <h2>Identity</h2>
-      <input data-ff-input="identity" placeholder="Identity…" />
-      <div class="ff-next" data-ff-action="complete-cycle">Complete Cycle</div>
-      <div data-ff-status="memory" style="margin-top:10px;color:#888;"></div>
-    </div>
-
-  </div>
-
-  <!-- MEMORY PANEL -->
-  <div id="ff-panel-memory" class="ff-console-panel">
-    <h2>Memory Engine</h2>
-
-    <p>Total Cycles: <span id="ff-memory-total">0</span></p>
-    <p>Last Identity: <span id="ff-memory-last-identity">—</span></p>
-    <p>Last Amplitude: <span id="ff-memory-last-amplitude">—</span></p>
-
-    <h3>Identity Drift</h3>
-    <div id="ff-memory-identity"></div>
-
-    <h3>Trajectory</h3>
-    <div id="ff-memory-trajectory"></div>
-
-    <h3>Meta</h3>
-    <div id="ff-memory-meta"></div>
-
-    <h3>Sessions</h3>
-    <div id="ff-memory-sessions"></div>
-  </div>
-
-</div>
+</body>
+</html>
