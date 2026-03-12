@@ -1,3 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>FeelForm Console</title>
+
+<style>
+/* ——— your CSS stays the same ——— */
+body {
+  background: #0a0a0a;
+  color: #eaeaea;
+  font-family: "Inter", sans-serif;
+  margin: 0;
+  padding: 0;
+}
+
+.ff-console {
+  width: 100%;
+  max-width: 900px;
+  margin: 40px auto;
+  padding: 20px;
+  border: 1px solid #222;
+  background: #111;
+  border-radius: 12px;
+}
+
+.ff-console-tabs {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+.ff-console-tab {
+  padding: 10px 18px;
+  border: 1px solid #333;
+  cursor: pointer;
+  border-radius: 6px;
+  opacity: 0.6;
+}
+
+.ff-console-tab.ff-active {
+  opacity: 1;
+  border-color: #888;
+}
+
+.ff-console-panel {
+  display: none;
+}
+
+.ff-console-panel.ff-active {
+  display: block;
+}
+
+.ff-chamber {
+  display: none;
+}
+
+.ff-chamber.ff-active {
+  display: block;
+}
+
+.ff-next {
+  margin-top: 20px;
+  padding: 10px 18px;
+  border: 1px solid #444;
+  cursor: pointer;
+  display: inline-block;
+}
+
+.ff-memory-item {
+  padding: 6px 0;
+  border-bottom: 1px solid #222;
+}
+
+.ff-session-pill {
+  padding: 10px;
+  margin-bottom: 10px;
+  border: 1px solid #333;
+  border-radius: 6px;
+}
+</style>
+</head>
+
+<body>
+
+<div class="ff-console">
+
+  <!-- TABS -->
+  <div class="ff-console-tabs">
+    <div class="ff-console-tab ff-active" data-tab="ritual">Ritual</div>
+    <div class="ff-console-tab" data-tab="memory">Memory</div>
+  </div>
+
+  <!-- PANELS -->
+  <div id="ff-panel-ritual" class="ff-console-panel ff-active">
+
+    <!-- CHAMBER 1 -->
+    <div id="ff-chamber-pulse" class="ff-chamber ff-active">
+      <h2>Pulse</h2>
+      <input data-ff-input="pulse" placeholder="Pulse…" />
+      <div class="ff-next" data-next="somatic">Next</div>
+    </div>
+
+    <!-- CHAMBER 2 -->
+    <div id="ff-chamber-somatic" class="ff-chamber">
+      <h2>Somatic</h2>
+      <input data-ff-input="somatic" placeholder="Somatic…" />
+      <div class="ff-next" data-next="amplitude">Next</div>
+    </div>
+
+    <!-- CHAMBER 3 -->
+    <div id="ff-chamber-amplitude" class="ff-chamber">
+      <h2>Amplitude</h2>
+      <input data-ff-input="amplitude" type="number" placeholder="Amplitude…" />
+      <div class="ff-next" data-next="reflection">Next</div>
+    </div>
+
+    <!-- CHAMBER 4 -->
+    <div id="ff-chamber-reflection" class="ff-chamber">
+      <h2>Reflection</h2>
+      <input data-ff-input="reflection" placeholder="Reflection…" />
+      <div class="ff-next" data-next="decision">Next</div>
+    </div>
+
+    <!-- CHAMBER 5 -->
+    <div id="ff-chamber-decision" class="ff-chamber">
+      <h2>Decision</h2>
+      <input data-ff-input="decision" placeholder="Decision…" />
+      <div class="ff-next" data-next="identity">Next</div>
+    </div>
+
+    <!-- CHAMBER 6 -->
+    <div id="ff-chamber-identity" class="ff-chamber">
+      <h2>Identity</h2>
+      <input data-ff-input="identity" placeholder="Identity…" />
+      <div class="ff-next" data-ff-action="complete-cycle">Complete Cycle</div>
+      <div data-ff-status="memory" style="margin-top:10px;color:#888;"></div>
+    </div>
+
+  </div>
+
+  <!-- MEMORY PANEL -->
+  <div id="ff-panel-memory" class="ff-console-panel">
+    <h2>Memory Engine</h2>
+
+    <p>Total Cycles: <span id="ff-memory-total">0</span></p>
+    <p>Last Identity: <span id="ff-memory-last-identity">—</span></p>
+    <p>Last Amplitude: <span id="ff-memory-last-amplitude">—</span></p>
+
+    <h3>Identity Drift</h3>
+    <div id="ff-memory-identity"></div>
+
+    <h3>Trajectory</h3>
+    <div id="ff-memory-trajectory"></div>
+
+    <h3>Meta</h3>
+    <div id="ff-memory-meta"></div>
+
+    <h3>Sessions</h3>
+    <div id="ff-memory-sessions"></div>
+  </div>
+
+</div>
+
+<!-- ——— FULL UPDATED JS ——— -->
+<script>
 const FF_API_BASE = "https://aifeelformconsole.onrender.com";
 
 /* -------------------------------
@@ -8,19 +175,14 @@ document.querySelectorAll(".ff-console-tab").forEach(tab => {
     const target = tab.getAttribute("data-tab");
 
     document.querySelectorAll(".ff-console-tab").forEach(t => t.classList.remove("ff-active"));
-    tab.addEventListener("click", () => {
-      const target = tab.getAttribute("data-tab");
+    tab.classList.add("ff-active");
 
-      document.querySelectorAll(".ff-console-tab").forEach(t => t.classList.remove("ff-active"));
-      tab.classList.add("ff-active");
-
-      document.querySelectorAll(".ff-console-panel").forEach(panel => {
-        panel.classList.remove("ff-active");
-      });
-
-      const panel = document.getElementById(`ff-panel-${target}`);
-      if (panel) panel.classList.add("ff-active");
+    document.querySelectorAll(".ff-console-panel").forEach(panel => {
+      panel.classList.remove("ff-active");
     });
+
+    const panel = document.getElementById(`ff-panel-${target}`);
+    if (panel) panel.classList.add("ff-active");
   });
 });
 
@@ -41,36 +203,7 @@ document.querySelectorAll(".ff-next").forEach(btn => {
 });
 
 /* -------------------------------
-   RITUAL COMPLETE
---------------------------------*/
-const ritualButton = document.getElementById("ff-ritual-complete");
-if (ritualButton) {
-  ritualButton.addEventListener("click", () => {
-    const glow = document.getElementById("ff-ritual-glow");
-    glow.style.opacity = 0.7;
-    setTimeout(() => { glow.style.opacity = 0.2; }, 600);
-
-    const memoryTab = document.querySelector('.ff-console-tab[data-tab="memory"]');
-    if (memoryTab) memoryTab.click();
-
-    const memoryButton = document.querySelector("[data-ff-action='complete-cycle']");
-    if (memoryButton) memoryButton.click();
-  });
-}
-
-/* -------------------------------
-   SOUND TOGGLE (UI ONLY)
---------------------------------*/
-const soundToggle = document.getElementById("ff-sound-toggle");
-if (soundToggle) {
-  soundToggle.addEventListener("click", () => {
-    const current = soundToggle.textContent.trim().toUpperCase();
-    soundToggle.textContent = current === "OFF" ? "ON" : "OFF";
-  });
-}
-
-/* -------------------------------
-   MEMORY ENGINE — SAVE (POST /api/session)
+   MEMORY ENGINE — SAVE
 --------------------------------*/
 async function ffSaveCycle() {
   const status = document.querySelector("[data-ff-status='memory']");
@@ -100,7 +233,7 @@ async function ffSaveCycle() {
 
     if (status) {
       status.textContent = "Saved";
-      status.style.color = "var(--ff-success)";
+      status.style.color = "limegreen";
     }
 
     ffLoadMemory();
@@ -108,7 +241,7 @@ async function ffSaveCycle() {
     console.error("Memory save error:", err);
     if (status) {
       status.textContent = "Error saving";
-      status.style.color = "var(--ff-danger)";
+      status.style.color = "red";
     }
   } finally {
     setTimeout(() => {
@@ -121,7 +254,7 @@ async function ffSaveCycle() {
 }
 
 /* -------------------------------
-   MEMORY ENGINE — LOAD (GET /api/memory)
+   MEMORY ENGINE — LOAD
 --------------------------------*/
 async function ffLoadMemory() {
   try {
@@ -131,56 +264,32 @@ async function ffLoadMemory() {
     const memory = await res.json();
     const cycles = memory.sessions || [];
 
-    // Totals
-    const totalEl = document.getElementById("ff-memory-total");
-    if (totalEl) totalEl.textContent = cycles.length;
+    document.getElementById("ff-memory-total").textContent = cycles.length;
 
     if (cycles.length > 0) {
       const last = cycles[cycles.length - 1];
-      const lastIdentityEl = document.getElementById("ff-memory-last-identity");
-      const lastAmpEl = document.getElementById("ff-memory-last-amplitude");
-
-      if (lastIdentityEl) lastIdentityEl.textContent = last.identity || "—";
-      if (lastAmpEl) lastAmpEl.textContent = (last.amplitude ?? "—");
+      document.getElementById("ff-memory-last-identity").textContent = last.identity || "—";
+      document.getElementById("ff-memory-last-amplitude").textContent = last.amplitude ?? "—";
     }
 
-    // Identity Drift
-    const identityDiv = document.getElementById("ff-memory-identity");
-    if (identityDiv) {
-      identityDiv.innerHTML = cycles
-        .map(c => `<div class="ff-memory-item">${(c.identity || "—")}</div>`)
-        .join("");
-    }
+    document.getElementById("ff-memory-identity").innerHTML =
+      cycles.map(c => `<div class="ff-memory-item">${c.identity || "—"}</div>`).join("");
 
-    // Trajectory
-    const trajectoryDiv = document.getElementById("ff-memory-trajectory");
-    if (trajectoryDiv) {
-      trajectoryDiv.innerHTML = cycles
-        .map(c => `<div class="ff-memory-item">${(c.pulse || "—")}</div>`)
-        .join("");
-    }
+    document.getElementById("ff-memory-trajectory").innerHTML =
+      cycles.map(c => `<div class="ff-memory-item">${c.pulse || "—"}</div>`).join("");
 
-    // Meta
-    const metaDiv = document.getElementById("ff-memory-meta");
-    if (metaDiv) {
-      metaDiv.innerHTML = cycles
-        .map(c => `<div class="ff-memory-item">${(c.reflection || "—")}</div>`)
-        .join("");
-    }
+    document.getElementById("ff-memory-meta").innerHTML =
+      cycles.map(c => `<div class="ff-memory-item">${c.reflection || "—"}</div>`).join("");
 
-    // Sessions
-    const sessionsDiv = document.getElementById("ff-memory-sessions");
-    if (sessionsDiv) {
-      sessionsDiv.innerHTML = cycles
-        .map(c => {
-          const date = c.timestamp ? new Date(c.timestamp).toLocaleString() : "—";
-          return `<div class="ff-session-pill">
-                    <strong>${date}</strong>
-                    <div>${(c.identity || "—")}</div>
-                  </div>`;
-        })
-        .join("");
-    }
+    document.getElementById("ff-memory-sessions").innerHTML =
+      cycles.map(c => {
+        const date = c.timestamp ? new Date(c.timestamp).toLocaleString() : "—";
+        return `<div class="ff-session-pill">
+                  <strong>${date}</strong>
+                  <div>${c.identity || "—"}</div>
+                </div>`;
+      }).join("");
+
   } catch (err) {
     console.error("Memory load error:", err);
   }
@@ -189,9 +298,11 @@ async function ffLoadMemory() {
 /* -------------------------------
    INIT
 --------------------------------*/
-const memoryButton = document.querySelector("[data-ff-action='complete-cycle']");
-if (memoryButton) {
-  memoryButton.addEventListener("click", ffSaveCycle);
-}
+document.querySelector("[data-ff-action='complete-cycle']")
+  .addEventListener("click", ffSaveCycle);
 
 ffLoadMemory();
+</script>
+
+</body>
+</html>
