@@ -1,534 +1,9 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8" />
-<title>Solar‑Flare Console</title>
-<meta name="viewport" content="width=device-width, initial-scale=1" />
-
-<style>
-/* ===== GLOBAL SURFACE ===== */
-
-:root {
-  --ff-bg: #05060a;
-  --ff-panel: rgba(255,255,255,0.02);
-  --ff-panel-strong: rgba(255,255,255,0.04);
-  --ff-border-soft: rgba(255,255,255,0.06);
-  --ff-ember: #f6b75c;
-  --ff-ember-soft: rgba(246,183,92,0.32);
-  --ff-ember-dim: rgba(246,183,92,0.18);
-  --ff-text-soft: rgba(255,255,255,0.72);
-  --ff-text-dim: rgba(255,255,255,0.46);
-  --ff-radius-lg: 22px;
-  --ff-radius-md: 16px;
-  --ff-radius-sm: 12px;
-  --ff-transition-fast: 0.18s ease;
-  --ff-transition-med: 0.32s ease;
-}
-
-*,
-*::before,
-*::after {
-  box-sizing: border-box;
-}
-
-body {
-  margin: 0;
-  min-height: 100vh;
-  background: radial-gradient(circle at top, #151824 0, #05060a 52%, #020308 100%);
-  color: var(--ff-text-soft);
-  font-family: system-ui, -apple-system, BlinkMacSystemFont, "SF Pro Text",
-    "Segoe UI", sans-serif;
-}
-
-/* ===== CONSOLE WRAPPER ===== */
-
-.ff-console {
-  display: flex;
-  max-width: 1120px;
-  margin: 40px auto;
-  padding: 24px 28px;
-  background: radial-gradient(circle at top left,
-              rgba(246,183,92,0.08),
-              rgba(0,0,0,0.0) 40%),
-              rgba(0,0,0,0.82);
-  border-radius: 28px;
-  border: 1px solid rgba(255,255,255,0.06);
-  box-shadow: 0 32px 80px rgba(0,0,0,0.75);
-  gap: 32px;
-}
-
-/* ===== SPINE ===== */
-
-.ff-spine {
-  width: 220px;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  border-right: 1px solid rgba(255,255,255,0.06);
-  padding-right: 22px;
-}
-
-/* Seal */
-
-.ff-spine-seal {
-  font-size: 11px;
-  letter-spacing: 0.26em;
-  text-transform: uppercase;
-  color: rgba(255,255,255,0.52);
-  margin-bottom: 18px;
-}
-
-/* Vertical engraving */
-
-.ff-spine-engraving {
-  writing-mode: vertical-rl;
-  text-orientation: mixed;
-  font-size: 11px;
-  letter-spacing: 0.32em;
-  text-transform: uppercase;
-  color: rgba(246,183,92,0.42);
-  opacity: 0.9;
-  margin-bottom: 32px;
-}
-
-/* Navigation band */
-
-.ff-spine-nav {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-  margin-top: 12px;
-}
-
-.ff-spine-nav-item {
-  font-size: 11px;
-  letter-spacing: 0.22em;
-  text-transform: uppercase;
-  color: rgba(255,255,255,0.42);
-  padding: 7px 0;
-  cursor: pointer;
-  position: relative;
-  transition: color var(--ff-transition-fast);
-}
-
-.ff-spine-nav-item::before {
-  content: "";
-  position: absolute;
-  left: -14px;
-  top: 50%;
-  width: 4px;
-  height: 4px;
-  border-radius: 999px;
-  background: transparent;
-  transform: translateY(-50%);
-  transition: background var(--ff-transition-fast), transform var(--ff-transition-fast);
-}
-
-.ff-spine-nav-item.active {
-  color: var(--ff-text-soft);
-}
-
-.ff-spine-nav-item.active::before {
-  background: var(--ff-ember-soft);
-  transform: translateY(-50%) scale(1.2);
-}
-
-/* Chamber rail */
-
-.ff-spine-rail {
-  margin-top: 26px;
-  width: 2px;
-  height: 180px;
-  border-radius: 999px;
-  background: linear-gradient(
-    to bottom,
-    rgba(246,183,92,0.12),
-    rgba(246,183,92,0.04)
-  );
-  position: relative;
-  overflow: hidden;
-}
-
-.ff-spine-rail-indicator {
-  position: absolute;
-  left: 50%;
-  width: 4px;
-  height: 26px;
-  border-radius: 999px;
-  background: rgba(246,183,92,0.45);
-  transform: translate(-50%, 0);
-  transition: transform var(--ff-transition-med);
-}
-
-/* Dot sequence */
-
-.ff-spine-dots {
-  display: flex;
-  justify-content: space-between;
-  margin-top: 32px;
-  max-width: 160px;
-}
-
-.ff-spine-dot {
-  width: 6px;
-  height: 6px;
-  border-radius: 999px;
-  background: rgba(246,183,92,0.16);
-  transition: background var(--ff-transition-fast), transform var(--ff-transition-fast);
-}
-
-.ff-spine-dot.active {
-  background: rgba(246,183,92,0.6);
-  transform: scale(1.15);
-}
-
-/* ===== CHAMBER SURFACE ===== */
-
-.ff-chambers {
-  flex: 1;
-  min-height: 420px;
-  position: relative;
-}
-
-.ff-chamber {
-  position: absolute;
-  inset: 0;
-  padding: 32px 30px;
-  border-radius: var(--ff-radius-lg);
-  background: var(--ff-panel);
-  border: 1px solid var(--ff-border-soft);
-  opacity: 0;
-  pointer-events: none;
-  transform: translateY(10px);
-  transition:
-    opacity var(--ff-transition-med),
-    transform var(--ff-transition-med),
-    background var(--ff-transition-med),
-    border-color var(--ff-transition-med);
-}
-
-.ff-chamber.active {
-  opacity: 1;
-  pointer-events: auto;
-  transform: translateY(0);
-}
-
-.ff-chamber-header {
-  font-size: 12px;
-  letter-spacing: 0.26em;
-  text-transform: uppercase;
-  color: rgba(255,255,255,0.64);
-  margin-bottom: 22px;
-}
-
-/* Shared lines */
-
-.ff-line-soft {
-  height: 1px;
-  background: linear-gradient(
-    to right,
-    rgba(246,183,92,0.04),
-    rgba(246,183,92,0.16),
-    rgba(246,183,92,0.04)
-  );
-  opacity: 0.7;
-  margin: 4px 0 18px;
-}
-
-/* ===== IDENTITY CHAMBER ===== */
-
-.ff-chamber.identity {
-  background: radial-gradient(circle at top,
-              rgba(246,183,92,0.06),
-              rgba(0,0,0,0.9));
-}
-
-.ff-identity-plane {
-  border-radius: var(--ff-radius-md);
-  border: 1px solid rgba(255,255,255,0.06);
-  padding: 32px 26px;
-  background: rgba(4,6,12,0.9);
-  display: flex;
-  flex-direction: column;
-  gap: 18px;
-}
-
-.ff-identity-row {
-  display: flex;
-  justify-content: space-between;
-  font-size: 13px;
-  color: var(--ff-text-dim);
-}
-
-.ff-identity-label {
-  letter-spacing: 0.18em;
-  text-transform: uppercase;
-  font-size: 11px;
-  color: rgba(255,255,255,0.5);
-}
-
-/* ===== REFLECTION CHAMBER ===== */
-
-.ff-chamber.reflection {
-  background: radial-gradient(circle at top,
-              rgba(246,183,92,0.04),
-              rgba(0,0,0,0.96));
-}
-
-.ff-reflection-field {
-  border-radius: var(--ff-radius-md);
-  border: 1px solid rgba(255,255,255,0.05);
-  padding: 30px 26px;
-  background: rgba(10,9,12,0.92);
-  display: flex;
-  flex-direction: column;
-  gap: 22px;
-}
-
-.ff-reflection-warmth {
-  display: flex;
-  gap: 10px;
-}
-
-.ff-reflection-dot {
-  width: 8px;
-  height: 8px;
-  border-radius: 999px;
-  background: radial-gradient(circle, rgba(246,183,92,0.5), rgba(246,183,92,0.02));
-  opacity: 0.7;
-}
-
-.ff-reflection-text {
-  font-size: 13px;
-  color: var(--ff-text-dim);
-}
-
-/* ===== DECISION CHAMBER ===== */
-
-.ff-chamber.decision {
-  background: radial-gradient(circle at top,
-              rgba(246,183,92,0.05),
-              rgba(0,0,0,0.96));
-}
-
-.ff-decision-grid {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 18px;
-}
-
-.ff-decision-column {
-  border-radius: var(--ff-radius-md);
-  border: 1px solid rgba(255,255,255,0.06);
-  padding: 22px 18px;
-  background: rgba(6,7,12,0.96);
-}
-
-.ff-decision-label {
-  font-size: 11px;
-  letter-spacing: 0.18em;
-  text-transform: uppercase;
-  color: rgba(255,255,255,0.5);
-  margin-bottom: 10px;
-}
-
-.ff-decision-option {
-  font-size: 13px;
-  color: var(--ff-text-dim);
-}
-
-/* ===== RITUAL CHAMBER ===== */
-
-.ff-chamber.ritual {
-  background: radial-gradient(circle at top,
-              rgba(246,183,92,0.06),
-              rgba(0,0,0,0.96));
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 32px;
-}
-
-.ff-ritual-orb {
-  width: 46px;
-  height: 46px;
-  border-radius: 50%;
-  background: radial-gradient(
-    circle at center,
-    rgba(246,183,92,0.28),
-    rgba(246,183,92,0.08)
-  );
-  border: 1px solid rgba(246,183,92,0.22);
-  opacity: 0.92;
-  cursor: pointer;
-  transition: transform var(--ff-transition-fast), box-shadow var(--ff-transition-fast);
-}
-
-.ff-ritual-orb:active {
-  transform: scale(0.92);
-  box-shadow: 0 0 22px rgba(246,183,92,0.34);
-}
-
-.ff-ritual-pulse {
-  position: absolute;
-  top: 82px;
-  width: 46px;
-  height: 46px;
-  border-radius: 50%;
-  background: radial-gradient(
-    circle,
-    rgba(246,183,92,0.20),
-    rgba(246,183,92,0.02)
-  );
-  opacity: 0;
-  pointer-events: none;
-  transform: scale(1);
-  transition: transform 0.45s ease, opacity 0.45s ease;
-}
-
-.ff-ritual-pulse.active {
-  transform: scale(3.6);
-  opacity: 0.55;
-}
-
-.ff-ritual-field {
-  width: 78%;
-  background: rgba(255,255,255,0.024);
-  border-radius: var(--ff-radius-md);
-  border: 1px solid rgba(255,255,255,0.05);
-  padding: 32px 26px;
-  display: flex;
-  flex-direction: column;
-  gap: 24px;
-  position: relative;
-}
-
-.ff-ritual-steps {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 14px;
-}
-
-.ff-ritual-step {
-  background: rgba(255,255,255,0.03);
-  border-radius: 14px;
-  border: 1px solid rgba(255,255,255,0.05);
-  padding: 12px 8px;
-  text-align: center;
-  font-size: 11px;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-  color: rgba(246,183,92,0.32);
-}
-
-/* ===== MEMORY CHAMBER ===== */
-
-.ff-chamber.memory {
-  background: radial-gradient(circle at top,
-              rgba(246,183,92,0.03),
-              rgba(0,0,0,0.96));
-}
-
-.ff-memory-plane {
-  width: 100%;
-  background: rgba(255,255,255,0.018);
-  border-radius: var(--ff-radius-md);
-  border: 1px solid rgba(255,255,255,0.04);
-  padding: 32px 26px;
-  display: flex;
-  flex-direction: column;
-  gap: 26px;
-  position: relative;
-  overflow: hidden;
-}
-
-/* Drift particles */
-
-.ff-memory-drift {
-  position: absolute;
-  width: 6px;
-  height: 6px;
-  background: rgba(246,183,92,0.12);
-  border-radius: 50%;
-  opacity: 0.42;
-  filter: blur(0.5px);
-  transition: transform 12s linear;
-}
-
-/* Glyph echoes */
-
-.ff-memory-glyph {
-  font-size: 11px;
-  letter-spacing: 0.18em;
-  text-transform: uppercase;
-  color: rgba(246,183,92,0.22);
-  opacity: 0.55;
-  position: absolute;
-  pointer-events: none;
-  transition: transform 18s linear;
-}
-
-/* Cluster lines */
-
-.ff-memory-cluster-line {
-  position: absolute;
-  height: 1px;
-  background: rgba(246,183,92,0.10);
-  opacity: 0.35;
-  transform-origin: left center;
-  border-radius: 1px;
-}
-
-/* Memory entry placeholder */
-
-.ff-memory-entry {
-  font-size: 12px;
-  letter-spacing: 0.12em;
-  color: rgba(246,183,92,0.26);
-  text-transform: uppercase;
-  text-align: center;
-}
-
-/* ===== RESPONSIVE ===== */
-
-@media (max-width: 900px) {
-  .ff-console {
-    flex-direction: column;
-    padding: 20px;
-  }
-  .ff-spine {
-    width: 100%;
-    flex-direction: row;
-    align-items: flex-start;
-    border-right: none;
-    border-bottom: 1px solid rgba(255,255,255,0.06);
-    padding-right: 0;
-    padding-bottom: 18px;
-    gap: 24px;
-  }
-  .ff-spine-engraving {
-    writing-mode: horizontal-tb;
-    margin-bottom: 0;
-  }
-  .ff-spine-nav {
-    flex-direction: row;
-    flex-wrap: wrap;
-  }
-  .ff-spine-nav-item::before {
-    left: 0;
-  }
-  .ff-spine-rail {
-    display: none;
-  }
-  .ff-spine-dots {
-    margin-top: 0;
-  }
-  .ff-chambers {
-    margin-top: 18px;
-    min-height: 380px;
-  }
-}
-</style>
+  <meta charset="UTF-8" />
+  <title>Solar‑Flare Console — Deep OS</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
 </head>
 
 <body>
@@ -569,12 +44,163 @@ body {
   <!-- ===== CHAMBERS ===== -->
   <main class="ff-chambers">
 
-    <!-- IDENTITY -->
+    <!-- ===================== IDENTITY ===================== -->
     <section id="identity" class="ff-chamber identity active">
       <div class="ff-chamber-header">Identity</div>
       <div class="ff-line-soft"></div>
+
       <div class="ff-identity-plane">
+
+        <div class="ff-identity-row">
+          <div>
+            <div class="ff-identity-label">Name</div>
+            <input id="ffIdentityName" type="text" class="ff-input" placeholder="Enter name" />
+          </div>
+          <div>
+            <div class="ff-identity-label">Role</div>
+            <input id="ffIdentityRole" type="text" class="ff-input" placeholder="Enter role" />
+          </div>
+        </div>
+
         <div class="ff-identity-row">
           <div>
             <div class="ff-identity-label">Altitude</div>
-            <div>Suspended · Cool · Clear</div
+            <input id="ffIdentityAltitude" type="range" min="0" max="100" />
+          </div>
+          <div>
+            <div class="ff-identity-label">Mode</div>
+            <select id="ffIdentityMode" class="ff-select">
+              <option value="Clear">Clear</option>
+              <option value="Drifting">Drifting</option>
+              <option value="Focused">Focused</option>
+              <option value="Open">Open</option>
+            </select>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ===================== REFLECTION ===================== -->
+    <section id="reflection" class="ff-chamber reflection">
+      <div class="ff-chamber-header">Reflection</div>
+      <div class="ff-line-soft"></div>
+
+      <div class="ff-reflection-field">
+
+        <div>
+          <div class="ff-reflection-label">Feeling</div>
+          <input id="ffReflectionFeeling" type="text" class="ff-input" placeholder="What are you feeling?" />
+        </div>
+
+        <div class="ff-reflection-slider-row">
+          <label>Warmth</label>
+          <input id="ffReflectionWarmth" type="range" min="0" max="100" />
+        </div>
+
+        <div class="ff-reflection-slider-row">
+          <label>Density</label>
+          <input id="ffReflectionDensity" type="range" min="0" max="100" />
+        </div>
+
+        <div class="ff-reflection-slider-row">
+          <label>Nearness</label>
+          <input id="ffReflectionNearness" type="range" min="0" max="100" />
+        </div>
+
+        <div class="ff-reflection-slider-row">
+          <label>Clarity</label>
+          <input id="ffReflectionClarity" type="range" min="0" max="100" />
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ===================== DECISION ===================== -->
+    <section id="decision" class="ff-chamber decision">
+      <div class="ff-chamber-header">Decision</div>
+      <div class="ff-line-soft"></div>
+
+      <div class="ff-decision-grid">
+
+        <button class="ff-decision-vector" data-vector="A">
+          <div class="ff-decision-label">Vector A</div>
+          <div class="ff-decision-desc">Orientation toward clarity</div>
+        </button>
+
+        <button class="ff-decision-vector" data-vector="B">
+          <div class="ff-decision-label">Vector B</div>
+          <div class="ff-decision-desc">Orientation toward expansion</div>
+        </button>
+
+        <button class="ff-decision-vector" data-vector="C">
+          <div class="ff-decision-label">Vector C</div>
+          <div class="ff-decision-desc">Orientation toward depth</div>
+        </button>
+
+      </div>
+
+      <div class="ff-decision-angle-display">
+        Angle: <span id="ffDecisionAngle">0</span>°
+      </div>
+    </section>
+
+    <!-- ===================== RITUAL ===================== -->
+    <section id="ritual" class="ff-chamber ritual">
+      <div class="ff-chamber-header">Ritual</div>
+
+      <div class="ff-ritual-orb" id="ffRitualOrb"></div>
+      <div class="ff-ritual-pulse" id="ffRitualPulse"></div>
+
+      <div class="ff-ritual-field">
+        <div class="ff-line-soft"></div>
+
+        <div class="ff-ritual-stats">
+          <div>Cycles: <span id="ffRitualCycles">0</span></div>
+          <div>Intensity: <span id="ffRitualIntensity">0</span></div>
+          <div>Last ignition: <span id="ffRitualTimestamp">—</span></div>
+        </div>
+
+        <div class="ff-line-soft"></div>
+      </div>
+    </section>
+
+    <!-- ===================== MEMORY ===================== -->
+    <section id="memory" class="ff-chamber memory">
+      <div class="ff-chamber-header">Memory</div>
+
+      <div class="ff-memory-plane">
+
+        <!-- Drift particles -->
+        <div class="ff-memory-drift" style="top: 18%; left: 26%;"></div>
+        <div class="ff-memory-drift" style="top: 42%; left: 68%;"></div>
+        <div class="ff-memory-drift" style="top: 66%; left: 40%;"></div>
+
+        <!-- Glyph echoes -->
+        <div class="ff-memory-glyph" style="top: 22%; left: 32%;">Δ</div>
+        <div class="ff-memory-glyph" style="top: 48%; left: 58%;">○</div>
+        <div class="ff-memory-glyph" style="top: 68%; left: 44%;">∴</div>
+
+        <!-- Cluster lines -->
+        <div class="ff-memory-cluster-line"
+             style="top: 25%; left: 34%; width: 120px; transform: rotate(18deg);"></div>
+        <div class="ff-memory-cluster-line"
+             style="top: 52%; left: 50%; width: 90px; transform: rotate(-22deg);"></div>
+        <div class="ff-memory-cluster-line"
+             style="top: 60%; left: 38%; width: 110px; transform: rotate(12deg);"></div>
+
+        <div class="ff-line-soft"></div>
+
+        <!-- Visible Memory Log -->
+        <div id="ffMemoryLog" class="ff-memory-log"></div>
+
+        <div class="ff-line-soft"></div>
+      </div>
+    </section>
+
+  </main>
+</div>
+
+<!-- JS will be added in Message 3 -->
+</body>
+</html>
