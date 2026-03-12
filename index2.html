@@ -1,74 +1,144 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>FeelForm Console — Solar‑Flare v4.1</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>FeelForm · Console</title>
 
-  <link rel="icon" href="data:,">
+  <!-- Stylesheet -->
+  <link rel="stylesheet" href="style.css">
 
-  <link rel="stylesheet" href="style.css" />
+  <!-- Script -->
+  <script defer src="script.js"></script>
 </head>
 
 <body>
 
-  <!-- ----------------------------------------------------
-       CONSOLE NAVIGATION
-  ---------------------------------------------------- -->
-  <nav class="console-nav">
-    <a href="#" data-target="identity" class="active">Identity</a>
-    <a href="#" data-target="ritual">Ritual</a>
-    <a href="#" data-target="memory">Memory</a>
-  </nav>
+  <div class="console">
 
-  <div class="nav-dots">
-    <div class="nav-dot active" data-target="identity"></div>
-    <div class="nav-dot" data-target="ritual"></div>
-    <div class="nav-dot" data-target="memory"></div>
+    <!-- HEADER -->
+    <div class="console-header">
+      <div class="console-title">FeelForm · Console</div>
+
+      <div class="console-nav">
+        <a href="#" data-target="identity" class="active">Identity</a>
+        <a href="#" data-target="reflection">Reflection</a>
+        <a href="#" data-target="decision">Decision</a>
+        <a href="#" data-target="ritual">Ritual</a>
+        <a href="#" data-target="memory">Memory</a>
+      </div>
+
+      <button id="sound-toggle" style="margin-left:20px;">Sound: OFF</button>
+    </div>
+
+    <!-- NAV DOTS -->
+    <div style="display:flex; gap:10px; margin-bottom:20px;">
+      <div class="nav-dot active" data-target="identity">●</div>
+      <div class="nav-dot" data-target="reflection">●</div>
+      <div class="nav-dot" data-target="decision">●</div>
+      <div class="nav-dot" data-target="ritual">●</div>
+      <div class="nav-dot" data-target="memory">●</div>
+    </div>
+
+    <!-- PANELS -->
+    <div class="console-panels">
+
+      <!-- IDENTITY -->
+      <div class="panel" id="identity">
+        <h2>Identity</h2>
+
+        <p>Name</p>
+        <input type="text" placeholder="Enter name">
+
+        <p>Role</p>
+        <input type="text" placeholder="Enter role">
+
+        <p>Altitude</p>
+        <input type="range" min="0" max="100" value="50">
+
+        <p>Mode</p>
+        <select>
+          <option>Stillness</option>
+          <option>Expansion</option>
+          <option>Depth</option>
+        </select>
+
+        <button style="margin-top:10px;">Clear</button>
+      </div>
+
+      <!-- REFLECTION -->
+      <div class="panel" id="reflection" style="display:none;">
+        <h2>Reflection</h2>
+
+        <p>Feeling</p>
+        <input type="text" placeholder="What are you feeling?">
+
+        <p>Warmth</p>
+        <input type="range" min="0" max="100" value="0">
+
+        <p>Density</p>
+        <input type="range" min="0" max="100" value="0">
+
+        <p>Nearness</p>
+        <input type="range" min="0" max="100" value="0">
+
+        <p>Clarity</p>
+        <input type="range" min="0" max="100" value="0">
+      </div>
+
+      <!-- DECISION -->
+      <div class="panel" id="decision" style="display:none;">
+        <h2>Decision</h2>
+
+        <p>Vector A</p>
+        <p style="opacity:0.7; margin-bottom:10px;">Orientation toward clarity</p>
+
+        <p>Vector B</p>
+        <p style="opacity:0.7; margin-bottom:10px;">Orientation toward expansion</p>
+
+        <p>Vector C</p>
+        <p style="opacity:0.7; margin-bottom:10px;">Orientation toward depth</p>
+
+        <p>Angle: 0°</p>
+      </div>
+
+      <!-- RITUAL -->
+      <div class="panel" id="ritual" style="display:none;">
+        <h2>Ritual</h2>
+
+        <p>Cycles: 0</p>
+        <p>Intensity: 0</p>
+        <p>Last ignition: —</p>
+      </div>
+
+      <!-- MEMORY (CINEMATIC MODE) -->
+      <div class="panel" id="memory" style="display:none;">
+        <h2>Memory</h2>
+
+        <!-- META HUD -->
+        <div id="memory-meta" class="memory-meta"></div>
+
+        <!-- CONSTELLATION LAYER -->
+        <div id="memory-constellation" class="memory-constellation"></div>
+
+        <!-- IDENTITY DRIFT TIMELINE -->
+        <div id="memory-identity" class="memory-identity"></div>
+
+        <!-- TRAJECTORY ARC VIEWER -->
+        <div id="memory-trajectory" class="memory-trajectory"></div>
+
+        <!-- SESSION CARDS -->
+        <div id="memory-sessions" class="memory-sessions"></div>
+      </div>
+
+    </div>
+
+    <!-- FOOTER -->
+    <div class="console-footer">
+      Solar–Flare · FeelForm OS
+    </div>
+
   </div>
-
-  <button id="sound-toggle">Sound: OFF</button>
-
-  <!-- ----------------------------------------------------
-       PANELS
-  ---------------------------------------------------- -->
-
-  <!-- IDENTITY PANEL -->
-  <section id="identity" class="panel">
-    <h1>Identity</h1>
-    <p>Welcome to the Solar‑Flare Console.</p>
-  </section>
-
-  <!-- RITUAL PANEL -->
-  <section id="ritual" class="panel" style="display:none;">
-    <h1>Ritual</h1>
-    <p>Ritual pathways will appear here.</p>
-  </section>
-
-  <!-- MEMORY PANEL -->
-  <section id="memory" class="panel" style="display:none;">
-
-    <h1>Memory Engine</h1>
-
-    <div id="memory-meta"></div>
-
-    <div id="memory-constellation" class="constellation">○</div>
-
-    <h2>Identity Drift</h2>
-    <div id="memory-identity" class="identity-timeline"></div>
-
-    <h2>Trajectory</h2>
-    <div id="memory-trajectory"></div>
-
-    <h2>Sessions</h2>
-    <div id="memory-sessions" class="session-grid"></div>
-
-  </section>
-
-  <!-- ----------------------------------------------------
-       SCRIPT
-  ---------------------------------------------------- -->
-  <script src="script.js"></script>
 
 </body>
 </html>
