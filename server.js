@@ -37,7 +37,7 @@ let memory = {
 };
 
 // -----------------------------------------------------
-// ORIGINAL ROUTES
+// ORIGINAL ROUTES (still supported)
 // -----------------------------------------------------
 
 // POST /api/session
@@ -65,16 +65,16 @@ app.get("/api/memory", (req, res) => {
 });
 
 // -----------------------------------------------------
-// MIRROR ROUTES FOR FRONTEND COMPATIBILITY
-// These match what your index.html is calling
+// REQUIRED ROUTES FOR YOUR FRONTEND
+// These are the ones your index.html calls
 // -----------------------------------------------------
 
-// GET /cycles  → return sessions array
+// GET /cycles → return sessions array
 app.get("/cycles", (req, res) => {
   res.json(memory.sessions);
 });
 
-// POST /cycles  → store a new cycle
+// POST /cycles → store a new cycle
 app.post("/cycles", (req, res) => {
   const cycle = req.body;
 
