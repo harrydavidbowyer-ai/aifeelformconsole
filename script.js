@@ -50,7 +50,7 @@ document.addEventListener("DOMContentLoaded", () => {
   let soundEnabled = false;
 
   const clickSound = new Audio(
-    "https://cdn.pixabay.com/download/audio/2022/03/15/audio_7c1f3e3c52.mp3?filename=click-124467.mp3"
+    "https://cdn.jsdelivr.net/gh/feathericons/feather-sounds/click.mp3"
   );
 
   soundToggle.addEventListener("click", () => {
