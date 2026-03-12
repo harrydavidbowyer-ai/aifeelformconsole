@@ -48,16 +48,16 @@
         <h2>Identity</h2>
 
         <p>Name</p>
-        <input type="text" placeholder="Enter name" style="width:100%; margin-bottom:12px;">
+        <input type="text" placeholder="Enter name">
 
         <p>Role</p>
-        <input type="text" placeholder="Enter role" style="width:100%; margin-bottom:12px;">
+        <input type="text" placeholder="Enter role">
 
         <p>Altitude</p>
-        <input type="range" min="0" max="100" value="50" style="width:100%; margin-bottom:12px;">
+        <input type="range" min="0" max="100" value="50">
 
         <p>Mode</p>
-        <select style="width:100%; margin-bottom:12px;">
+        <select>
           <option>Stillness</option>
           <option>Expansion</option>
           <option>Depth</option>
@@ -71,19 +71,19 @@
         <h2>Reflection</h2>
 
         <p>Feeling</p>
-        <input type="text" placeholder="What are you feeling?" style="width:100%; margin-bottom:12px;">
+        <input type="text" placeholder="What are you feeling?">
 
         <p>Warmth</p>
-        <input type="range" min="0" max="100" value="0" style="width:100%; margin-bottom:12px;">
+        <input type="range" min="0" max="100" value="0">
 
         <p>Density</p>
-        <input type="range" min="0" max="100" value="0" style="width:100%; margin-bottom:12px;">
+        <input type="range" min="0" max="100" value="0">
 
         <p>Nearness</p>
-        <input type="range" min="0" max="100" value="0" style="width:100%; margin-bottom:12px;">
+        <input type="range" min="0" max="100" value="0">
 
         <p>Clarity</p>
-        <input type="range" min="0" max="100" value="0" style="width:100%; margin-bottom:12px;">
+        <input type="range" min="0" max="100" value="0">
       </div>
 
       <!-- DECISION -->
@@ -111,13 +111,24 @@
         <p>Last ignition: —</p>
       </div>
 
-      <!-- MEMORY -->
+      <!-- MEMORY (CINEMATIC MODE) -->
       <div class="panel" id="memory" style="display:none;">
         <h2>Memory</h2>
 
-        <p>Δ</p>
-        <p>○</p>
-        <p>∴</p>
+        <!-- META HUD -->
+        <div id="memory-meta" class="memory-meta"></div>
+
+        <!-- CONSTELLATION LAYER -->
+        <div id="memory-constellation" class="memory-constellation"></div>
+
+        <!-- IDENTITY DRIFT TIMELINE -->
+        <div id="memory-identity" class="memory-identity"></div>
+
+        <!-- TRAJECTORY ARC VIEWER -->
+        <div id="memory-trajectory" class="memory-trajectory"></div>
+
+        <!-- SESSION CARDS -->
+        <div id="memory-sessions" class="memory-sessions"></div>
       </div>
 
     </div>
