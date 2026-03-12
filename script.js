@@ -1,129 +1,139 @@
-// ------------------------------------------------------------
-// FEELFORM OS — BEHAVIOR PACK 1
-// Adds:
-// 1. Tab switching
-// 2. Memory engine
-// 3. Micro‑parallax
-// 4. Solar‑flare breathing
-// 5. Session bloom animation
-// ------------------------------------------------------------
+/* ----------------------------------------------------
+   FEELFORM OS — SCRIPT.JS
+   Navigation + Synthetic Sound Engine
+---------------------------------------------------- */
 
+document.addEventListener("DOMContentLoaded", () => {
 
-// ------------------------------------------------------------
-// TAB SWITCHING
-// ------------------------------------------------------------
-document.querySelectorAll(".ff-console-tab").forEach(tab => {
-  tab.addEventListener("click", () => {
+  /* ----------------------------------------------------
+     AUDIO ENGINE
+  ---------------------------------------------------- */
 
-    // deactivate all tabs
-    document.querySelectorAll(".ff-console-tab")
-      .forEach(t => t.classList.remove("ff-active"));
+  const FFSound = {
+    enabled: false,
+    ctx: null,
+    master: null,
 
-    // activate clicked tab
-    tab.classList.add("ff-active");
+    init() {
+      if (!this.ctx) {
+        this.ctx = new (window.AudioContext || window.webkitAudioContext)();
+        this.master = this.ctx.createGain();
+        this.master.gain.value = 0.6;
+        this.master.connect(this.ctx.destination);
+      }
+    },
 
-    // hide all panels
-    document.querySelectorAll(".ff-console-panel")
-      .forEach(p => p.classList.remove("ff-active"));
+    unlock() {
+      // Required for Safari/iOS
+      if (this.ctx && this.ctx.state === "suspended") {
+        this.ctx.resume();
+      }
+    },
 
-    // show matching panel
-    const panelId = "panel-" + tab.textContent.trim().toLowerCase();
-    const panel = document.getElementById(panelId);
-    if (panel) panel.classList.add("ff-active");
-  });
-});
+    toggle() {
+      this.enabled = !this.enabled;
+      const btn = document.querySelector("#sound-toggle");
+      if (btn) btn.textContent = this.enabled ? "Sound: ON" : "Sound: OFF";
+    },
 
+    play(type = "ui") {
+      if (!this.enabled) return;
+      if (!this.ctx) this.init();
+      this.unlock();
 
-// ------------------------------------------------------------
-// MEMORY ENGINE
-// ------------------------------------------------------------
-const noteInput   = document.getElementById("ff-note-input");
-const eventInput  = document.getElementById("ff-event-input");
-const signalInput = document.getElementById("ff-signal-input");
+      const osc = this.ctx.createOscillator();
+      const gain = this.ctx.createGain();
 
-const notesBox    = document.getElementById("ff-notes");
-const eventsBox   = document.getElementById("ff-events");
-const signalsBox  = document.getElementById("ff-signals");
-const sessionsBox = document.getElementById("ff-sessions");
+      // Default tone
+      let freq = 220;
+      let attack = 0.01;
+      let release = 0.25;
 
-document.getElementById("ff-add").addEventListener("click", () => {
-  const note   = noteInput.value.trim();
-  const event  = eventInput.value.trim();
-  const signal = signalInput.value.trim();
+      // Tone variations
+      if (type === "nav") {
+        freq = 320;
+        release = 0.18;
+      }
+      if (type === "open") {
+        freq = 180;
+        release = 0.35;
+      }
+      if (type === "dot") {
+        freq = 260;
+        release = 0.12;
+      }
 
-  // Add to memory panels
-  if (note)   notesBox.innerHTML   += `<div>${note}</div>`;
-  if (event)  eventsBox.innerHTML  += `<div>${event}</div>`;
-  if (signal) signalsBox.innerHTML += `<div>${signal}</div>`;
+      osc.type = "sine";
+      osc.frequency.value = freq;
 
-  // Add to sessions timeline
-  if (note || event || signal) {
-    const time = new Date().toLocaleTimeString();
-    const text = note || event || signal;
+      gain.gain.setValueAtTime(0, this.ctx.currentTime);
+      gain.gain.linearRampToValueAtTime(0.4, this.ctx.currentTime + attack);
+      gain.gain.exponentialRampToValueAtTime(0.0001, this.ctx.currentTime + release);
 
-    sessionsBox.innerHTML += `
-      <div class="ff-memory-session-card ff-bloom">
-        <div>${time}</div>
-        <div>${text}</div>
-      </div>
-    `;
+      osc.connect(gain);
+      gain.connect(this.master);
+
+      osc.start();
+      osc.stop(this.ctx.currentTime + release);
+    }
+  };
+
+  /* ----------------------------------------------------
+     SOUND TOGGLE BUTTON
+  ---------------------------------------------------- */
+
+  const soundToggle = document.querySelector("#sound-toggle");
+  if (soundToggle) {
+    soundToggle.addEventListener("click", () => {
+      FFSound.toggle();
+      FFSound.play("ui");
+    });
   }
 
-  // Clear inputs
-  noteInput.value = "";
-  eventInput.value = "";
-  signalInput.value = "";
-});
+  /* ----------------------------------------------------
+     NAVIGATION LOGIC
+  ---------------------------------------------------- */
 
+  const navLinks = document.querySelectorAll(".console-nav a");
+  const panels = document.querySelectorAll(".panel");
+  const dots = document.querySelectorAll(".nav-dot");
 
-// ------------------------------------------------------------
-// MICRO‑PARALLAX (hover-based subtle movement)
-// ------------------------------------------------------------
-const root = document.getElementById("ff-root");
+  // NAV LINKS
+  navLinks.forEach(link => {
+    link.addEventListener("click", e => {
+      e.preventDefault();
+      const target = link.getAttribute("data-target");
 
-document.addEventListener("mousemove", (e) => {
-  const x = (e.clientX / window.innerWidth  - 0.5) * 4;
-  const y = (e.clientY / window.innerHeight - 0.5) * 4;
-
-  root.style.transform = `translate(${x}px, ${y}px)`;
-});
-
-
-// ------------------------------------------------------------
-// SOLAR‑FLARE BREATHING (slow scale + glow)
-// ------------------------------------------------------------
-let t = 0;
-function solarBreath() {
-  t += 0.005;
-
-  const scale = 1 + Math.sin(t) * 0.01;
-  const glow  = 0.25 + Math.sin(t * 0.5) * 0.15;
-
-  root.style.boxShadow =
-    `inset 0 0 80px rgba(248,181,0,${glow})`;
-
-  root.style.transform += ` scale(${scale})`;
-
-  requestAnimationFrame(solarBreath);
-}
-solarBreath();
-
-
-// ------------------------------------------------------------
-// SESSION BLOOM (soft pop-in animation)
-// ------------------------------------------------------------
-const observer = new MutationObserver(() => {
-  document.querySelectorAll(".ff-memory-session-card.ff-bloom")
-    .forEach(card => {
-      card.style.opacity = "0";
-      card.style.transform = "scale(0.9)";
-      requestAnimationFrame(() => {
-        card.style.transition = "0.35s ease";
-        card.style.opacity = "1";
-        card.style.transform = "scale(1)";
-        card.classList.remove("ff-bloom");
+      panels.forEach(panel => {
+        panel.style.display = panel.id === target ? "block" : "none";
       });
-    });
-});
 
-observer.observe(sessionsBox, { childList: true });
+      navLinks.forEach(l => l.classList.remove("active"));
+      link.classList.add("active");
+
+      FFSound.play("nav");
+    });
+  });
+
+  // NAV DOTS
+  dots.forEach(dot => {
+    dot.addEventListener("click", () => {
+      const target = dot.getAttribute("data-target");
+
+      panels.forEach(panel => {
+        panel.style.display = panel.id === target ? "block" : "none";
+      });
+
+      dots.forEach(d => d.classList.remove("active"));
+      dot.classList.add("active");
+
+      FFSound.play("dot");
+    });
+  });
+
+  // DEFAULT PANEL
+  if (panels.length > 0) {
+    panels.forEach((p, i) => p.style.display = i === 0 ? "block" : "none");
+  }
+
+});
