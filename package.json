@@ -1,25 +1,13 @@
 {
-  "sessions": [
-    {
-      "pulse": "string",
-      "reflection": "string",
-      "identity": "string",
-      "timestamp": "2026-03-12T06:07:00.000Z"
-    }
-  ],
-  "identity": [
-    "string"
-  ],
-  "trajectory": [
-    "pulse → reflection → identity"
-  ],
-  "meta": {
-    "total_cycles": 1,
-    "last_cycle": {
-      "pulse": "string",
-      "reflection": "string",
-      "identity": "string",
-      "timestamp": "2026-03-12T06:07:00.000Z"
-    }
+  "name": "feelform-console",
+  "version": "1.0.0",
+  "type": "module",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "express": "^4.18.2",
+    "cors": "^2.8.5"
   }
 }
