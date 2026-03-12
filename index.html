@@ -22,32 +22,26 @@
 
     <!-- LEFT NAVIGATION -->
     <nav id="ff-console-tabs">
-
       <div class="ff-console-tab ff-active" data-panel="system">
         <span>System</span>
         <span class="ff-tab-indicator"></span>
       </div>
-
       <div class="ff-console-tab" data-panel="coaching">
         <span>Coaching</span>
         <span class="ff-tab-indicator"></span>
       </div>
-
       <div class="ff-console-tab" data-panel="identity">
         <span>Identity</span>
         <span class="ff-tab-indicator"></span>
       </div>
-
       <div class="ff-console-tab" data-panel="memory">
         <span>Memory</span>
         <span class="ff-tab-indicator"></span>
       </div>
-
       <div class="ff-console-tab" data-panel="engine">
         <span>Engine</span>
         <span class="ff-tab-indicator"></span>
       </div>
-
     </nav>
 
     <!-- RIGHT PANELS -->
@@ -103,27 +97,37 @@
           <p>Core identity nodes active.</p>
         </div>
 
+        <!-- Paired identity blocks -->
         <div class="ff-identity-grid">
           <div class="ff-identity-card">
-            <label>Role</label>
-            <div class="ff-identity-value">Philosophical Life Coach</div>
+            <label>Altitude</label>
+            <div class="ff-identity-value" id="ff-altitude">High</div>
           </div>
-
           <div class="ff-identity-card">
-            <label>Mode</label>
-            <div class="ff-identity-value">Architect</div>
+            <label>Density</label>
+            <div class="ff-identity-value" id="ff-density">Light</div>
           </div>
-
           <div class="ff-identity-card">
-            <label>Field</label>
-            <div class="ff-identity-value">Metaphysical Systems</div>
+            <label>Presence</label>
+            <div class="ff-identity-value" id="ff-presence">Open</div>
+          </div>
+          <div class="ff-identity-card">
+            <label>Clarity</label>
+            <div class="ff-identity-value" id="ff-clarity">Sharp</div>
+          </div>
+        </div>
+
+        <!-- Trajectory line -->
+        <div class="ff-trajectory-block">
+          <label>Trajectory</label>
+          <div class="ff-trajectory-rail">
+            <div class="ff-trajectory-ember" id="ff-trajectory-ember"></div>
           </div>
         </div>
       </div>
 
       <!-- MEMORY PANEL -->
       <div class="ff-console-panel" id="panel-memory">
-
         <div class="ff-memory-section">
           <div class="ff-memory-title">Memory Engine</div>
 
@@ -132,7 +136,6 @@
               <div class="ff-label">State</div>
               <div class="ff-value">Active</div>
             </div>
-
             <div class="ff-memory-pill">
               <div class="ff-label">Cycles</div>
               <div class="ff-value" id="ff-cycle-count">0</div>
@@ -144,12 +147,10 @@
               <header>Notes</header>
               <div class="ff-memory-scroll" id="ff-notes"></div>
             </div>
-
             <div class="ff-memory-panel">
               <header>Events</header>
               <div class="ff-memory-scroll" id="ff-events"></div>
             </div>
-
             <div class="ff-memory-panel">
               <header>Signals</header>
               <div class="ff-memory-scroll" id="ff-signals"></div>
@@ -166,12 +167,10 @@
               <label>Note</label>
               <input id="ff-note-input">
             </div>
-
             <div>
               <label>Event</label>
               <input id="ff-event-input">
             </div>
-
             <div>
               <label>Signal</label>
               <input id="ff-signal-input">
@@ -181,7 +180,6 @@
           <div class="ff-memory-controls">
             <button id="ff-add">Add</button>
           </div>
-
         </div>
       </div>
 
