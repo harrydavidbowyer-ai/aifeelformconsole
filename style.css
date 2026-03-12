@@ -62,7 +62,22 @@ body {
   transition: 0.25s ease;
 }
 
+.console-nav a.active,
 .console-nav a:hover {
+  opacity: 1;
+  color: #ffb44a;
+}
+
+/* NAV DOTS */
+.nav-dot {
+  cursor: pointer;
+  font-size: 1.2rem;
+  opacity: 0.4;
+  transition: 0.25s ease;
+}
+
+.nav-dot.active,
+.nav-dot:hover {
   opacity: 1;
   color: #ffb44a;
 }
@@ -102,31 +117,40 @@ body {
   font-size: 0.92rem;
   line-height: 1.55;
   opacity: 0.85;
+  margin-bottom: 8px;
 }
 
-/* ICONS */
-.icon {
-  width: 22px;
-  height: 22px;
-  margin-right: 8px;
-  opacity: 0.8;
-  transition: 0.25s ease;
+/* INPUTS */
+input[type="text"],
+select,
+input[type="range"] {
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 180, 70, 0.18);
+  border-radius: 6px;
+  padding: 8px;
+  color: #e6e6e6;
+  width: 100%;
+  margin-bottom: 12px;
 }
 
-.icon:hover {
-  opacity: 1;
+input[type="text"]::placeholder {
+  color: rgba(255, 255, 255, 0.35);
 }
 
-/* LINKS INSIDE PANELS */
-.panel a {
+/* BUTTONS */
+button {
+  background: rgba(255, 180, 70, 0.15);
+  border: 1px solid rgba(255, 180, 70, 0.35);
   color: #ffb44a;
-  text-decoration: none;
-  font-weight: 500;
+  padding: 8px 16px;
+  border-radius: 6px;
+  cursor: pointer;
   transition: 0.25s ease;
 }
 
-.panel a:hover {
-  color: #ffd28a;
+button:hover {
+  background: rgba(255, 180, 70, 0.25);
+  border-color: rgba(255, 180, 70, 0.55);
 }
 
 /* FOOTER */
