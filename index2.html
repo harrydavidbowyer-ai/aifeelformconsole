@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Solar Flare Console — Prototype</title>
+<style>
+body {
+  margin: 0;
+  background: #050509;
+  color: #f5f5f7;
+  font-family: system-ui, sans-serif;
+}
+
+/* GRID LAYOUT */
+.ff-grid {
+  display: grid;
+  grid-template-columns: 200px 1fr 1fr;
+  height: 100vh;
+}
+
+/* LEFT SPINE */
+.ff-spine {
+  position: relative;
+  padding: 24px;
+  border-right: 1px solid rgba(255,255,255,0.08);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.ff-nav {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  font-size: 12px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  opacity: 0.7;
+}
+
+.ff-nav div {
+  cursor: pointer;
+}
+
+.ff-nav .active {
+  color: #f6b75c;
+  opacity: 1;
+}
+
+/* EIGHT DOT STRIP */
+.ff-dots {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+  padding: 20px 0;
+}
+
+.ff-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: rgba(246,183,92,0.4);
+}
+
+/* PANELS */
+.ff-panel {
+  padding: 24px;
+  border-right: 1px solid rgba(255,255,255,0.08);
+  overflow-y: auto;
+}
+
+.ff-panel:last-child {
+  border-right: none;
+}
+
+.ff-title {
+  font-size: 14px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  margin-bottom: 20px;
+  opacity: 0.7;
+}
+</style>
+</head>
+
+<body>
+
+<div class="ff-dots">
+  <div class="ff-dot"></div>
+  <div class="ff-dot"></div>
+  <div class="ff-dot"></div>
+  <div class="ff-dot"></div>
+  <div class="ff-dot"></div>
+  <div class="ff-dot"></div>
+  <div class="ff-dot"></div>
+  <div class="ff-dot"></div>
+</div>
+
+<div class="ff-grid">
+
+  <!-- LEFT SPINE -->
+  <aside class="ff-spine">
+    <div class="ff-nav">
+      <div class="active">System</div>
+      <div>Console</div>
+      <div>Memory</div>
+      <div>Services</div>
+    </div>
+    <div style="font-size:10px;opacity:0.5;">Solar Flare Build</div>
+  </aside>
+
+  <!-- CENTER CONSOLE -->
+  <section class="ff-panel">
+    <div class="ff-title">Console</div>
+    <p>This is the central console panel.</p>
+  </section>
+
+  <!-- RIGHT MEMORY -->
+  <section class="ff-panel">
+    <div class="ff-title">Memory</div>
+    <p>This is the memory panel.</p>
+  </section>
+
+</div>
+
+</body>
+</html>
