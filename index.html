@@ -2,641 +2,9 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>FeelForm OS · Ember Gold · Solar Flare</title>
-  <style>
-    :root {
-      --ff-bg: #020617;
-      --ff-ember: #fbbf24;
-      --ff-ember-soft: #f59e0b;
-      --ff-ember-deep: #92400e;
-      --ff-text-main: #e5e7eb;
-      --ff-text-soft: #9ca3af;
-      --ff-border-soft: rgba(148, 163, 184, 0.4);
-      --ff-panel-bg: rgba(15, 23, 42, 0.9);
-      --ff-panel-glass: rgba(15, 23, 42, 0.6);
-      --ff-accent: #f97316;
-      --ff-danger: #ef4444;
-    }
-
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
-
-    body {
-      font-family: system-ui, -apple-system, BlinkMacSystemFont, "SF Pro Text",
-        "Segoe UI", sans-serif;
-      background: radial-gradient(circle at top, #020617 0, #000 55%, #020617 100%);
-      color: var(--ff-text-main);
-      min-height: 100vh;
-      display: flex;
-      align-items: stretch;
-      justify-content: center;
-      padding: 18px;
-    }
-
-    #ff-root {
-      width: 1120px;
-      max-width: 100%;
-      border-radius: 18px;
-      border: 1px solid rgba(249, 115, 22, 0.5);
-      background:
-        radial-gradient(circle at top left, rgba(248, 250, 252, 0.04), transparent 55%),
-        radial-gradient(circle at bottom right, rgba(248, 250, 252, 0.03), transparent 55%),
-        radial-gradient(circle at top, rgba(248, 250, 252, 0.04), transparent 60%),
-        #020617;
-      box-shadow:
-        0 0 0 1px rgba(15, 23, 42, 0.9),
-        0 30px 80px rgba(0, 0, 0, 0.9),
-        0 0 80px rgba(248, 181, 0, 0.25);
-      overflow: hidden;
-      display: grid;
-      grid-template-rows: auto auto minmax(0, 1fr);
-      position: relative;
-      isolation: isolate;
-    }
-
-    /* solar flare halo */
-    #ff-root::before {
-      content: "";
-      position: absolute;
-      inset: -40%;
-      background:
-        radial-gradient(circle at top, rgba(248, 181, 0, 0.12), transparent 60%),
-        radial-gradient(circle at bottom, rgba(248, 113, 22, 0.12), transparent 60%);
-      opacity: 0.7;
-      mix-blend-mode: screen;
-      pointer-events: none;
-      z-index: -1;
-      animation: ffSolarHalo 18s ease-in-out infinite alternate;
-    }
-
-    @keyframes ffSolarHalo {
-      0% {
-        transform: translate3d(0, 0, 0) scale(1);
-        opacity: 0.6;
-      }
-      50% {
-        transform: translate3d(0, -10px, 0) scale(1.03);
-        opacity: 0.9;
-      }
-      100% {
-        transform: translate3d(0, 10px, 0) scale(1.02);
-        opacity: 0.7;
-      }
-    }
-
-    /* header */
-
-    #ff-header {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 10px 16px 8px;
-      border-bottom: 1px solid rgba(55, 65, 81, 0.9);
-      background: linear-gradient(
-        to right,
-        rgba(15, 23, 42, 0.96),
-        rgba(15, 23, 42, 0.9),
-        rgba(15, 23, 42, 0.96)
-      );
-    }
-
-    #ff-logo {
-      font-size: 11px;
-      letter-spacing: 0.22em;
-      text-transform: uppercase;
-      color: #fbbf24;
-    }
-
-    #ff-header-center {
-      font-size: 11px;
-      letter-spacing: 0.18em;
-      text-transform: uppercase;
-      color: #9ca3af;
-    }
-
-    #ff-header-right {
-      display: flex;
-      align-items: center;
-      gap: 6px;
-      font-size: 11px;
-      color: #9ca3af;
-    }
-
-    #ff-sound-label {
-      text-transform: uppercase;
-      letter-spacing: 0.16em;
-      font-size: 10px;
-    }
-
-    #ff-sound-toggle,
-    #ff-force-audio {
-      font-size: 10px;
-      letter-spacing: 0.16em;
-      text-transform: uppercase;
-      padding: 4px 8px;
-      border-radius: 999px;
-      border: 1px solid rgba(249, 115, 22, 0.7);
-      background: #020617;
-      color: #fed7aa;
-      cursor: pointer;
-    }
-
-    #ff-force-audio {
-      border-style: dashed;
-      color: #fed7aa;
-    }
-
-    /* console */
-
-    #ff-console {
-      display: grid;
-      grid-template-columns: 260px minmax(0, 1fr);
-      border-bottom: 1px solid rgba(55, 65, 81, 0.9);
-      min-height: 210px;
-    }
-
-    #ff-console-tabs {
-      border-right: 1px solid rgba(55, 65, 81, 0.9);
-      background: radial-gradient(circle at top left, #020617, #020617 40%, #000 100%);
-      padding: 10px 10px 12px;
-      display: flex;
-      flex-direction: column;
-      gap: 4px;
-    }
-
-    .ff-console-tab {
-      padding: 7px 9px;
-      border-radius: 8px;
-      font-size: 10px;
-      letter-spacing: 0.18em;
-      text-transform: uppercase;
-      color: #6b7280;
-      cursor: pointer;
-      border: 1px solid transparent;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-
-    .ff-console-tab::after {
-      content: "●";
-      font-size: 8px;
-      opacity: 0;
-      color: #f97316;
-      transform: translateX(4px);
-      transition: opacity 0.2s ease, transform 0.2s ease;
-    }
-
-    .ff-console-tab.ff-active {
-      border-color: rgba(249, 115, 22, 0.7);
-      background: radial-gradient(circle at left, rgba(248, 181, 0, 0.12), transparent 60%);
-      color: #fbbf24;
-      box-shadow: 0 0 0 1px rgba(15, 23, 42, 0.9), 0 0 18px rgba(248, 181, 0, 0.4);
-    }
-
-    .ff-console-tab.ff-active::after {
-      opacity: 1;
-      transform: translateX(0);
-    }
-
-    #ff-console-panels {
-      padding: 10px 12px 12px;
-      background: radial-gradient(circle at top, rgba(15, 23, 42, 0.96), rgba(15, 23, 42, 0.9));
-      display: flex;
-      flex-direction: column;
-      gap: 8px;
-    }
-
-    .ff-console-panel {
-      display: none;
-    }
-
-    .ff-console-panel.ff-active {
-      display: block;
-    }
-
-    .ff-console-block {
-      padding: 10px 12px;
-      border-radius: 10px;
-      border: 1px solid rgba(55, 65, 81, 0.9);
-      background: linear-gradient(135deg, rgba(15, 23, 42, 0.96), rgba(15, 23, 42, 0.7));
-      box-shadow: 0 16px 40px rgba(0, 0, 0, 0.7);
-    }
-
-    .ff-console-block h2 {
-      font-size: 11px;
-      letter-spacing: 0.18em;
-      text-transform: uppercase;
-      color: #fbbf24;
-      margin-bottom: 4px;
-    }
-
-    .ff-console-block p {
-      font-size: 12px;
-      color: #d1d5db;
-    }
-
-    /* memory panel */
-
-    .ff-memory-section {
-      padding: 8px 10px 10px;
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
-      background: radial-gradient(circle at top left, #020617, #020617 40%, #000 100%);
-      border-radius: 10px;
-      border: 1px solid rgba(55, 65, 81, 0.9);
-      box-shadow: 0 18px 50px rgba(0, 0, 0, 0.9);
-      position: relative;
-      overflow: hidden;
-    }
-
-    .ff-memory-section::before {
-      content: "";
-      position: absolute;
-      inset: -40%;
-      background:
-        radial-gradient(circle at top, rgba(248, 181, 0, 0.16), transparent 60%),
-        radial-gradient(circle at bottom, rgba(248, 113, 22, 0.16), transparent 60%);
-      opacity: 0.7;
-      mix-blend-mode: screen;
-      pointer-events: none;
-      z-index: -1;
-      animation: ffMemorySolar 16s ease-in-out infinite alternate;
-    }
-
-    @keyframes ffMemorySolar {
-      0% {
-        transform: translate3d(0, 0, 0) scale(1);
-        opacity: 0.5;
-      }
-      50% {
-        transform: translate3d(0, -8px, 0) scale(1.02);
-        opacity: 0.9;
-      }
-      100% {
-        transform: translate3d(0, 6px, 0) scale(1.01);
-        opacity: 0.6;
-      }
-    }
-
-    .ff-memory-title {
-      font-size: 11px;
-      letter-spacing: 0.22em;
-      text-transform: uppercase;
-      color: #fbbf24;
-    }
-
-    .ff-memory-strip {
-      display: flex;
-      gap: 8px;
-      flex-wrap: wrap;
-    }
-
-    .ff-memory-pill {
-      min-width: 150px;
-      padding: 7px 9px;
-      border-radius: 999px;
-      border: 1px solid rgba(248, 181, 0, 0.7);
-      background: radial-gradient(circle at top left, rgba(15, 23, 42, 0.96), rgba(15, 23, 42, 0.6));
-      display: flex;
-      flex-direction: column;
-      gap: 2px;
-      box-shadow: 0 0 18px rgba(248, 181, 0, 0.35);
-    }
-
-    .ff-memory-pill .ff-label {
-      font-size: 9px;
-      letter-spacing: 0.16em;
-      text-transform: uppercase;
-      color: #fed7aa;
-      opacity: 0.8;
-    }
-
-    .ff-memory-pill .ff-value {
-      font-size: 12px;
-      color: #fef3c7;
-    }
-
-    .ff-memory-grid {
-      display: grid;
-      grid-template-columns: repeat(3, minmax(0, 1fr));
-      gap: 8px;
-    }
-
-    .ff-memory-panel {
-      background: linear-gradient(145deg, rgba(15, 23, 42, 0.96), rgba(15, 23, 42, 0.7));
-      border-radius: 9px;
-      border: 1px solid rgba(248, 181, 0, 0.5);
-      box-shadow: 0 18px 40px rgba(0, 0, 0, 0.9);
-      padding: 7px 8px 8px;
-      display: flex;
-      flex-direction: column;
-      gap: 4px;
-      position: relative;
-      overflow: hidden;
-    }
-
-    .ff-memory-panel header {
-      font-size: 10px;
-      letter-spacing: 0.18em;
-      text-transform: uppercase;
-      color: #fed7aa;
-    }
-
-    .ff-memory-scroll {
-      max-height: 120px;
-      overflow: auto;
-      font-size: 11px;
-      color: #e5e7eb;
-      padding-right: 4px;
-    }
-
-    .ff-memory-timeline {
-      margin-top: 2px;
-      padding: 8px 8px 6px;
-      border-radius: 9px;
-      border: 1px solid rgba(55, 65, 81, 0.9);
-      background: radial-gradient(circle at top, rgba(15, 23, 42, 0.96), rgba(15, 23, 42, 0.7));
-      box-shadow: 0 18px 40px rgba(0, 0, 0, 0.9);
-    }
-
-    .ff-memory-timeline header {
-      font-size: 10px;
-      letter-spacing: 0.18em;
-      text-transform: uppercase;
-      color: #fbbf24;
-      margin-bottom: 4px;
-    }
-
-    .ff-memory-sessions {
-      display: flex;
-      flex-direction: column;
-      gap: 6px;
-      max-height: 140px;
-      overflow: auto;
-    }
-
-    .ff-memory-session-card {
-      border-radius: 7px;
-      border: 1px solid rgba(248, 181, 0, 0.7);
-      background: radial-gradient(circle at top left, rgba(15, 23, 42, 0.96), rgba(15, 23, 42, 0.7));
-      padding: 6px 8px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      font-size: 11px;
-      color: #fef3c7;
-      box-shadow:
-        0 0 0 1px rgba(15, 23, 42, 0.9),
-        0 0 18px rgba(248, 181, 0, 0.5);
-      transform-origin: center;
-      animation: ffSessionBloom 0.4s ease-out;
-    }
-
-    @keyframes ffSessionBloom {
-      0% {
-        transform: scale(0.9);
-        opacity: 0;
-      }
-      100% {
-        transform: scale(1);
-        opacity: 1;
-      }
-    }
-
-    .ff-memory-session-meta {
-      display: flex;
-      flex-direction: column;
-      gap: 2px;
-    }
-
-    .ff-memory-session-meta span {
-      opacity: 0.95;
-    }
-
-    .ff-memory-session-pill {
-      font-size: 10px;
-      padding: 2px 7px;
-      border-radius: 999px;
-      border: 1px solid rgba(248, 181, 0, 0.9);
-      color: #fef3c7;
-      background: radial-gradient(circle at top, rgba(248, 181, 0, 0.2), transparent 70%);
-      box-shadow: 0 0 16px rgba(248, 181, 0, 0.7);
-    }
-
-    .ff-memory-inputs {
-      display: grid;
-      grid-template-columns: repeat(3, minmax(0, 1fr));
-      gap: 8px;
-      margin-top: 2px;
-    }
-
-    .ff-memory-inputs label {
-      font-size: 10px;
-      letter-spacing: 0.12em;
-      text-transform: uppercase;
-      color: #fed7aa;
-      margin-bottom: 3px;
-      display: block;
-    }
-
-    .ff-memory-inputs input,
-    .ff-memory-inputs textarea {
-      width: 100%;
-      background: #020617;
-      border: 1px solid #1f2937;
-      border-radius: 4px;
-      color: #f9fafb;
-      font-size: 12px;
-      padding: 6px 8px;
-    }
-
-    .ff-memory-controls {
-      display: flex;
-      justify-content: flex-end;
-      gap: 8px;
-      align-items: center;
-      margin-top: 4px;
-    }
-
-    .ff-memory-controls button {
-      padding: 6px 12px;
-      font-size: 10px;
-      letter-spacing: 0.16em;
-      text-transform: uppercase;
-      border-radius: 4px;
-      border: 1px solid #f97316;
-      background: #020617;
-      color: #fed7aa;
-      cursor: pointer;
-      box-shadow: 0 0 16px rgba(248, 181, 0, 0.5);
-    }
-
-    .ff-memory-controls span {
-      font-size: 11px;
-      color: #fbbf24;
-    }
-
-    /* chambers */
-
-    #ff-chambers {
-      display: grid;
-      grid-template-columns: repeat(4, minmax(0, 1fr));
-      grid-auto-rows: minmax(0, 1fr);
-      gap: 1px;
-      background: radial-gradient(circle at top, #020617, #000);
-      border-top: 1px solid rgba(55, 65, 81, 0.9);
-    }
-
-    .ff-chamber {
-      padding: 12px 12px 14px;
-      background: radial-gradient(circle at top, rgba(15, 23, 42, 0.96), rgba(15, 23, 42, 0.9));
-      position: relative;
-      overflow: hidden;
-      display: none;
-      flex-direction: column;
-      gap: 6px;
-      border-right: 1px solid rgba(31, 41, 55, 0.9);
-    }
-
-    .ff-chamber.ff-active {
-      display: flex;
-    }
-
-    .ff-chamber::before {
-      content: "";
-      position: absolute;
-      inset: -40%;
-      background:
-        radial-gradient(circle at top, rgba(248, 181, 0, 0.12), transparent 60%),
-        radial-gradient(circle at bottom, rgba(248, 113, 22, 0.12), transparent 60%);
-      opacity: 0;
-      mix-blend-mode: screen;
-      pointer-events: none;
-      z-index: -1;
-      transition: opacity 0.4s ease;
-    }
-
-    .ff-chamber.ff-active::before {
-      opacity: 0.9;
-    }
-
-    .ff-chamber h1 {
-      font-size: 12px;
-      letter-spacing: 0.18em;
-      text-transform: uppercase;
-      color: #fbbf24;
-    }
-
-    .ff-chamber p {
-      font-size: 12px;
-      color: #e5e7eb;
-    }
-
-    .ff-chamber textarea,
-    .ff-chamber input[type="text"] {
-      width: 100%;
-      background: #020617;
-      border: 1px solid #1f2937;
-      border-radius: 4px;
-      color: #f9fafb;
-      font-size: 12px;
-      padding: 6px 8px;
-      resize: vertical;
-      min-height: 60px;
-    }
-
-    .ff-range-label {
-      font-size: 11px;
-      color: #e5e7eb;
-      display: flex;
-      flex-direction: column;
-      gap: 2px;
-    }
-
-    .ff-range-label input[type="range"] {
-      width: 100%;
-    }
-
-    .ff-next,
-    #ff-ritual-complete {
-      margin-top: 4px;
-      padding: 6px 10px;
-      font-size: 10px;
-      letter-spacing: 0.16em;
-      text-transform: uppercase;
-      border-radius: 4px;
-      border: 1px solid #f97316;
-      background: #020617;
-      color: #fed7aa;
-      cursor: pointer;
-      align-self: flex-start;
-      box-shadow: 0 0 16px rgba(248, 181, 0, 0.5);
-    }
-
-    #ff-ritual-sub {
-      font-size: 11px;
-      color: #e5e7eb;
-    }
-
-    #ff-ritual-glow {
-      position: absolute;
-      inset: 0;
-      pointer-events: none;
-      opacity: 0;
-      background:
-        radial-gradient(circle at center, rgba(248, 181, 0, 0.25), transparent 60%);
-      mix-blend-mode: screen;
-      transition: opacity 0.4s ease;
-    }
-
-    #ff-ritual-glow.ff-active {
-      opacity: 1;
-      animation: ffRitualPulse 2.4s ease-in-out infinite;
-    }
-
-    @keyframes ffRitualPulse {
-      0% {
-        opacity: 0.4;
-      }
-      50% {
-        opacity: 1;
-      }
-      100% {
-        opacity: 0.4;
-      }
-    }
-
-    /* responsive */
-
-    @media (max-width: 900px) {
-      #ff-console {
-        grid-template-columns: 1fr;
-      }
-      #ff-console-tabs {
-        flex-direction: row;
-        border-right: none;
-        border-bottom: 1px solid rgba(55, 65, 81, 0.9);
-      }
-      .ff-console-tab {
-        flex: 1;
-        justify-content: center;
-      }
-      #ff-chambers {
-        grid-template-columns: repeat(2, minmax(0, 1fr));
-      }
-      .ff-memory-grid {
-        grid-template-columns: 1fr;
-      }
-      .ff-memory-inputs {
-        grid-template-columns: 1fr;
-      }
-    }
-  </style>
+  <title>FeelForm OS · v4.1 · Ember Gold</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" href="style.css" />
 </head>
 <body>
 <div id="ff-root">
@@ -815,358 +183,174 @@
 </div>
 
 <script>
-  const FF_API_BASE = "https://feelform-console.onrender.com";
+  const FF_API_BASE = "https://aifeelformconsole.onrender.com";
 
-  async function ffSendCycleToMemory() {
-    const pulse = document.getElementById("ff-pulse-input")?.value || "";
-    const somatic = document.getElementById("ff-somatic-location")?.value || "";
-    const reflection = document.getElementById("ff-reflect-input")?.value || "";
-    const decisionA = document.getElementById("ff-decision-a")?.value || "";
-    const decisionB = document.getElementById("ff-decision-b")?.value || "";
-    const identity = document.getElementById("ff-identity-input")?.value || "";
-    const intensity = parseFloat(
-      document.getElementById("ff-somatic-intensity")?.value || "0"
-    );
+  // Tabs
+  document.querySelectorAll(".ff-console-tab").forEach(tab => {
+    tab.addEventListener("click", () => {
+      const target = tab.getAttribute("data-tab");
+
+      document.querySelectorAll(".ff-console-tab").forEach(t => t.classList.remove("ff-active"));
+      tab.classList.add("ff-active");
+
+      document.querySelectorAll(".ff-console-panel").forEach(panel => {
+        panel.classList.remove("ff-active");
+      });
+
+      const panel = document.getElementById(`ff-panel-${target}`);
+      if (panel) panel.classList.add("ff-active");
+    });
+  });
+
+  // Chambers
+  function ffShowChamber(name) {
+    document.querySelectorAll(".ff-chamber").forEach(ch => ch.classList.remove("ff-active"));
+    const target = document.getElementById(`ff-chamber-${name}`);
+    if (target) target.classList.add("ff-active");
+  }
+
+  document.querySelectorAll(".ff-next").forEach(btn => {
+    btn.addEventListener("click", () => {
+      const next = btn.getAttribute("data-next");
+      if (next) ffShowChamber(next);
+    });
+  });
+
+  const ritualButton = document.getElementById("ff-ritual-complete");
+  if (ritualButton) {
+    ritualButton.addEventListener("click", () => {
+      const glow = document.getElementById("ff-ritual-glow");
+      glow.style.opacity = 0.7;
+      setTimeout(() => { glow.style.opacity = 0.2; }, 600);
+
+      const memoryTab = document.querySelector('.ff-console-tab[data-tab="memory"]');
+      if (memoryTab) memoryTab.click();
+
+      const memoryButton = document.querySelector("[data-ff-action='complete-cycle']");
+      if (memoryButton) memoryButton.click();
+    });
+  }
+
+  // Sound toggle (UI only)
+  const soundToggle = document.getElementById("ff-sound-toggle");
+  if (soundToggle) {
+    soundToggle.addEventListener("click", () => {
+      const current = soundToggle.textContent.trim().toUpperCase();
+      soundToggle.textContent = current === "OFF" ? "ON" : "OFF";
+    });
+  }
+
+  // MEMORY ENGINE
+  async function ffSaveCycle() {
+    const status = document.querySelector("[data-ff-status='memory']");
+    if (status) {
+      status.textContent = "Saving…";
+      status.style.color = "";
+    }
 
     const payload = {
-      pulse,
-      somatic,
-      reflection,
-      decision: `${decisionA} | ${decisionB}`.trim(),
-      identity,
-      amplitude: intensity / 100,
+      pulse: document.querySelector("[data-ff-input='pulse']").value.trim(),
+      somatic: document.querySelector("[data-ff-input='somatic']").value.trim(),
+      amplitude: parseFloat(document.querySelector("[data-ff-input='amplitude']").value || 0),
+      reflection: document.querySelector("[data-ff-input='reflection']").value.trim(),
+      decision: document.querySelector("[data-ff-input='decision']").value.trim(),
+      identity: document.querySelector("[data-ff-input='identity']").value.trim(),
+      timestamp: Date.now()
     };
 
     try {
-      const res = await fetch(FF_API_BASE + "/api/session", {
+      const res = await fetch(`${FF_API_BASE}/cycles`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(payload),
+        body: JSON.stringify(payload)
       });
-      return await res.json();
-    } catch (e) {
-      console.error("Error sending cycle:", e);
-      return null;
+
+      if (!res.ok) throw new Error("Failed to save");
+
+      if (status) {
+        status.textContent = "Saved";
+        status.style.color = "var(--ff-success)";
+      }
+      ffLoadMemory();
+    } catch (err) {
+      console.error("Memory save error:", err);
+      if (status) {
+        status.textContent = "Error saving";
+        status.style.color = "var(--ff-danger)";
+      }
+    } finally {
+      setTimeout(() => {
+        if (status) {
+          status.textContent = "";
+          status.style.color = "";
+        }
+      }, 2500);
     }
   }
 
-  async function ffLoadMemoryFromServer() {
+  async function ffLoadMemory() {
     try {
-      const res = await fetch(FF_API_BASE + "/api/memory");
-      return await res.json();
-    } catch (e) {
-      console.error("Error loading memory:", e);
-      return null;
-    }
-  }
+      const res = await fetch(`${FF_API_BASE}/cycles`);
+      if (!res.ok) throw new Error("Failed to load");
 
-  async function ffRefreshMemoryPanel() {
-    const data = await ffLoadMemoryFromServer();
-    if (!data) return;
+      const cycles = await res.json();
 
-    const total = data.meta?.total_cycles ?? 0;
-    const last = data.meta?.last_cycle || null;
+      const totalEl = document.getElementById("ff-memory-total");
+      if (totalEl) totalEl.textContent = cycles.length;
 
-    const totalEl = document.getElementById("ff-memory-total");
-    const lastIdEl = document.getElementById("ff-memory-last-identity");
-    const lastAmpEl = document.getElementById("ff-memory-last-amplitude");
+      if (cycles.length > 0) {
+        const last = cycles[cycles.length - 1];
+        const lastIdentityEl = document.getElementById("ff-memory-last-identity");
+        const lastAmpEl = document.getElementById("ff-memory-last-amplitude");
 
-    if (totalEl) totalEl.textContent = total;
-    if (lastIdEl) lastIdEl.textContent = last?.identity || "—";
-    if (lastAmpEl)
-      lastAmpEl.textContent =
-        typeof last?.amplitude === "number"
-          ? last.amplitude.toFixed(2)
-          : "—";
-
-    const identityEl = document.getElementById("ff-memory-identity");
-    const trajectoryEl = document.getElementById("ff-memory-trajectory");
-    const metaEl = document.getElementById("ff-memory-meta");
-    const sessionsEl = document.getElementById("ff-memory-sessions");
-
-    if (identityEl) {
-      identityEl.textContent = "";
-      (data.identity || []).forEach((item, idx) => {
-        const line = document.createElement("div");
-        line.textContent = `${idx + 1}. ${item}`;
-        identityEl.appendChild(line);
-      });
-    }
-
-    if (trajectoryEl) {
-      trajectoryEl.textContent = "";
-      (data.trajectory || []).forEach((item, idx) => {
-        const line = document.createElement("div");
-        line.textContent = `${idx + 1}. ${item}`;
-        trajectoryEl.appendChild(line);
-      });
-    }
-
-    if (metaEl) {
-      metaEl.textContent = JSON.stringify(data.meta, null, 2);
-    }
-
-    if (sessionsEl) {
-      sessionsEl.textContent = "";
-      (data.sessions || []).forEach((s) => {
-        const card = document.createElement("div");
-        card.className = "ff-memory-session-card";
-
-        const meta = document.createElement("div");
-        meta.className = "ff-memory-session-meta";
-
-        const line1 = document.createElement("span");
-        line1.textContent = s.identity || "(no identity)";
-
-        const line2 = document.createElement("span");
-        line2.textContent = s.pulse || "(no pulse)";
-
-        meta.appendChild(line1);
-        meta.appendChild(line2);
-
-        const pill = document.createElement("div");
-        pill.className = "ff-memory-session-pill";
-        pill.textContent =
-          typeof s.amplitude === "number"
-            ? `amp ${s.amplitude.toFixed(2)}`
-            : "amp —";
-
-        card.appendChild(meta);
-        card.appendChild(pill);
-        sessionsEl.appendChild(card);
-      });
-
-      if (!data.sessions || !data.sessions.length) {
-        const empty = document.createElement("div");
-        empty.style.fontSize = "11px";
-        empty.style.color = "#9ca3af";
-        empty.textContent =
-          "No sessions yet. Complete a cycle to begin the timeline.";
-        sessionsEl.appendChild(empty);
-      }
-    }
-  }
-
-  /* audio */
-
-  let ffAudioCtx = null;
-  let ffSomaticNode = null;
-  let ffRitualNode = null;
-  let ffMasterGain = null;
-  let ffAudioEnabled = false;
-
-  function ffInitAudio() {
-    if (ffAudioCtx) return;
-    ffAudioCtx = new (window.AudioContext || window.webkitAudioContext)();
-    ffMasterGain = ffAudioCtx.createGain();
-    ffMasterGain.gain.value = 0.7;
-    ffMasterGain.connect(ffAudioCtx.destination);
-  }
-
-  function ffStartSomaticBreath() {
-    if (!ffAudioCtx) return;
-    ffStopSomaticBreath();
-
-    const osc = ffAudioCtx.createOscillator();
-    const gain = ffAudioCtx.createGain();
-
-    osc.type = "sine";
-    osc.frequency.value = 70;
-
-    gain.gain.value = 0;
-    osc.connect(gain);
-    gain.connect(ffMasterGain);
-
-    const now = ffAudioCtx.currentTime;
-    gain.gain.linearRampToValueAtTime(0.18, now + 0.8);
-    gain.gain.linearRampToValueAtTime(0.05, now + 4.0);
-    gain.gain.linearRampToValueAtTime(0.18, now + 7.2);
-
-    osc.start();
-    ffSomaticNode = { osc, gain };
-  }
-
-  function ffStopSomaticBreath() {
-    if (!ffSomaticNode) return;
-    const { osc, gain } = ffSomaticNode;
-    const now = ffAudioCtx.currentTime;
-    gain.gain.cancelScheduledValues(now);
-    gain.gain.linearRampToValueAtTime(0, now + 0.6);
-    osc.stop(now + 0.7);
-    ffSomaticNode = null;
-  }
-
-  function ffStartRitualDrone() {
-    if (!ffAudioCtx) return;
-    ffStopRitualDrone();
-
-    const osc = ffAudioCtx.createOscillator();
-    const gain = ffAudioCtx.createGain();
-
-    osc.type = "sawtooth";
-    osc.frequency.value = 48;
-
-    gain.gain.value = 0;
-    osc.connect(gain);
-    gain.connect(ffMasterGain);
-
-    const now = ffAudioCtx.currentTime;
-    gain.gain.linearRampToValueAtTime(0.22, now + 2.0);
-    gain.gain.linearRampToValueAtTime(0.28, now + 8.0);
-
-    osc.start();
-    ffRitualNode = { osc, gain };
-  }
-
-  function ffStopRitualDrone() {
-    if (!ffRitualNode) return;
-    const { osc, gain } = ffRitualNode;
-    const now = ffAudioCtx.currentTime;
-    gain.gain.cancelScheduledValues(now);
-    gain.gain.linearRampToValueAtTime(0, now + 1.2);
-    osc.stop(now + 1.3);
-    ffRitualNode = null;
-  }
-
-  function ffStopAllAudio() {
-    ffStopSomaticBreath();
-    ffStopRitualDrone();
-  }
-
-  function ffSetupSoundControls() {
-    const toggle = document.getElementById("ff-sound-toggle");
-    const forceBtn = document.getElementById("ff-force-audio");
-
-    if (!toggle) return;
-
-    toggle.addEventListener("click", () => {
-      if (!ffAudioCtx) ffInitAudio();
-
-      ffAudioEnabled = !ffAudioEnabled;
-      toggle.textContent = ffAudioEnabled ? "ON" : "OFF";
-
-      if (!ffAudioEnabled) {
-        ffStopAllAudio();
-      }
-    });
-
-    if (forceBtn) {
-      forceBtn.addEventListener("click", () => {
-        if (!ffAudioCtx) ffInitAudio();
-        ffAudioEnabled = true;
-        toggle.textContent = "ON";
-        forceBtn.style.display = "none";
-      });
-    }
-
-    window.addEventListener(
-      "click",
-      () => {
-        if (!ffAudioCtx) ffInitAudio();
-      },
-      { once: true }
-    );
-  }
-
-  function ffSetupConsoleTabs() {
-    const tabs = Array.from(document.querySelectorAll(".ff-console-tab"));
-    const panels = {
-      system: document.getElementById("ff-panel-system"),
-      coaching: document.getElementById("ff-panel-coaching"),
-      identity: document.getElementById("ff-panel-identity"),
-      memory: document.getElementById("ff-panel-memory"),
-    };
-
-    tabs.forEach((tab) => {
-      tab.addEventListener("click", () => {
-        const target = tab.dataset.tab;
-        tabs.forEach((t) => t.classList.remove("ff-active"));
-        tab.classList.add("ff-active");
-
-        Object.values(panels).forEach((p) => p && p.classList.remove("ff-active"));
-        if (panels[target]) panels[target].classList.add("ff-active");
-
-        if (target === "memory") ffRefreshMemoryPanel();
-      });
-    });
-  }
-
-  function ffSetupChambers() {
-    const chambers = Array.from(document.querySelectorAll(".ff-chamber"));
-    const nextButtons = Array.from(document.querySelectorAll(".ff-next"));
-    const ritualGlow = document.getElementById("ff-ritual-glow");
-    const ritualButton = document.getElementById("ff-ritual-complete");
-
-    function activateChamber(id) {
-      chambers.forEach((c) => c.classList.remove("ff-active"));
-      const target = document.getElementById(id);
-      if (!target) return;
-      target.classList.add("ff-active");
-
-      if (!ffAudioEnabled || !ffAudioCtx) {
-        ffStopAllAudio();
-        if (ritualGlow) ritualGlow.classList.remove("ff-active");
-        return;
+        if (lastIdentityEl) lastIdentityEl.textContent = last.identity || "—";
+        if (lastAmpEl) lastAmpEl.textContent = (last.amplitude ?? "—");
       }
 
-      ffStopAllAudio();
-
-      if (id === "ff-chamber-somatic") {
-        ffStartSomaticBreath();
-        if (ritualGlow) ritualGlow.classList.remove("ff-active");
-      } else if (id === "ff-chamber-ritual") {
-        ffStartRitualDrone();
-        if (ritualGlow) ritualGlow.classList.add("ff-active");
-      } else {
-        if (ritualGlow) ritualGlow.classList.remove("ff-active");
+      const identityDiv = document.getElementById("ff-memory-identity");
+      if (identityDiv) {
+        identityDiv.innerHTML = cycles
+          .map(c => `<div class="ff-memory-item">${(c.identity || "—")}</div>`)
+          .join("");
       }
-    }
 
-    nextButtons.forEach((btn) => {
-      btn.addEventListener("click", () => {
-        const nextId = "ff-chamber-" + btn.dataset.next;
-        activateChamber(nextId);
-      });
-    });
+      const trajectoryDiv = document.getElementById("ff-memory-trajectory");
+      if (trajectoryDiv) {
+        trajectoryDiv.innerHTML = cycles
+          .map(c => `<div class="ff-memory-item">${(c.pulse || "—")}</div>`)
+          .join("");
+      }
 
-    if (ritualButton) {
-      ritualButton.addEventListener("click", async () => {
-        const statusEl = document.querySelector('[data-ff-status="memory"]');
-        if (statusEl) statusEl.textContent = "Writing...";
-        await ffSendCycleToMemory();
-        await ffRefreshMemoryPanel();
-        if (statusEl) statusEl.textContent = "Cycle stored.";
-        activateChamber("ff-chamber-baseline");
-      });
-    }
+      const metaDiv = document.getElementById("ff-memory-meta");
+      if (metaDiv) {
+        metaDiv.innerHTML = cycles
+          .map(c => `<div class="ff-memory-item">${(c.reflection || "—")}</div>`)
+          .join("");
+      }
 
-    const initial = document.getElementById("ff-chamber-baseline");
-    if (initial) {
-      initial.classList.add("ff-active");
-    }
-  }
-
-  function ffSetupMemoryInputs() {
-    const completeBtn = document.querySelector('[data-ff-action="complete-cycle"]');
-    const statusEl = document.querySelector('[data-ff-status="memory"]');
-
-    if (completeBtn) {
-      completeBtn.addEventListener("click", async () => {
-        if (statusEl) statusEl.textContent = "Writing...";
-        await ffSendCycleToMemory();
-        await ffRefreshMemoryPanel();
-        if (statusEl) statusEl.textContent = "Cycle stored.";
-      });
+      const sessionsDiv = document.getElementById("ff-memory-sessions");
+      if (sessionsDiv) {
+        sessionsDiv.innerHTML = cycles
+          .map(c => {
+            const date = c.timestamp ? new Date(c.timestamp).toLocaleString() : "—";
+            return `<div class="ff-session-pill">
+                      <strong>${date}</strong>
+                      <div>${(c.identity || "—")}</div>
+                    </div>`;
+          })
+          .join("");
+      }
+    } catch (err) {
+      console.error("Memory load error:", err);
     }
   }
 
-  document.addEventListener("DOMContentLoaded", () => {
-    ffSetupSoundControls();
-    ffSetupConsoleTabs();
-    ffSetupChambers();
-    ffSetupMemoryInputs();
-    ffRefreshMemoryPanel();
-  });
+  const memoryButton = document.querySelector("[data-ff-action='complete-cycle']");
+  if (memoryButton) {
+    memoryButton.addEventListener("click", ffSaveCycle);
+  }
+
+  ffLoadMemory();
 </script>
 </body>
 </html>
