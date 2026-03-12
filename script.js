@@ -69,9 +69,58 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
 /* ----------------------------------------------------
+   DECISION GEOMETRY ENGINE — v1.0
+---------------------------------------------------- */
+
+function computeDecisionGeometry({ clarity, expansion, depth }) {
+
+  // Normalize values (0–100 → 0–1)
+  const A = clarity / 100;
+  const B = expansion / 100;
+  const C = depth / 100;
+
+  // Compute magnitude (overall decision intensity)
+  const magnitude = Math.sqrt(A*A + B*B + C*C);
+
+  // Compute orientation angle in 2D plane (A vs B)
+  const angle = Math.atan2(B, A) * (180 / Math.PI);
+
+  // Determine dominant vector
+  let dominant = "Clarity";
+  if (B > A && B > C) dominant = "Expansion";
+  if (C > A && C > B) dominant = "Depth";
+
+  return {
+    A,
+    B,
+    C,
+    magnitude,
+    angle: Math.round(angle),
+    dominant
+  };
+}
+
+
+
+/* ----------------------------------------------------
+   SOLAR–FLARE IGNITION
+---------------------------------------------------- */
+
+function igniteSolarFlare() {
+  const flare = document.getElementById("solar-flare-ignition");
+
+  flare.classList.add("active");
+
+  // fade out after ignition
+  setTimeout(() => {
+    flare.classList.remove("active");
+  }, 600);
+}
+
+
+
+/* ----------------------------------------------------
    FEELFORM CYCLE ENGINE — v1.0
-   (Collects all Console inputs, generates a cycle,
-    sends it to backend, updates Memory Engine)
 ---------------------------------------------------- */
 
 async function completeCycle() {
@@ -89,11 +138,12 @@ async function completeCycle() {
   const nearness = document.querySelectorAll("#reflection input[type='range']")[2].value || 0;
   const clarity = document.querySelectorAll("#reflection input[type='range']")[3].value || 0;
 
-  // 3. DECISION INPUTS (placeholder logic)
-  const vectorA = "Orientation toward clarity";
-  const vectorB = "Orientation toward expansion";
-  const vectorC = "Orientation toward depth";
-  const angle = 0;
+  // 3. DECISION GEOMETRY (REAL)
+  const geometry = computeDecisionGeometry({
+    clarity: Number(clarity),
+    expansion: Number(warmth),
+    depth: Number(density)
+  });
 
   // 4. RITUAL STATE
   const intensity = (Number(warmth) + Number(density) + Number(nearness) + Number(clarity)) / 4;
@@ -114,10 +164,12 @@ async function completeCycle() {
       clarity
     },
     decision: {
-      vectorA,
-      vectorB,
-      vectorC,
-      angle
+      vectorA: geometry.A,
+      vectorB: geometry.B,
+      vectorC: geometry.C,
+      angle: geometry.angle,
+      magnitude: geometry.magnitude,
+      dominant: geometry.dominant
     },
     ritual: {
       intensity
@@ -133,8 +185,20 @@ async function completeCycle() {
     body: JSON.stringify(cycle)
   });
 
+  // 🔥 IGNITE SOLAR–FLARE
+  igniteSolarFlare();
+
   // 7. UPDATE MEMORY ENGINE
   renderCinematicMemory();
+
+  // 8. UPDATE DECISION PANEL UI
+  document.getElementById("vecA").textContent = geometry.A.toFixed(2);
+  document.getElementById("vecB").textContent = geometry.B.toFixed(2);
+  document.getElementById("vecC").textContent = geometry.C.toFixed(2);
+
+  document.getElementById("decision-angle").textContent = geometry.angle + "°";
+  document.getElementById("decision-magnitude").textContent = geometry.magnitude.toFixed(2);
+  document.getElementById("decision-dominant").textContent = geometry.dominant;
 }
 
 
@@ -217,7 +281,7 @@ function renderTrajectory(memory) {
     .join("");
 }
 
-/* RENDER SESSION CARDS */
+/* RENDER SESSION CARARDS */
 function renderSessionCards(memory) {
   const container = document.querySelector("#memory-sessions");
   container.innerHTML = memory.sessions
