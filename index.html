@@ -1,0 +1,458 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>FeelForm OS · Ember Gold · Solar Flare</title>
+  <style>
+    /* ————————————————————————————————————————————————
+       FULL CSS (Solar-Flare Ember-Gold Monolith)
+       ———————————————————————————————————————————————— */
+
+    :root {
+      --ff-bg: #020617;
+      --ff-ember: #fbbf24;
+      --ff-ember-soft: #f59e0b;
+      --ff-ember-deep: #92400e;
+      --ff-text-main: #e5e7eb;
+      --ff-text-soft: #9ca3af;
+      --ff-border-soft: rgba(148, 163, 184, 0.4);
+      --ff-panel-bg: rgba(15, 23, 42, 0.9);
+      --ff-panel-glass: rgba(15, 23, 42, 0.6);
+      --ff-accent: #f97316;
+      --ff-danger: #ef4444;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "SF Pro Text",
+        "Segoe UI", sans-serif;
+      background: radial-gradient(circle at top, #020617 0, #000 55%, #020617 100%);
+      color: var(--ff-text-main);
+      min-height: 100vh;
+      display: flex;
+      align-items: stretch;
+      justify-content: center;
+      padding: 18px;
+    }
+
+    #ff-root {
+      width: 1120px;
+      max-width: 100%;
+      border-radius: 18px;
+      border: 1px solid rgba(249, 115, 22, 0.5);
+      background:
+        radial-gradient(circle at top left, rgba(248, 250, 252, 0.04), transparent 55%),
+        radial-gradient(circle at bottom right, rgba(248, 250, 252, 0.03), transparent 55%),
+        radial-gradient(circle at top, rgba(248, 250, 252, 0.04), transparent 60%),
+        #020617;
+      box-shadow:
+        0 0 0 1px rgba(15, 23, 42, 0.9),
+        0 30px 80px rgba(0, 0, 0, 0.9),
+        0 0 80px rgba(248, 181, 0, 0.25);
+      overflow: hidden;
+      display: grid;
+      grid-template-rows: auto auto minmax(0, 1fr);
+      position: relative;
+      isolation: isolate;
+    }
+
+    /* Solar flare halo */
+    #ff-root::before {
+      content: "";
+      position: absolute;
+      inset: -40%;
+      background:
+        radial-gradient(circle at top, rgba(248, 181, 0, 0.12), transparent 60%),
+        radial-gradient(circle at bottom, rgba(248, 113, 22, 0.12), transparent 60%);
+      opacity: 0.7;
+      mix-blend-mode: screen;
+      pointer-events: none;
+      z-index: -1;
+      animation: ffSolarHalo 18s ease-in-out infinite alternate;
+    }
+
+    @keyframes ffSolarHalo {
+      0% { transform: translate3d(0, 0, 0) scale(1); opacity: 0.6; }
+      50% { transform: translate3d(0, -10px, 0) scale(1.03); opacity: 0.9; }
+      100% { transform: translate3d(0, 10px, 0) scale(1.02); opacity: 0.7; }
+    }
+
+    /* ————————————————————————————————————————————————
+       HEADER
+       ———————————————————————————————————————————————— */
+
+    #ff-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 10px 16px 8px;
+      border-bottom: 1px solid rgba(55, 65, 81, 0.9);
+      background: linear-gradient(
+        to right,
+        rgba(15, 23, 42, 0.96),
+        rgba(15, 23, 42, 0.9),
+        rgba(15, 23, 42, 0.96)
+      );
+    }
+
+    #ff-logo {
+      font-size: 11px;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: #fbbf24;
+    }
+
+    #ff-header-center {
+      font-size: 11px;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: #9ca3af;
+    }
+
+    #ff-header-right {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 11px;
+      color: #9ca3af;
+    }
+
+    #ff-sound-label {
+      text-transform: uppercase;
+      letter-spacing: 0.16em;
+      font-size: 10px;
+    }
+
+    #ff-sound-toggle,
+    #ff-force-audio {
+      font-size: 10px;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      padding: 4px 8px;
+      border-radius: 999px;
+      border: 1px solid rgba(249, 115, 22, 0.7);
+      background: #020617;
+      color: #fed7aa;
+      cursor: pointer;
+    }
+
+    #ff-force-audio {
+      border-style: dashed;
+      color: #fed7aa;
+    }
+
+    /* ————————————————————————————————————————————————
+       CONSOLE
+       ———————————————————————————————————————————————— */
+
+    #ff-console {
+      display: grid;
+      grid-template-columns: 260px minmax(0, 1fr);
+      border-bottom: 1px solid rgba(55, 65, 81, 0.9);
+      min-height: 210px;
+    }
+
+    #ff-console-tabs {
+      border-right: 1px solid rgba(55, 65, 81, 0.9);
+      background: radial-gradient(circle at top left, #020617, #020617 40%, #000 100%);
+      padding: 10px 10px 12px;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .ff-console-tab {
+      padding: 7px 9px;
+      border-radius: 8px;
+      font-size: 10px;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: #6b7280;
+      cursor: pointer;
+      border: 1px solid transparent;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .ff-console-tab::after {
+      content: "●";
+      font-size: 8px;
+      opacity: 0;
+      color: #f97316;
+      transform: translateX(4px);
+      transition: opacity 0.2s ease, transform 0.2s ease;
+    }
+
+    .ff-console-tab.ff-active {
+      border-color: rgba(249, 115, 22, 0.7);
+      background: radial-gradient(circle at left, rgba(248, 181, 0, 0.12), transparent 60%);
+      color: #fbbf24;
+      box-shadow: 0 0 0 1px rgba(15, 23, 42, 0.9), 0 0 18px rgba(248, 181, 0, 0.4);
+    }
+
+    .ff-console-tab.ff-active::after {
+      opacity: 1;
+      transform: translateX(0);
+    }
+
+    #ff-console-panels {
+      padding: 10px 12px 12px;
+      background: radial-gradient(circle at top, rgba(15, 23, 42, 0.96), rgba(15, 23, 42, 0.9));
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .ff-console-panel {
+      display: none;
+    }
+
+    .ff-console-panel.ff-active {
+      display: block;
+    }
+
+    .ff-console-block {
+      padding: 10px 12px;
+      border-radius: 10px;
+      border: 1px solid rgba(55, 65, 81, 0.9);
+      background: linear-gradient(135deg, rgba(15, 23, 42, 0.96), rgba(15, 23, 42, 0.7));
+      box-shadow: 0 16px 40px rgba(0, 0, 0, 0.7);
+    }
+
+    .ff-console-block h2 {
+      font-size: 11px;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: #fbbf24;
+      margin-bottom: 4px;
+    }
+
+    .ff-console-block p {
+      font-size: 12px;
+      color: #d1d5db;
+    }
+
+    /* ————————————————————————————————————————————————
+       MEMORY PANEL
+       ———————————————————————————————————————————————— */
+
+    .ff-memory-section {
+      padding: 8px 10px 10px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      background: radial-gradient(circle at top left, #020617, #020617 40%, #000 100%);
+      border-radius: 10px;
+      border: 1px solid rgba(55, 65, 81, 0.9);
+      box-shadow: 0 18px 50px rgba(0, 0, 0, 0.9);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .ff-memory-section::before {
+      content: "";
+      position: absolute;
+      inset: -40%;
+      background:
+        radial-gradient(circle at top, rgba(248, 181, 0, 0.16), transparent 60%),
+        radial-gradient(circle at bottom, rgba(248, 113, 22, 0.16), transparent 60%);
+      opacity: 0.7;
+      mix-blend-mode: screen;
+      pointer-events: none;
+      z-index: -1;
+      animation: ffMemorySolar 16s ease-in-out infinite alternate;
+    }
+
+    @keyframes ffMemorySolar {
+      0% { transform: translate3d(0, 0, 0) scale(1); opacity: 0.5; }
+      50% { transform: translate3d(0, -8px, 0) scale(1.02); opacity: 0.9; }
+      100% { transform: translate3d(0, 6px, 0) scale(1.01); opacity: 0.6; }
+    }
+
+    .ff-memory-title {
+      font-size: 11px;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: #fbbf24;
+    }
+
+    .ff-memory-strip {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .ff-memory-pill {
+      min-width: 150px;
+      padding: 7px 9px;
+      border-radius: 999px;
+      border: 1px solid rgba(248, 181, 0, 0.7);
+      background: radial-gradient(circle at top left, rgba(15, 23, 42, 0.96), rgba(15, 23, 42, 0.6));
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+      box-shadow: 0 0 18px rgba(248, 181, 0, 0.35);
+    }
+
+    .ff-memory-pill .ff-label {
+      font-size: 9px;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: #fed7aa;
+      opacity: 0.8;
+    }
+
+    .ff-memory-pill .ff-value {
+      font-size: 12px;
+      color: #fef3c7;
+    }
+
+    .ff-memory-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 8px;
+    }
+
+    .ff-memory-panel {
+      background: linear-gradient(145deg, rgba(15, 23, 42, 0.96), rgba(15, 23, 42, 0.7));
+      border-radius: 9px;
+      border: 1px solid rgba(248, 181, 0, 0.5);
+      box-shadow: 0 18px 40px rgba(0, 0, 0, 0.9);
+      padding: 7px 8px 8px;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .ff-memory-panel header {
+      font-size: 10px;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: #fed7aa;
+    }
+
+    .ff-memory-scroll {
+      max-height: 120px;
+      overflow: auto;
+      font-size: 11px;
+      color: #e5e7eb;
+      padding-right: 4px;
+    }
+
+    .ff-memory-timeline {
+      margin-top: 2px;
+      padding: 8px 8px 6px;
+      border-radius: 9px;
+      border: 1px solid rgba(55, 65, 81, 0.9);
+      background: radial-gradient(circle at top, rgba(15, 23, 42, 0.96), rgba(15, 23, 42, 0.7));
+      box-shadow: 0 18px 40px rgba(0, 0, 0, 0.9);
+    }
+
+    .ff-memory-timeline header {
+      font-size: 10px;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: #fbbf24;
+      margin-bottom: 4px;
+    }
+
+    .ff-memory-sessions {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      max-height: 140px;
+      overflow: auto;
+    }
+
+    .ff-memory-session-card {
+      border-radius: 7px;
+      border: 1px solid rgba(248, 181, 0, 0.7);
+      background: radial-gradient(circle at top left, rgba(15, 23, 42, 0.96), rgba(15, 23, 42, 0.7));
+      padding: 6px 8px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 11px;
+      color: #fef3c7;
+      box-shadow:
+        0 0 0 1px rgba(15, 23, 42, 0.9),
+        0 0 18px rgba(248, 181, 0, 0.5);
+      transform-origin: center;
+      animation: ffSessionBloom 0.4s ease-out;
+    }
+
+    @keyframes ffSessionBloom {
+      0% { transform: scale(0.9); opacity: 0; }
+      100% { transform: scale(1); opacity: 1; }
+    }
+
+    .ff-memory-session-meta {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+
+    .ff-memory-session-meta span {
+      opacity: 0.95;
+    }
+
+    .ff-memory-session-pill {
+      font-size: 10px;
+      padding: 2px 7px;
+      border-radius: 999px;
+      border: 1px solid rgba(248, 181, 0, 0.9);
+      color: #fef3c7;
+      background: radial-gradient(circle at top, rgba(248, 181, 0, 0.2), transparent 70%);
+      box-shadow: 0 0 16px rgba(248, 181, 0, 0.7);
+    }
+
+    .ff-memory-inputs {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 8px;
+      margin-top: 2px;
+    }
+
+    .ff-memory-inputs label {
+      font-size: 10px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: #fed7aa;
+      margin-bottom: 3px;
+      display: block;
+    }
+
+    .ff-memory-inputs input,
+    .ff-memory-inputs textarea {
+      width: 100%;
+      background: #020617;
+      border: 1px solid #1f2937;
+      border-radius: 4px;
+      color: #f9fafb;
+      font-size: 12px;
+      padding: 6px 8px;
+    }
+
+    .ff-memory-controls {
+      display: flex;
+      justify-content: flex-end;
+      gap: 8px;
+      align-items: center;
+      margin-top: 4px;
+    }
+
+    .ff-memory-controls button {
+      padding: 6px 12px;
+      font-size: 10px;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      border-radius: 4px;
+      border: 1px solid #f973
