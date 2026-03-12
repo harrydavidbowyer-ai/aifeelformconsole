@@ -1,144 +1,194 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>FeelForm · Console</title>
+/* ----------------------------------------------------
+   FEELFORM — SOLAR‑FLARE CONSOLE STYLE
+   Midnight Glass + Ember Gold
+---------------------------------------------------- */
 
-  <!-- Stylesheet -->
-  <link rel="stylesheet" href="style.css">
+:root {
+  --bg: #0a0a0f;
+  --glass: rgba(255, 255, 255, 0.06);
+  --glass-border: rgba(255, 255, 255, 0.12);
+  --text: #e6e6e6;
+  --accent: #ffb44c;
+  --accent-soft: rgba(255, 180, 76, 0.35);
+  --dot: #444;
+  --dot-active: #ffb44c;
+  --panel-width: 90%;
+  --panel-max: 900px;
+  --transition: 0.25s ease;
+}
 
-  <!-- Script -->
-  <script defer src="script.js"></script>
-</head>
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Inter", sans-serif;
+}
 
-<body>
+body {
+  background: var(--bg);
+  color: var(--text);
+  padding: 2rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
 
-  <div class="console">
+/* ----------------------------------------------------
+   NAVIGATION
+---------------------------------------------------- */
 
-    <!-- HEADER -->
-    <div class="console-header">
-      <div class="console-title">FeelForm · Console</div>
+.console-nav {
+  display: flex;
+  gap: 2rem;
+  margin-bottom: 1rem;
+}
 
-      <div class="console-nav">
-        <a href="#" data-target="identity" class="active">Identity</a>
-        <a href="#" data-target="reflection">Reflection</a>
-        <a href="#" data-target="decision">Decision</a>
-        <a href="#" data-target="ritual">Ritual</a>
-        <a href="#" data-target="memory">Memory</a>
-      </div>
+.console-nav a {
+  color: var(--text);
+  text-decoration: none;
+  font-size: 1.1rem;
+  opacity: 0.6;
+  transition: var(--transition);
+}
 
-      <button id="sound-toggle" style="margin-left:20px;">Sound: OFF</button>
-    </div>
+.console-nav a.active,
+.console-nav a:hover {
+  opacity: 1;
+  color: var(--accent);
+}
 
-    <!-- NAV DOTS -->
-    <div style="display:flex; gap:10px; margin-bottom:20px;">
-      <div class="nav-dot active" data-target="identity">●</div>
-      <div class="nav-dot" data-target="reflection">●</div>
-      <div class="nav-dot" data-target="decision">●</div>
-      <div class="nav-dot" data-target="ritual">●</div>
-      <div class="nav-dot" data-target="memory">●</div>
-    </div>
+/* NAV DOTS */
 
-    <!-- PANELS -->
-    <div class="console-panels">
+.nav-dots {
+  display: flex;
+  gap: 0.75rem;
+  margin-bottom: 2rem;
+}
 
-      <!-- IDENTITY -->
-      <div class="panel" id="identity">
-        <h2>Identity</h2>
+.nav-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: var(--dot);
+  transition: var(--transition);
+  cursor: pointer;
+}
 
-        <p>Name</p>
-        <input type="text" placeholder="Enter name">
+.nav-dot.active {
+  background: var(--dot-active);
+  box-shadow: 0 0 6px var(--accent);
+}
 
-        <p>Role</p>
-        <input type="text" placeholder="Enter role">
+/* ----------------------------------------------------
+   SOUND TOGGLE
+---------------------------------------------------- */
 
-        <p>Altitude</p>
-        <input type="range" min="0" max="100" value="50">
+#sound-toggle {
+  margin-bottom: 2rem;
+  background: var(--glass);
+  border: 1px solid var(--glass-border);
+  color: var(--text);
+  padding: 0.5rem 1rem;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: var(--transition);
+}
 
-        <p>Mode</p>
-        <select>
-          <option>Stillness</option>
-          <option>Expansion</option>
-          <option>Depth</option>
-        </select>
+#sound-toggle:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+}
 
-        <button style="margin-top:10px;">Clear</button>
-      </div>
+/* ----------------------------------------------------
+   PANELS
+---------------------------------------------------- */
 
-      <!-- REFLECTION -->
-      <div class="panel" id="reflection" style="display:none;">
-        <h2>Reflection</h2>
+.panel {
+  width: var(--panel-width);
+  max-width: var(--panel-max);
+  background: var(--glass);
+  border: 1px solid var(--glass-border);
+  padding: 2rem;
+  border-radius: 12px;
+  backdrop-filter: blur(12px);
+  transition: var(--transition);
+}
 
-        <p>Feeling</p>
-        <input type="text" placeholder="What are you feeling?">
+.panel h1,
+.panel h2 {
+  color: var(--accent);
+  margin-bottom: 1rem;
+}
 
-        <p>Warmth</p>
-        <input type="range" min="0" max="100" value="0">
+/* ----------------------------------------------------
+   MEMORY ENGINE ELEMENTS
+---------------------------------------------------- */
 
-        <p>Density</p>
-        <input type="range" min="0" max="100" value="0">
+#memory-meta p {
+  margin-bottom: 0.5rem;
+  opacity: 0.85;
+}
 
-        <p>Nearness</p>
-        <input type="range" min="0" max="100" value="0">
+/* CONSTELLATION GLYPH */
 
-        <p>Clarity</p>
-        <input type="range" min="0" max="100" value="0">
-      </div>
+#memory-constellation {
+  font-size: 3rem;
+  text-align: center;
+  margin: 1.5rem 0;
+  transition: transform 1.2s ease;
+  opacity: 0.9;
+}
 
-      <!-- DECISION -->
-      <div class="panel" id="decision" style="display:none;">
-        <h2>Decision</h2>
+#memory-constellation.drift {
+  transform: translateY(-6px);
+}
 
-        <p>Vector A</p>
-        <p style="opacity:0.7; margin-bottom:10px;">Orientation toward clarity</p>
+/* IDENTITY TIMELINE */
 
-        <p>Vector B</p>
-        <p style="opacity:0.7; margin-bottom:10px;">Orientation toward expansion</p>
+.identity-timeline {
+  display: flex;
+  gap: 0.5rem;
+  margin-bottom: 2rem;
+}
 
-        <p>Vector C</p>
-        <p style="opacity:0.7; margin-bottom:10px;">Orientation toward depth</p>
+.identity-timeline .node {
+  width: 12px;
+  height: 12px;
+  background: var(--accent-soft);
+  border-radius: 50%;
+  transition: var(--transition);
+}
 
-        <p>Angle: 0°</p>
-      </div>
+.identity-timeline .node.recent {
+  background: var(--accent);
+  box-shadow: 0 0 8px var(--accent);
+}
 
-      <!-- RITUAL -->
-      <div class="panel" id="ritual" style="display:none;">
-        <h2>Ritual</h2>
+/* TRAJECTORY */
 
-        <p>Cycles: 0</p>
-        <p>Intensity: 0</p>
-        <p>Last ignition: —</p>
-      </div>
+#memory-trajectory div {
+  padding: 0.25rem 0;
+  opacity: 0.85;
+}
 
-      <!-- MEMORY (CINEMATIC MODE) -->
-      <div class="panel" id="memory" style="display:none;">
-        <h2>Memory</h2>
+/* SESSION CARDS */
 
-        <!-- META HUD -->
-        <div id="memory-meta" class="memory-meta"></div>
+.session-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 1rem;
+  margin-top: 1rem;
+}
 
-        <!-- CONSTELLATION LAYER -->
-        <div id="memory-constellation" class="memory-constellation"></div>
+.session-card {
+  background: var(--glass);
+  border: 1px solid var(--glass-border);
+  padding: 1rem;
+  border-radius: 10px;
+  transition: var(--transition);
+}
 
-        <!-- IDENTITY DRIFT TIMELINE -->
-        <div id="memory-identity" class="memory-identity"></div>
-
-        <!-- TRAJECTORY ARC VIEWER -->
-        <div id="memory-trajectory" class="memory-trajectory"></div>
-
-        <!-- SESSION CARDS -->
-        <div id="memory-sessions" class="memory-sessions"></div>
-      </div>
-
-    </div>
-
-    <!-- FOOTER -->
-    <div class="console-footer">
-      Solar–Flare · FeelForm OS
-    </div>
-
-  </div>
-
-</body>
-</html>
+.session-card:hover {
+  border-color: var(--accent);
+  transform: translateY(-3px);
+}
