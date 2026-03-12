@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>FeelForm OS — Solar Flare</title>
+  <title>FeelForm OS — Solar Flare Ember Gold</title>
   <link rel="stylesheet" href="style.css">
 </head>
 
@@ -11,47 +11,113 @@
 <div id="ff-root">
 
   <!-- HEADER -->
-  <div id="ff-header">
+  <header id="ff-header">
     <div id="ff-logo">FEELFORM OS</div>
     <div id="ff-header-center">SOLAR FLARE</div>
     <div id="ff-header-right">EMBER GOLD</div>
-  </div>
+  </header>
 
-  <!-- CONSOLE -->
+  <!-- CONSOLE SPINE -->
   <div id="ff-console">
 
-    <!-- LEFT MENU -->
-    <div id="ff-console-tabs">
-      <div class="ff-console-tab ff-active" data-panel="system">System</div>
-      <div class="ff-console-tab" data-panel="coaching">Coaching</div>
-      <div class="ff-console-tab" data-panel="identity">Identity</div>
-      <div class="ff-console-tab" data-panel="memory">Memory</div>
-    </div>
+    <!-- LEFT NAVIGATION -->
+    <nav id="ff-console-tabs">
+
+      <div class="ff-console-tab ff-active" data-panel="system">
+        <span>System</span>
+        <span class="ff-tab-indicator"></span>
+      </div>
+
+      <div class="ff-console-tab" data-panel="coaching">
+        <span>Coaching</span>
+        <span class="ff-tab-indicator"></span>
+      </div>
+
+      <div class="ff-console-tab" data-panel="identity">
+        <span>Identity</span>
+        <span class="ff-tab-indicator"></span>
+      </div>
+
+      <div class="ff-console-tab" data-panel="memory">
+        <span>Memory</span>
+        <span class="ff-tab-indicator"></span>
+      </div>
+
+      <div class="ff-console-tab" data-panel="engine">
+        <span>Engine</span>
+        <span class="ff-tab-indicator"></span>
+      </div>
+
+    </nav>
 
     <!-- RIGHT PANELS -->
-    <div id="ff-console-panels">
+    <section id="ff-console-panels">
 
       <!-- SYSTEM PANEL -->
       <div class="ff-console-panel ff-active" id="panel-system">
         <div class="ff-console-block">
-          <h2>System</h2>
-          <p>Core system online.</p>
+          <h2>System Status</h2>
+          <p>Solar‑Flare Ember‑Gold core online. All subsystems breathing.</p>
+        </div>
+
+        <div class="ff-console-block">
+          <h2>Indicators</h2>
+          <div class="ff-indicator-grid">
+            <div class="ff-indicator">
+              <label>Pulse</label>
+              <div class="ff-indicator-value" id="ff-pulse">Stable</div>
+            </div>
+            <div class="ff-indicator">
+              <label>Glow</label>
+              <div class="ff-indicator-value" id="ff-glow">Active</div>
+            </div>
+            <div class="ff-indicator">
+              <label>Field</label>
+              <div class="ff-indicator-value" id="ff-field">Aligned</div>
+            </div>
+          </div>
         </div>
       </div>
 
       <!-- COACHING PANEL -->
       <div class="ff-console-panel" id="panel-coaching">
         <div class="ff-console-block">
-          <h2>Coaching</h2>
-          <p>Coaching pathways active.</p>
+          <h2>Coaching Pathways</h2>
+          <p>Ritual sequences and transformation arcs available.</p>
+        </div>
+
+        <div class="ff-pathway-grid">
+          <div class="ff-pathway-card">Alignment</div>
+          <div class="ff-pathway-card">Courage</div>
+          <div class="ff-pathway-card">Meaning</div>
+          <div class="ff-pathway-card">Discipline</div>
+          <div class="ff-pathway-card">Presence</div>
+          <div class="ff-pathway-card">Identity</div>
         </div>
       </div>
 
       <!-- IDENTITY PANEL -->
       <div class="ff-console-panel" id="panel-identity">
         <div class="ff-console-block">
-          <h2>Identity</h2>
-          <p>Identity architecture loaded.</p>
+          <h2>Identity Architecture</h2>
+          <p>Core identity nodes active.</p>
+        </div>
+
+        <div class="ff-identity-grid">
+          <div class="ff-identity-card">
+            <label>Role</label>
+            <div class="ff-identity-value">Philosophical Life Coach</div>
+          </div>
+
+          <div class="ff-identity-card">
+            <label>Mode</label>
+            <div class="ff-identity-value">Architect</div>
+          </div>
+
+          <div class="ff-identity-card">
+            <label>Field</label>
+            <div class="ff-identity-value">Metaphysical Systems</div>
+          </div>
         </div>
       </div>
 
@@ -59,9 +125,8 @@
       <div class="ff-console-panel" id="panel-memory">
 
         <div class="ff-memory-section">
-          <div class="ff-memory-title">Memory</div>
+          <div class="ff-memory-title">Memory Engine</div>
 
-          <!-- Memory strip -->
           <div class="ff-memory-strip">
             <div class="ff-memory-pill">
               <div class="ff-label">State</div>
@@ -70,11 +135,10 @@
 
             <div class="ff-memory-pill">
               <div class="ff-label">Cycles</div>
-              <div class="ff-value">0</div>
+              <div class="ff-value" id="ff-cycle-count">0</div>
             </div>
           </div>
 
-          <!-- Memory grid -->
           <div class="ff-memory-grid">
             <div class="ff-memory-panel">
               <header>Notes</header>
@@ -92,13 +156,11 @@
             </div>
           </div>
 
-          <!-- Timeline -->
           <div class="ff-memory-timeline">
             <header>Sessions</header>
             <div class="ff-memory-sessions" id="ff-sessions"></div>
           </div>
 
-          <!-- Inputs -->
           <div class="ff-memory-inputs">
             <div>
               <label>Note</label>
@@ -116,7 +178,6 @@
             </div>
           </div>
 
-          <!-- Controls -->
           <div class="ff-memory-controls">
             <button id="ff-add">Add</button>
           </div>
@@ -124,7 +185,15 @@
         </div>
       </div>
 
-    </div>
+      <!-- ENGINE PANEL -->
+      <div class="ff-console-panel" id="panel-engine">
+        <div class="ff-console-block">
+          <h2>Engine Core</h2>
+          <p>Solar‑Flare breathing, ember‑pulse, and micro‑parallax active.</p>
+        </div>
+      </div>
+
+    </section>
   </div>
 </div>
 
