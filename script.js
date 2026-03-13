@@ -1,8 +1,68 @@
 /* ----------------------------------------------------
+   FEELFORM SYNTHETIC SOUND ENGINE — v2.0
+---------------------------------------------------- */
+
+const FFSound = {
+  enabled: false,
+  ctx: null,
+
+  init() {
+    if (!this.ctx) {
+      this.ctx = new (window.AudioContext || window.webkitAudioContext)();
+    }
+  },
+
+  unlock() {
+    this.init();
+    if (this.ctx.state === "suspended") {
+      this.ctx.resume();
+    }
+  },
+
+  play(freq = 440, duration = 0.12, type = "sine") {
+    if (!this.enabled) return;
+
+    this.init();
+
+    const osc = this.ctx.createOscillator();
+    const gain = this.ctx.createGain();
+
+    osc.type = type;
+    osc.frequency.value = freq;
+
+    gain.gain.setValueAtTime(0.25, this.ctx.currentTime);
+    gain.gain.exponentialRampToValueAtTime(0.001, this.ctx.currentTime + duration);
+
+    osc.connect(gain);
+    gain.connect(this.ctx.destination);
+
+    osc.start();
+    osc.stop(this.ctx.currentTime + duration);
+  },
+
+  click() {
+    this.play(420, 0.08, "triangle");
+  },
+
+  ignite() {
+    this.play(180, 0.25, "sine");
+    setTimeout(() => this.play(360, 0.25, "sine"), 80);
+    setTimeout(() => this.play(720, 0.25, "sine"), 160);
+  }
+};
+
+
+
+/* ----------------------------------------------------
    FEELFORM CONSOLE — CORE UI LOGIC
 ---------------------------------------------------- */
 
 document.addEventListener("DOMContentLoaded", () => {
+
+  /* Unlock audio on first interaction */
+  document.body.addEventListener("click", () => {
+    FFSound.unlock();
+  }, { once: true });
 
   /* ----------------------------------------------------
      PANEL SWITCHING
@@ -30,6 +90,7 @@ document.addEventListener("DOMContentLoaded", () => {
       e.preventDefault();
       const target = link.getAttribute("data-target");
       showPanel(target);
+      if (FFSound.enabled) FFSound.click();
     });
   });
 
@@ -37,6 +98,7 @@ document.addEventListener("DOMContentLoaded", () => {
     dot.addEventListener("click", () => {
       const target = dot.getAttribute("data-target");
       showPanel(target);
+      if (FFSound.enabled) FFSound.click();
     });
   });
 
@@ -44,24 +106,14 @@ document.addEventListener("DOMContentLoaded", () => {
   showPanel("identity");
 
   /* ----------------------------------------------------
-     SOUND ENGINE
+     SOUND TOGGLE
   ---------------------------------------------------- */
   const soundToggle = document.getElementById("sound-toggle");
-  let soundEnabled = false;
-
-  const clickSound = new Audio(
-    "https://cdn.pixabay.com/download/audio/2022/03/15/audio_7c1f3e3c52.mp3?filename=click-124467.mp3"
-  );
 
   soundToggle.addEventListener("click", () => {
-    soundEnabled = !soundEnabled;
-    soundToggle.textContent = `Sound: ${soundEnabled ? "ON" : "OFF"}`;
-  });
-
-  document.querySelectorAll(".console-nav a, .nav-dot").forEach((el) => {
-    el.addEventListener("click", () => {
-      if (soundEnabled) clickSound.play();
-    });
+    FFSound.enabled = !FFSound.enabled;
+    soundToggle.textContent = `Sound: ${FFSound.enabled ? "ON" : "OFF"}`;
+    FFSound.unlock();
   });
 
 }); // END DOMContentLoaded
@@ -74,18 +126,13 @@ document.addEventListener("DOMContentLoaded", () => {
 
 function computeDecisionGeometry({ clarity, expansion, depth }) {
 
-  // Normalize values (0–100 → 0–1)
   const A = clarity / 100;
   const B = expansion / 100;
   const C = depth / 100;
 
-  // Compute magnitude (overall decision intensity)
   const magnitude = Math.sqrt(A*A + B*B + C*C);
-
-  // Compute orientation angle in 2D plane (A vs B)
   const angle = Math.atan2(B, A) * (180 / Math.PI);
 
-  // Determine dominant vector
   let dominant = "Clarity";
   if (B > A && B > C) dominant = "Expansion";
   if (C > A && C > B) dominant = "Depth";
@@ -111,7 +158,8 @@ function igniteSolarFlare() {
 
   flare.classList.add("active");
 
-  // fade out after ignition
+  if (FFSound.enabled) FFSound.ignite();
+
   setTimeout(() => {
     flare.classList.remove("active");
   }, 600);
@@ -125,30 +173,25 @@ function igniteSolarFlare() {
 
 async function completeCycle() {
 
-  // 1. COLLECT IDENTITY INPUTS
   const identityName = document.querySelector("#identity input[placeholder='Enter name']").value || "";
   const identityRole = document.querySelector("#identity input[placeholder='Enter role']").value || "";
   const altitude = document.querySelector("#identity input[type='range']").value || 0;
   const mode = document.querySelector("#identity select").value || "";
 
-  // 2. COLLECT REFLECTION INPUTS
   const feeling = document.querySelector("#reflection input[placeholder='What are you feeling?']").value || "";
   const warmth = document.querySelectorAll("#reflection input[type='range']")[0].value || 0;
   const density = document.querySelectorAll("#reflection input[type='range']")[1].value || 0;
   const nearness = document.querySelectorAll("#reflection input[type='range']")[2].value || 0;
   const clarity = document.querySelectorAll("#reflection input[type='range']")[3].value || 0;
 
-  // 3. DECISION GEOMETRY (REAL)
   const geometry = computeDecisionGeometry({
     clarity: Number(clarity),
     expansion: Number(warmth),
     depth: Number(density)
   });
 
-  // 4. RITUAL STATE
   const intensity = (Number(warmth) + Number(density) + Number(nearness) + Number(clarity)) / 4;
 
-  // 5. BUILD THE CYCLE OBJECT
   const cycle = {
     identity: {
       name: identityName,
@@ -178,20 +221,16 @@ async function completeCycle() {
     timestamp: Date.now()
   };
 
-  // 6. SEND TO BACKEND
   await fetch("https://feelform-memory-engine-mq5j.onrender.com/api/session", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(cycle)
   });
 
-  // 🔥 IGNITE SOLAR–FLARE
   igniteSolarFlare();
 
-  // 7. UPDATE MEMORY ENGINE
   renderCinematicMemory();
 
-  // 8. UPDATE DECISION PANEL UI
   document.getElementById("vecA").textContent = geometry.A.toFixed(2);
   document.getElementById("vecB").textContent = geometry.B.toFixed(2);
   document.getElementById("vecC").textContent = geometry.C.toFixed(2);
@@ -209,7 +248,6 @@ async function completeCycle() {
 
 const MEMORY_URL = "https://feelform-memory-engine-mq5j.onrender.com/api/memory";
 
-/* LOAD MEMORY */
 async function loadCinematicMemory() {
   try {
     const res = await fetch(MEMORY_URL);
@@ -220,7 +258,6 @@ async function loadCinematicMemory() {
   }
 }
 
-/* RENDER META HUD */
 function renderMeta(memory) {
   const meta = document.querySelector("#memory-meta");
   meta.innerHTML = `
@@ -233,7 +270,6 @@ function renderMeta(memory) {
   `;
 }
 
-/* RENDER CONSTELLATION (Δ ○ ∴) */
 function renderConstellation(memory) {
   const el = document.querySelector("#memory-constellation");
 
@@ -260,7 +296,6 @@ function renderConstellation(memory) {
   setTimeout(() => el.classList.add("drift"), 50);
 }
 
-/* RENDER IDENTITY DRIFT TIMELINE */
 function renderIdentity(memory) {
   const container = document.querySelector("#memory-identity");
   container.innerHTML = "";
@@ -273,7 +308,6 @@ function renderIdentity(memory) {
   });
 }
 
-/* RENDER TRAJECTORY CHAINS */
 function renderTrajectory(memory) {
   const container = document.querySelector("#memory-trajectory");
   container.innerHTML = memory.trajectory
@@ -281,7 +315,6 @@ function renderTrajectory(memory) {
     .join("");
 }
 
-/* RENDER SESSION CARARDS */
 function renderSessionCards(memory) {
   const container = document.querySelector("#memory-sessions");
   container.innerHTML = memory.sessions
@@ -300,7 +333,6 @@ function renderSessionCards(memory) {
     .join("");
 }
 
-/* MASTER RENDERER */
 async function renderCinematicMemory() {
   const memory = await loadCinematicMemory();
   if (!memory) return;
@@ -312,7 +344,6 @@ async function renderCinematicMemory() {
   renderSessionCards(memory);
 }
 
-/* LOAD WHEN MEMORY PANEL IS OPENED */
 document.querySelectorAll(".console-nav a, .nav-dot").forEach((el) => {
   el.addEventListener("click", () => {
     const target = el.getAttribute("data-target");
