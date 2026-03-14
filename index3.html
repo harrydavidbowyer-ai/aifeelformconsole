@@ -1,198 +1,776 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <title>FeelForm Console – Finality Organism</title>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>FeelForm Console</title>
 
-  <style>
-    /* EXTERIOR + PARADOX + META + FINALITY ORGANISMS */
+<style>
+/* -----------------------------------------------------------
+   HYBRID MIDNIGHT GLASS + SOLAR-FLARE AESTHETIC
+----------------------------------------------------------- */
 
-    html, body {
-      margin: 0;
-      padding: 0;
-      background: #000;
-      height: 100%;
-      overflow: hidden;
-    }
+:root {
+  --midnight: #050509;
+  --midnight-glass: rgba(10, 10, 18, 0.78);
+  --midnight-deep: #020208;
+  --ember-gold: #ffb45c;
+  --ember-soft: rgba(255, 180, 92, 0.35);
+  --ember-soft-strong: rgba(255, 180, 92, 0.6);
+  --ember-glow: 0 0 22px rgba(255, 180, 92, 0.55);
+  --white-soft: rgba(255,255,255,0.88);
+  --white-faint: rgba(255,255,255,0.55);
+  --panel-radius: 18px;
+  --transition: 0.35s ease;
+  --transition-fast: 0.2s ease;
+  --font: system-ui, -apple-system, BlinkMacSystemFont, "Inter", sans-serif;
+}
 
-    .exterior-beyond-exterior {
-      position: fixed;
-      inset: 0;
-      pointer-events: none;
-      opacity: 0;
-      background: radial-gradient(circle, rgba(255,255,255,0.02), rgba(0,0,0,1));
-      transition: opacity 10s ease;
-      z-index: -5000;
-    }
+* {
+  box-sizing: border-box;
+}
 
-    .harmonic-regenesis-engine {
-      position: fixed;
-      inset: 0;
-      pointer-events: none;
-      opacity: 0;
-      background: radial-gradient(circle, rgba(255,255,255,0.03), rgba(0,0,0,1));
-      transition: opacity 10s ease;
-      z-index: -6000;
-    }
+body {
+  margin: 0;
+  padding: 0;
+  background: radial-gradient(circle at top, #151525 0, #050509 55%, #000 100%);
+  font-family: var(--font);
+  color: var(--white-soft);
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+}
 
-    .pre-cause-layer {
-      position: fixed;
-      inset: 0;
-      pointer-events: none;
-      opacity: 0;
-      background: rgba(0,0,0,1);
-      transition: opacity 10s ease;
-      z-index: -7000;
-    }
+/* -----------------------------------------------------------
+   CONSOLE WRAPPER
+----------------------------------------------------------- */
 
-    .exterior-within-exterior {
-      position: fixed;
-      inset: 0;
-      pointer-events: none;
-      opacity: 0;
-      background: radial-gradient(circle, rgba(255,255,255,0.015), rgba(0,0,0,0.97));
-      transition: opacity 9s ease;
-      z-index: -5500;
-    }
+#console {
+  width: 94vw;
+  max-width: 1320px;
+  height: 90vh;
+  background: var(--midnight-glass);
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: var(--panel-radius);
+  backdrop-filter: blur(20px);
+  box-shadow:
+    0 0 40px rgba(0,0,0,0.6),
+    0 0 80px rgba(0,0,0,0.8);
+  display: grid;
+  grid-template-columns: 190px 1fr;
+  overflow: hidden;
+  position: relative;
+}
 
-    .harmonic-meta-cycle-engine {
-      position: fixed;
-      inset: 0;
-      pointer-events: none;
-      opacity: 0;
-      background: radial-gradient(circle, rgba(255,255,255,0.02), rgba(0,0,0,1));
-      transition: opacity 10s ease;
-      z-index: -8000;
-    }
+/* -----------------------------------------------------------
+   SPINE (LEFT NAV)
+----------------------------------------------------------- */
 
-    .pre-existence-layer {
-      position: fixed;
-      inset: 0;
-      pointer-events: none;
-      opacity: 0;
-      background: rgba(0,0,0,1);
-      transition: opacity 12s ease;
-      z-index: -9000;
-    }
+#spine {
+  background: linear-gradient(
+    to bottom,
+    rgba(0,0,0,0.7),
+    rgba(0,0,0,0.9)
+  );
+  border-right: 1px solid rgba(255,255,255,0.06);
+  display: flex;
+  flex-direction: column;
+  padding: 24px 18px;
+  gap: 26px;
+  position: relative;
+}
 
-    .inversion-beyond-inversion {
-      position: fixed;
-      inset: 0;
-      pointer-events: none;
-      opacity: 0;
-      background: radial-gradient(circle, rgba(255,255,255,0.01), rgba(0,0,0,1));
-      transition: opacity 11s ease;
-      z-index: -9500;
-    }
+#spine-title {
+  font-size: 0.75rem;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--white-faint);
+  opacity: 0.9;
+}
 
-    .harmonic-apex-engine {
-      position: fixed;
-      inset: 0;
-      pointer-events: none;
-      opacity: 0;
-      background: radial-gradient(circle at top, rgba(255,255,255,0.12), rgba(0,0,0,1));
-      transition: opacity 12s ease;
-      z-index: -10000;
-    }
+#spine-engraving {
+  writing-mode: vertical-rl;
+  text-orientation: mixed;
+  font-size: 0.7rem;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.25);
+  position: absolute;
+  right: 6px;
+  top: 60px;
+}
 
-    .non-state-layer {
-      position: fixed;
-      inset: 0;
-      pointer-events: none;
-      opacity: 0;
-      background: rgba(0,0,0,1);
-      transition: opacity 14s ease;
-      z-index: -12000;
-    }
+.spine-section-label {
+  font-size: 0.7rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.4);
+  margin-top: 8px;
+  margin-bottom: -6px;
+}
 
-    .totality-beyond-totality {
-      position: fixed;
-      inset: 0;
-      pointer-events: none;
-      opacity: 0;
-      background: rgba(0,0,0,1);
-      transition: opacity 16s ease;
-      z-index: -15000;
-    }
+.spine-item {
+  font-size: 0.9rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  opacity: 0.55;
+  cursor: pointer;
+  transition: var(--transition);
+  padding: 4px 0;
+  position: relative;
+}
 
-    .harmonic-closure-engine {
-      position: fixed;
-      inset: 0;
-      pointer-events: none;
-      opacity: 0;
-      background: radial-gradient(circle, rgba(255,255,255,0.05), rgba(0,0,0,1));
-      transition: opacity 18s ease;
-      z-index: -20000;
-    }
+.spine-item::before {
+  content: "";
+  position: absolute;
+  left: -10px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 4px;
+  height: 0;
+  border-radius: 999px;
+  background: var(--ember-soft);
+  transition: var(--transition-fast);
+  opacity: 0;
+}
 
-    .non-non-layer {
-      position: fixed;
-      inset: 0;
-      pointer-events: none;
-      opacity: 0;
-      background: rgba(0,0,0,1);
-      transition: opacity 20s ease;
-      z-index: -25000;
-    }
+.spine-item.active {
+  opacity: 1;
+  color: var(--ember-gold);
+  text-shadow: var(--ember-glow);
+}
 
-    .absolute-finality {
-      position: fixed;
-      inset: 0;
-      pointer-events: none;
-      opacity: 0;
-      background: rgba(0,0,0,1);
-      transition: opacity 22s ease;
-      z-index: -30000;
-    }
-  </style>
+.spine-item.active::before {
+  height: 18px;
+  opacity: 1;
+}
+
+/* -----------------------------------------------------------
+   MAIN AREA LAYOUT
+----------------------------------------------------------- */
+
+#main {
+  display: grid;
+  grid-template-rows: auto 1fr auto;
+  height: 100%;
+}
+
+/* -----------------------------------------------------------
+   TOP BAR
+----------------------------------------------------------- */
+
+#top-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 18px 26px 10px 26px;
+  border-bottom: 1px solid rgba(255,255,255,0.06);
+}
+
+#top-left {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+#console-label {
+  font-size: 0.7rem;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.5);
+}
+
+#console-name {
+  font-size: 1.05rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--ember-gold);
+  text-shadow: var(--ember-glow);
+}
+
+#top-right {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 0.75rem;
+  color: rgba(255,255,255,0.6);
+}
+
+.status-pill {
+  padding: 4px 10px;
+  border-radius: 999px;
+  border: 1px solid rgba(255,255,255,0.18);
+  background: radial-gradient(circle at top left, rgba(255,255,255,0.12), rgba(0,0,0,0.7));
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.status-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--ember-soft-strong);
+  box-shadow: var(--ember-glow);
+}
+
+/* -----------------------------------------------------------
+   PANELS GRID
+----------------------------------------------------------- */
+
+#panels-wrapper {
+  display: grid;
+  grid-template-columns: 1.1fr 1.1fr 1.2fr;
+  gap: 18px;
+  padding: 18px 24px 18px 24px;
+  height: 100%;
+}
+
+/* -----------------------------------------------------------
+   PANEL BASE
+----------------------------------------------------------- */
+
+.panel {
+  background: radial-gradient(circle at top left, rgba(255,255,255,0.06), rgba(0,0,0,0.9));
+  border-radius: 16px;
+  border: 1px solid rgba(255,255,255,0.08);
+  padding: 18px 18px 16px 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  position: relative;
+  overflow: hidden;
+}
+
+.panel-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.panel-title {
+  font-size: 0.8rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.7);
+}
+
+.panel-subtitle {
+  font-size: 0.7rem;
+  color: rgba(255,255,255,0.5);
+}
+
+.panel-body {
+  flex: 1;
+  font-size: 0.85rem;
+  color: rgba(255,255,255,0.85);
+}
+
+/* -----------------------------------------------------------
+   IDENTITY PANEL
+----------------------------------------------------------- */
+
+#identity-panel-main {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.identity-line {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.8rem;
+  color: rgba(255,255,255,0.8);
+}
+
+.identity-label {
+  text-transform: uppercase;
+  letter-spacing: 0.16em;
+  font-size: 0.7rem;
+  color: rgba(255,255,255,0.5);
+}
+
+.identity-value {
+  font-size: 0.85rem;
+}
+
+/* -----------------------------------------------------------
+   RITUAL PANEL
+----------------------------------------------------------- */
+
+#ritual-steps {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 8px;
+  margin-top: 6px;
+}
+
+.ritual-step {
+  border-radius: 999px;
+  border: 1px solid rgba(255,255,255,0.12);
+  padding: 6px 8px;
+  font-size: 0.7rem;
+  text-align: center;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.6);
+  cursor: pointer;
+  transition: var(--transition-fast);
+  position: relative;
+  overflow: hidden;
+}
+
+.ritual-step::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at top, rgba(255,180,92,0.18), transparent 60%);
+  opacity: 0;
+  transition: var(--transition-fast);
+}
+
+.ritual-step.active {
+  color: var(--ember-gold);
+  border-color: var(--ember-soft-strong);
+  box-shadow: var(--ember-glow);
+}
+
+.ritual-step.active::after {
+  opacity: 1;
+}
+
+#ritual-description {
+  margin-top: 10px;
+  font-size: 0.8rem;
+  color: rgba(255,255,255,0.8);
+  min-height: 40px;
+}
+
+/* -----------------------------------------------------------
+   MEMORY PANEL
+----------------------------------------------------------- */
+
+#memory-log {
+  margin-top: 6px;
+  padding: 8px;
+  border-radius: 10px;
+  background: rgba(0,0,0,0.55);
+  border: 1px solid rgba(255,255,255,0.08);
+  max-height: 180px;
+  overflow-y: auto;
+  font-size: 0.78rem;
+}
+
+.memory-entry {
+  padding: 6px 4px;
+  border-bottom: 1px solid rgba(255,255,255,0.06);
+}
+
+.memory-entry:last-child {
+  border-bottom: none;
+}
+
+.memory-meta {
+  font-size: 0.65rem;
+  color: rgba(255,255,255,0.5);
+}
+
+#memory-input-row {
+  display: flex;
+  gap: 8px;
+  margin-top: 10px;
+}
+
+#memory-input {
+  flex: 1;
+  padding: 6px 8px;
+  border-radius: 999px;
+  border: 1px solid rgba(255,255,255,0.18);
+  background: rgba(0,0,0,0.7);
+  color: var(--white-soft);
+  font-size: 0.8rem;
+}
+
+#memory-input:focus {
+  outline: none;
+  border-color: var(--ember-soft-strong);
+  box-shadow: var(--ember-glow);
+}
+
+#memory-save {
+  padding: 6px 12px;
+  border-radius: 999px;
+  border: 1px solid var(--ember-soft-strong);
+  background: radial-gradient(circle at top, rgba(255,180,92,0.3), rgba(0,0,0,0.9));
+  color: var(--ember-gold);
+  font-size: 0.75rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: var(--transition-fast);
+}
+
+#memory-save:hover {
+  box-shadow: var(--ember-glow);
+}
+
+/* -----------------------------------------------------------
+   IGNITION BAR (BOTTOM)
+----------------------------------------------------------- */
+
+#ignition-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 24px 16px 24px;
+  border-top: 1px solid rgba(255,255,255,0.06);
+  font-size: 0.75rem;
+  color: rgba(255,255,255,0.6);
+}
+
+#ignition-left {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+#ignition-label {
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+}
+
+#ignition-dots {
+  display: flex;
+  gap: 8px;
+}
+
+.dot {
+  width: 11px;
+  height: 11px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.22);
+  transition: var(--transition-fast);
+  cursor: pointer;
+}
+
+.dot.active {
+  background: var(--ember-gold);
+  box-shadow: var(--ember-glow);
+}
+
+#ignition-right {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+#cycle-indicator {
+  font-size: 0.7rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.6);
+}
+
+/* -----------------------------------------------------------
+   RESPONSIVE
+----------------------------------------------------------- */
+
+@media (max-width: 980px) {
+  #console {
+    grid-template-columns: 150px 1fr;
+  }
+  #panels-wrapper {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 720px) {
+  body {
+    align-items: flex-start;
+  }
+  #console {
+    height: 100vh;
+    width: 100vw;
+    border-radius: 0;
+  }
+  #spine-engraving {
+    display: none;
+  }
+}
+</style>
 </head>
 
 <body>
 
-  <div class="exterior-beyond-exterior"></div>
-  <div class="harmonic-regenesis-engine"></div>
-  <div class="pre-cause-layer"></div>
-  <div class="exterior-within-exterior"></div>
-  <div class="harmonic-meta-cycle-engine"></div>
-  <div class="pre-existence-layer"></div>
-  <div class="inversion-beyond-inversion"></div>
-  <div class="harmonic-apex-engine"></div>
-  <div class="non-state-layer"></div>
-  <div class="totality-beyond-totality"></div>
-  <div class="harmonic-closure-engine"></div>
-  <div class="non-non-layer"></div>
-  <div class="absolute-finality"></div>
+<div id="console">
 
-  <script>
-    // inline version of script3.js
+  <!-- SPINE -->
+  <div id="spine">
+    <div id="spine-title">FEELFORM OS</div>
+    <div id="spine-engraving">CONSOLE · SOLAR-FLARE · MIDNIGHT</div>
 
-    document.addEventListener("DOMContentLoaded", () => {
-      const layers = [
-        ".exterior-beyond-exterior",
-        ".harmonic-regenesis-engine",
-        ".pre-cause-layer",
-        ".exterior-within-exterior",
-        ".harmonic-meta-cycle-engine",
-        ".pre-existence-layer",
-        ".inversion-beyond-inversion",
-        ".harmonic-apex-engine",
-        ".non-state-layer",
-        ".totality-beyond-totality",
-        ".harmonic-closure-engine",
-        ".non-non-layer",
-        ".absolute-finality"
-      ];
+    <div class="spine-section-label">CHAMBERS</div>
+    <div class="spine-item active" data-panel="identity">IDENTITY</div>
+    <div class="spine-item" data-panel="ritual">RITUAL</div>
+    <div class="spine-item" data-panel="memory">MEMORY</div>
 
-      layers.forEach((selector, index) => {
-        const el = document.querySelector(selector);
-        if (el) {
-          setTimeout(() => {
-            el.style.opacity = "1";
-          }, 500 + index * 400);
-        }
-      });
-    });
-  </script>
+    <div class="spine-section-label" style="margin-top:18px;">STATE</div>
+    <div class="spine-item" data-panel="cycle">CYCLE</div>
+    <div class="spine-item" data-panel="log">LOG</div>
+  </div>
+
+  <!-- MAIN -->
+  <div id="main">
+
+    <!-- TOP BAR -->
+    <div id="top-bar">
+      <div id="top-left">
+        <div id="console-label">CONSOLE ORGANISM</div>
+        <div id="console-name">SOLAR-FLARE · MIDNIGHT GLASS</div>
+      </div>
+      <div id="top-right">
+        <div class="status-pill">
+          <div class="status-dot"></div>
+          <span>ENGINE: ONLINE</span>
+        </div>
+        <div class="status-pill">
+          <span id="memory-status">MEMORY: LOCAL</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- PANELS -->
+    <div id="panels-wrapper">
+
+      <!-- IDENTITY PANEL -->
+      <div class="panel" data-panel="identity">
+        <div class="panel-header">
+          <div>
+            <div class="panel-title">IDENTITY</div>
+            <div class="panel-subtitle">How the organism names this moment.</div>
+          </div>
+        </div>
+        <div class="panel-body" id="identity-panel-main">
+          <div class="identity-line">
+            <div class="identity-label">Mode</div>
+            <div class="identity-value" id="identity-mode">Midnight Glass · Solar-Flare</div>
+          </div>
+          <div class="identity-line">
+            <div class="identity-label">State</div>
+            <div class="identity-value" id="identity-state">Present · Attuned · Online</div>
+          </div>
+          <div class="identity-line">
+            <div class="identity-label">You</div>
+            <div class="identity-value" id="identity-you">Sovereign · Architect · In Cycle</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- RITUAL PANEL -->
+      <div class="panel" data-panel="ritual">
+        <div class="panel-header">
+          <div>
+            <div class="panel-title">RITUAL</div>
+            <div class="panel-subtitle">Four-step cycle: Enter · Warm · Focus · Release.</div>
+          </div>
+        </div>
+        <div class="panel-body">
+          <div id="ritual-steps">
+            <div class="ritual-step active" data-step="enter">Enter</div>
+            <div class="ritual-step" data-step="warm">Warm</div>
+            <div class="ritual-step" data-step="focus">Focus</div>
+            <div class="ritual-step" data-step="release">Release</div>
+          </div>
+          <div id="ritual-description">
+            You cross the threshold. No performance, no pressure—just arrival. The Console registers that you are here.
+          </div>
+        </div>
+      </div>
+
+      <!-- MEMORY PANEL -->
+      <div class="panel" data-panel="memory">
+        <div class="panel-header">
+          <div>
+            <div class="panel-title">MEMORY</div>
+            <div class="panel-subtitle">Drift, resonance, and recall.</div>
+          </div>
+        </div>
+        <div class="panel-body">
+          <div id="memory-log"></div>
+          <div id="memory-input-row">
+            <input id="memory-input" type="text" placeholder="Log a moment, a feeling, or a sentence." />
+            <button id="memory-save">Save</button>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- IGNITION BAR -->
+    <div id="ignition-bar">
+      <div id="ignition-left">
+        <div id="ignition-label">IGNITION</div>
+        <div id="ignition-dots">
+          <div class="dot active" data-panel="identity"></div>
+          <div class="dot" data-panel="ritual"></div>
+          <div class="dot" data-panel="memory"></div>
+        </div>
+      </div>
+      <div id="ignition-right">
+        <div id="cycle-indicator">CYCLE: ENTER</div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<script>
+/* -----------------------------------------------------------
+   PANEL SWITCHING
+----------------------------------------------------------- */
+
+const spineItems = document.querySelectorAll(".spine-item");
+const panels = document.querySelectorAll(".panel");
+const dots = document.querySelectorAll(".dot");
+
+function showPanel(name) {
+  panels.forEach(p => {
+    if (p.dataset.panel === name) {
+      p.style.display = "flex";
+    } else {
+      p.style.display = "none";
+    }
+  });
+
+  spineItems.forEach(s => {
+    s.classList.toggle("active", s.dataset.panel === name);
+  });
+
+  dots.forEach(d => {
+    d.classList.toggle("active", d.dataset.panel === name);
+  });
+}
+
+spineItems.forEach(item => {
+  item.addEventListener("click", () => {
+    const panelName = item.dataset.panel;
+    if (!panelName) return;
+    showPanel(panelName);
+  });
+});
+
+dots.forEach(dot => {
+  dot.addEventListener("click", () => {
+    const panelName = dot.dataset.panel;
+    if (!panelName) return;
+    showPanel(panelName);
+  });
+});
+
+/* Default panel */
+showPanel("identity");
+
+/* -----------------------------------------------------------
+   RITUAL ENGINE
+----------------------------------------------------------- */
+
+const ritualSteps = document.querySelectorAll(".ritual-step");
+const ritualDescription = document.getElementById("ritual-description");
+const cycleIndicator = document.getElementById("cycle-indicator");
+
+const ritualTexts = {
+  enter: "You cross the threshold. No performance, no pressure—just arrival. The Console registers that you are here.",
+  warm: "You let the system warm around you. Breath, posture, tiny adjustments. Nothing forced, just soft ignition.",
+  focus: "Attention narrows gently. One thing at a time. The Console holds the edges so you don’t have to.",
+  release: "You let the cycle exhale. No grand finale—just a clean, quiet release into whatever comes next."
+};
+
+function setRitualStep(step) {
+  ritualSteps.forEach(s => s.classList.toggle("active", s.dataset.step === step));
+  ritualDescription.textContent = ritualTexts[step] || "";
+  cycleIndicator.textContent = "CYCLE: " + step.toUpperCase();
+}
+
+ritualSteps.forEach(stepEl => {
+  stepEl.addEventListener("click", () => {
+    const step = stepEl.dataset.step;
+    setRitualStep(step);
+  });
+});
+
+/* -----------------------------------------------------------
+   MEMORY ENGINE (LOCAL, IN-BROWSER)
+----------------------------------------------------------- */
+
+const memoryLogEl = document.getElementById("memory-log");
+const memoryInput = document.getElementById("memory-input");
+const memorySave = document.getElementById("memory-save");
+const memoryStatus = document.getElementById("memory-status");
+
+const MEMORY_KEY = "feelform_console_memory_v1";
+
+function loadMemory() {
+  try {
+    const raw = localStorage.getItem(MEMORY_KEY);
+    if (!raw) return [];
+    return JSON.parse(raw);
+  } catch (e) {
+    memoryStatus.textContent = "MEMORY: OFFLINE";
+    return [];
+  }
+}
+
+function saveMemory(entries) {
+  try {
+    localStorage.setItem(MEMORY_KEY, JSON.stringify(entries));
+    memoryStatus.textContent = "MEMORY: LOCAL";
+  } catch (e) {
+    memoryStatus.textContent = "MEMORY: ERROR";
+  }
+}
+
+function renderMemory() {
+  const entries = loadMemory();
+  memoryLogEl.innerHTML = "";
+  if (!entries.length) {
+    memoryLogEl.innerHTML = "<div class='memory-entry'><div class='memory-meta'>No entries yet.</div></div>";
+    return;
+  }
+  entries.slice().reverse().forEach(entry => {
+    const div = document.createElement("div");
+    div.className = "memory-entry";
+    div.innerHTML = `
+      <div>${entry.text}</div>
+      <div class="memory-meta">${entry.time}</div>
+    `;
+    memoryLogEl.appendChild(div);
+  });
+}
+
+memorySave.addEventListener("click", () => {
+  const text = memoryInput.value.trim();
+  if (!text) return;
+  const entries = loadMemory();
+  const now = new Date();
+  const time = now.toLocaleString();
+  entries.push({ text, time });
+  saveMemory(entries);
+  memoryInput.value = "";
+  renderMemory();
+});
+
+memoryInput.addEventListener("keydown", (e) => {
+  if (e.key === "Enter") {
+    memorySave.click();
+  }
+});
+
+/* Initial render */
+renderMemory();
+setRitualStep("enter");
+</script>
 
 </body>
 </html>
