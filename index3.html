@@ -7,6 +7,14 @@
   <style>
     /* EXTERIOR + PARADOX + META + FINALITY ORGANISMS */
 
+    html, body {
+      margin: 0;
+      padding: 0;
+      background: #000;
+      height: 100%;
+      overflow: hidden;
+    }
+
     .exterior-beyond-exterior {
       position: fixed;
       inset: 0;
@@ -155,8 +163,36 @@
   <div class="non-non-layer"></div>
   <div class="absolute-finality"></div>
 
-  <!-- Correct script reference -->
-  <script src="script3.js"></script>
+  <script>
+    // inline version of script3.js
+
+    document.addEventListener("DOMContentLoaded", () => {
+      const layers = [
+        ".exterior-beyond-exterior",
+        ".harmonic-regenesis-engine",
+        ".pre-cause-layer",
+        ".exterior-within-exterior",
+        ".harmonic-meta-cycle-engine",
+        ".pre-existence-layer",
+        ".inversion-beyond-inversion",
+        ".harmonic-apex-engine",
+        ".non-state-layer",
+        ".totality-beyond-totality",
+        ".harmonic-closure-engine",
+        ".non-non-layer",
+        ".absolute-finality"
+      ];
+
+      layers.forEach((selector, index) => {
+        const el = document.querySelector(selector);
+        if (el) {
+          setTimeout(() => {
+            el.style.opacity = "1";
+          }, 500 + index * 400);
+        }
+      });
+    });
+  </script>
 
 </body>
 </html>
